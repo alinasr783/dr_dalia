@@ -94,7 +94,7 @@ export default function Footer({ lang }: FooterProps) {
   const socialLinksData = [
     { icon: FacebookIcon, href: socialLinks.facebook, label: "Facebook" },
     { icon: InstagramIcon, href: socialLinks.instagram, label: "Instagram" },
-    { icon: TikTokIcon, href: socialLinks.tiktok, label: "TikTok" },
+    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: "WhatsApp" },
   ];
 
   return (
@@ -155,7 +155,7 @@ export default function Footer({ lang }: FooterProps) {
             <ul className="space-y-2">
               <li>
                 <a
-                  href={`https://wa.me/${clinicInfo.whatsappNumber}`}
+                  href={clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-white/70 hover:text-brand-accent transition-colors text-xs"
@@ -166,13 +166,13 @@ export default function Footer({ lang }: FooterProps) {
               </li>
               <li>
                 <a
-                  href={`tel:${tClinic.phone}`}
+                  href={`tel:${clinicInfo.phone}`}
                   className="flex items-center gap-2 text-white/70 hover:text-brand-accent transition-colors text-xs"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 shrink-0">
                     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
                   </svg>
-                  <span>{tClinic.phone}</span>
+                  <span>{clinicInfo.phone}</span>
                 </a>
               </li>
             </ul>
@@ -192,9 +192,10 @@ export default function Footer({ lang }: FooterProps) {
 
             {/* Working Hours - hidden on mobile */}
             <div className="hidden md:flex flex-col gap-0.5 text-[11px] text-white/50">
-              <span>{isAr ? "السبت - الأربعاء" : "Sat - Wed"}: 10:00 AM - 9:00 PM</span>
-              <span>{isAr ? "الخميس" : "Thu"}: 10:00 AM - 5:00 PM</span>
-              <span className="italic">{isAr ? "الجمعة: مغلق" : "Fri: Closed"}</span>
+              <span>{isAr ? "الأحد" : "Sun"}: 3:00 PM - 9:30 PM</span>
+              <span>{isAr ? "الثلاثاء" : "Tue"}: 4:00 PM - 9:30 PM</span>
+              <span>{isAr ? "الخميس" : "Thu"}: 4:00 PM - 9:30 PM</span>
+              <span className="italic">{isAr ? "الجمعة، السبت، الاثنين، الأربعاء: مغلق" : "Fri, Sat, Mon, Wed: Closed"}</span>
             </div>
           </div>
         </div>

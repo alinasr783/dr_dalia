@@ -12,97 +12,113 @@
   "clinic": {
     "nameEn": "Dr. Dalia",
     "nameAr": "د. داليا",
-    "whatsappNumber": "971501234567",
-    "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.7526148378657!2d55.27218!3d25.20485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDEyJzE3LjUiTiA1NcKwMTYnMjAuMCJF!5e0!3m2!1sen!2sae!4v1700000000000!5m2!1sen!2sae"
+    "whatsappNumber": "201112521494",
+    "phone": "01027268370",
+    "whatsappLink": "https://api.whatsapp.com/send/?phone=%2B201112521494&text&type=phone_number&app_absent=0",
+    "googleMapsEmbedUrl": "https://maps.google.com/maps?q=29.9742821,31.2753871&t=k&z=17&ie=UTF8&iwloc=&output=embed"
   },
 
-  "heroBackground": "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1920&auto=format&fit=crop",
+  "heroBackground": "https://i.ibb.co/DDrFNqsd/file-0000000088787246b884095151e44a92.png",
 
   "gallery": [
     {
       "id": 1,
-      "image": "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=600&auto=format&fit=crop",
-      "altEn": "Bright, confident smile after whitening",
-      "altAr": "ابتسامة مشرقة وواثقة بعد التبييض"
+      "image": "https://i.ibb.co/20sg9Bjm/FB-IMG-1783257512874.jpg",
+      "altEn": "Smile transformation result",
+      "altAr": "نتيجة تحول الابتسامة"
     },
     {
       "id": 2,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBaRzsoWHGrBYWC0o0Bece6Yf1WJ-IJdweBlzuhORT5kMGhn07rErDRsgjA5CfZ8J252CjBCq8XHWeOPDcqXJrTMGoqCVB2mnEJwE_Td9PDqYn9aPMw6nRRlm7BD9Dp0hvCO8RcgKChirFvqN2T4WN0Vck9zqolZkFv3YD76sV9LrC26TqQZTxEtRimRCj_0yQYk8FUrJ5ls1O7mugvaCdRtPSwzS_3dCynCJDnxxmgvDqiwoKCZJfZuA",
-      "altEn": "Porcelain veneers transformation",
-      "altAr": "تحول مذهل بقشور البورسلين"
+      "image": "https://i.ibb.co/WvDMV8fX/FB-IMG-1783257519740.jpg",
+      "altEn": "Dental cosmetic treatment",
+      "altAr": "علاج تجميلي للأسنان"
     },
     {
       "id": 3,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqwFFgeCiC4uvVM4CExUElENjCGM7nc-CYuaw0BPPLYZdGL1-3Hd7ofERCqMT2mog30sFFXpr-WozhFphgAofnDf7n2J5HDBmx_RIk-4ESwUHKT_LqBOsNDlEdjFZRuOAiREkrXisd9gxaDoOeJ9P7GM41gVX7PY66s2VZZzbgkQfCM34E3Od1T0sBhnwQQE0pyunInkShayciufJ3QpJkrHcte9iRBO8rASP0Y_eyj7_Kav32FKbWNg",
-      "altEn": "Professional teeth cleaning result",
-      "altAr": "نتيجة تنظيف الأسنان الاحترافي"
+      "image": "https://i.ibb.co/GQmN1qpz/FB-IMG-1783257527685.jpg",
+      "altEn": "Professional dental care",
+      "altAr": "رعاية أسنان احترافية"
     },
     {
       "id": 4,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAfkGDnLCb3JNTRczau2IyrRtNSTRucD9BQ8z-Nb8_iygALDkkRvzV3-luU4btuwmK7vOBLx7XWSqSkN1K-LKomEESWVvI-eWpxKkjecnDyJCx3VVJ1Blf_cuBoWFkJoFF8tgqBTQBta80mqDtfPraKw4O8TGmytDb8o2V3XOglkNq4Qg2ZixBvnUnvLq_OPTMkPsqXc7tBOVG8nUjBuhFho8pwvuQzj0KPIg66kQhBTz2U9D7afum-gQ",
-      "altEn": "Hollywood smile makeover",
-      "altAr": "ابتسامة هوليوود"
+      "image": "https://i.ibb.co/qLf2yyrM/FB-IMG-1783257533974.jpg",
+      "altEn": "Beautiful smile makeover",
+      "altAr": "تحول مذهل للابتسامة"
     }
   ],
 
   "beforeAfter": [
     {
       "id": 1,
-      "beforeImage": "https://images.unsplash.com/photo-1598256989800-fea5ce5146ce?q=80&w=1200&auto=format&fit=crop",
-      "afterImage": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=1200&auto=format&fit=crop",
-      "titleEn": "Veneer Transformation",
-      "titleAr": "تحول الفينير"
+      "beforeImage": "https://i.ibb.co/CpSs9Fm1/FB-IMG-1783257108856.jpg",
+      "afterImage": "https://i.ibb.co/qFj8HCWy/FB-IMG-1783257114055.jpg",
+      "titleEn": "Smile Transformation",
+      "titleAr": "تحول الابتسامة"
+    },
+    {
+      "id": 2,
+      "beforeImage": "https://i.ibb.co/yFmLsnHT/FB-IMG-1783257118019.jpg",
+      "afterImage": "https://i.ibb.co/pvXgW8fp/FB-IMG-1783257122464.jpg",
+      "titleEn": "Dental Restoration",
+      "titleAr": "ترميم الأسنان"
+    },
+    {
+      "id": 3,
+      "beforeImage": "https://i.ibb.co/tpQX9hrC/FB-IMG-1783257129997.jpg",
+      "afterImage": "https://i.ibb.co/TqhWVcrR/FB-IMG-1783257137708.jpg",
+      "titleEn": "Cosmetic Treatment",
+      "titleAr": "العلاج التجميلي"
     }
   ],
 
-  "aboutDoctorImage": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop",
+  "aboutDoctorImage": "https://i.ibb.co/DDrFNqsd/file-0000000088787246b884095151e44a92.png",
 
   "testimonials": [
     {
       "id": 1,
-      "nameEn": "Sarah Jenkins",
-      "nameAr": "سارة جينكينز",
-      "reviewEn": "Dr. Dalia completely transformed my smile! The clinic is beautiful and the care is top-notch. I couldn't be happier with my results.",
-      "reviewAr": "د. داليا غيرت ابتسامتي تماماً! العيادة جميلة والرعاية من الطراز الأول. لم أكن لأكون أسعد من ذلك بنتائجي.",
+      "nameEn": "Ebtsam Maher",
+      "nameAr": "ابتسام ماهر",
+      "reviewEn": "Dr. Dalia's work is outstanding and she has a conscience in her work, not to mention her taste in dealing with patients. I really recommend anyone to go to her. Best wishes always, Dr. Dalia.",
+      "reviewAr": "دكتورة داليا شغلها مميز وعندها ضمير في شغلها دا غير الزوق في التعامل انصح بجد اى حد يروح لها بالتوفيق دائما د. داليا",
       "rating": 5
     },
     {
       "id": 2,
-      "nameEn": "Ahmed Al-Fayed",
-      "nameAr": "أحمد الفايد",
-      "reviewEn": "Professionalism at its best. I was always afraid of dentists, but Dr. Dalia's gentle approach completely changed my perspective.",
-      "reviewAr": "الاحترافية في أبهى صورها. كنت دائماً أخشى أطباء الأسنان، لكن أسلوب د. داليا اللطيف غيّر وجهة نظري تماماً.",
+      "nameEn": "Sara Mohamed",
+      "nameAr": "سارة محمد",
+      "reviewEn": "I was always afraid of dental treatment, but my experience with Dr. Dalia completely changed that. She has a very gentle touch and reassures the patient all the time. Her attention to detail is clear. A very comfortable experience and I will definitely repeat it.",
+      "reviewAr": "كنت دايما بخاف من علاج الأسنان، لكن تجربتي مع دكتور داليا غيرت الفكرة دي تماما إيدها خفيفة جدا وبتطمن المريض طول الوقت، واهتمامها بالتفاصيل واضح تجربة مريحة جدًا وهكررها أكيد",
       "rating": 5
     },
     {
       "id": 3,
-      "nameEn": "Maria Gonzalez",
-      "nameAr": "ماريا غونزاليس",
-      "reviewEn": "I travelled from abroad just for my veneers with Dr. Dalia. Best decision ever! The results exceeded all my expectations.",
-      "reviewAr": "سافرت من الخارج فقط للحصول على قشور الفينير مع د. داليا. أفضل قرار على الإطلاق! النتائج فاقت كل توقعاتي.",
+      "nameEn": "Samar Ahmed",
+      "nameAr": "سمر احمد",
+      "reviewEn": "One of the best and most refined doctors I have dealt with. She did extraction, cleaning, fillings, and prosthetics for me. And there's nothing better than that. I can't go to any other dentist, even my young daughters are afraid to go to any other dentist. Follow-up and she responds to me at any time I need her, she is friendly, listens well, and is very comforting.",
+      "reviewAr": "من اشطر و ارقى الدكاترة اللي اتعاملت معاهم اشتغلت معايا خلع وتنظيف وحشو وتركيبات كمان مفيش احسن من كدة مش بعرف اروح الدكتور اسنان غيرها حتى بناتي صغيرين بيخافوا يروحوا لدكتور اسنان غيرها كشف ومتابعة بترد عليا ف اي وقت بحتاجها فيه و ودودة وبتسمع كويس و مريحة اوي",
       "rating": 5
     },
     {
       "id": 4,
-      "nameEn": "Fatima Al-Rashid",
-      "nameAr": "فاطمة الراشد",
-      "reviewEn": "From the moment I walked in, the clinic felt premium. Dr. Dalia listened carefully and delivered exactly what I wanted.",
-      "reviewAr": "منذ اللحظة التي دخلت فيها، شعرت أن العيادة فاخرة. د. داليا استمعت بعناية وقدمت بالضبط ما أردته.",
+      "nameEn": "Asmaa Eldoby",
+      "nameAr": "اسما عدوي",
+      "reviewEn": "Dr. Dalia is very skilled and has modern and sterilized equipment. I recommend anyone to try her services.",
+      "reviewAr": "دكتوره داليا شاطره جدا وعندها اجهزه حديثه ومعقمه وانصح اي حد يتا ابع معاها",
       "rating": 5
     },
     {
       "id": 5,
-      "nameEn": "James Mitchell",
-      "nameAr": "جيمس ميتشل",
-      "reviewEn": "World-class dental care. My implants look and feel completely natural. Highly recommend Dr. Dalia to anyone.",
-      "reviewAr": "رعاية أسنان عالمية المستوى. زراعاتي تبدو وتشعر طبيعية تماماً. أوصي بشدة بالدكتورة داليا لأي شخص.",
+      "nameEn": "Maya Medhat",
+      "nameAr": "ميا مدحت",
+      "reviewEn": "Dr. Dalia's work is outstanding and she has a conscience in her work, not to mention her taste in dealing with patients, honestly.",
+      "reviewAr": "دكتورة داليا شغلها مميز وعندها ضمير في شغلها دا غير الزوق في التعامل بصراحة",
       "rating": 5
     }
   ],
 
   "socialLinks": {
-    "instagram": "https://instagram.com/drdalia",
-    "facebook": "https://facebook.com/drdalia",
-    "tiktok": "https://tiktok.com/@drdalia"
+    "instagram": "https://www.instagram.com/dr_dalia_abdelmowgoud?igsh=MWY2Y2szbzlnZG95NA==",
+    "facebook": "https://www.facebook.com/share/1CocjuuFjk/",
+    "whatsapp": "https://api.whatsapp.com/send/?phone=%2B201112521494&text&type=phone_number&app_absent=0"
   }
 }

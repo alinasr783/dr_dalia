@@ -203,18 +203,4 @@
   100% { stroke-dashoffset: 0; }
 }
 
-/* Floating animation for hero image */
-@keyframes hero-float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.02); }
-}
 
-.hero-image-wrapper {
-  animation: hero-float 6s ease-in-out infinite;
-}
-
-.hero-image-wrapper:hover {
-  animation-play-state: paused;
-  transform: scale(1.02);
-  box-shadow: 0 25px 50px -12px rgba(6, 68, 111, 0.25);
-}

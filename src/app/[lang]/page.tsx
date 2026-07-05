@@ -13,8 +13,10 @@ import {
   testimonialsList,
   heroBackground,
   clinicInfo,
+  beforeAfterCases,
   Language,
 } from "@/lib/supabaseMock";
+import ImageSlider from "@/components/ImageSlider";
 
 /* ─────────────────────────── Page ─────────────────────────── */
 
@@ -31,7 +33,7 @@ export default function LandingPage({
   const whatsappMessage = isAr
     ? "مرحباً دكتورة داليا، أود حجز موعد استشارة."
     : "Hello Dr. Dalia, I would like to book a consultation appointment.";
-  const whatsappUrl = `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const sectionVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -90,7 +92,7 @@ export default function LandingPage({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="hero-image-wrapper relative h-[400px] w-full rounded-2xl overflow-hidden shadow-lg border border-border bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 flex items-center justify-center transition-all duration-500"
+              className="relative h-[400px] w-full rounded overflow-hidden shadow-lg border border-border bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 flex items-center justify-center"
             >
               <Image
                 src={aboutDoctorImage}
@@ -210,31 +212,26 @@ export default function LandingPage({
               </p>
             </motion.div>
 
-            <div className="flex flex-col gap-6">
-              {t.beforeAfter.cases.map((c, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {beforeAfterCases.map((item, index) => (
                 <motion.div
-                  key={index}
+                  key={item.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   className="rounded-xl overflow-hidden shadow-sm border border-border bg-white"
                 >
-                  <div className="relative h-48 bg-muted flex">
-                    <Image
-                      src={galleryItems[index]?.image || heroBackground}
-                      alt={c.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-brand-primary mb-2">
-                      {c.title}
+                  <ImageSlider
+                    beforeImage={item.beforeImage}
+                    afterImage={item.afterImage}
+                    beforeLabel={t.beforeAfter.before}
+                    afterLabel={t.beforeAfter.after}
+                  />
+                  <div className="p-4">
+                    <h3 className="text-[18px] leading-[24px] font-semibold text-brand-primary">
+                      {isAr ? item.titleAr : item.titleEn}
                     </h3>
-                    <p className="text-sm leading-5 text-foreground/60">
-                      {c.description}
-                    </p>
                   </div>
                 </motion.div>
               ))}
