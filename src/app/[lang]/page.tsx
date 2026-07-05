@@ -16,7 +16,6 @@ import {
   beforeAfterCases,
   Language,
 } from "@/lib/supabaseMock";
-import ImageSlider from "@/components/ImageSlider";
 
 /* ─────────────────────────── Page ─────────────────────────── */
 
@@ -222,12 +221,14 @@ export default function LandingPage({
                   viewport={{ once: true }}
                   className="rounded-xl overflow-hidden shadow-sm border border-border bg-white"
                 >
-                  <ImageSlider
-                    beforeImage={item.beforeImage}
-                    afterImage={item.afterImage}
-                    beforeLabel={t.beforeAfter.before}
-                    afterLabel={t.beforeAfter.after}
-                  />
+                  <div className="relative h-64 bg-muted">
+                    <Image
+                      src={item.beforeImage}
+                      alt={isAr ? item.titleAr : item.titleEn}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="p-4">
                     <h3 className="text-[18px] leading-[24px] font-semibold text-brand-primary">
                       {isAr ? item.titleAr : item.titleEn}

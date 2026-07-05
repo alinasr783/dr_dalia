@@ -35,12 +35,6 @@
     },
     {
       "id": 3,
-      "image": "https://i.ibb.co/GQmN1qpz/FB-IMG-1783257527685.jpg",
-      "altEn": "Professional dental care",
-      "altAr": "رعاية أسنان احترافية"
-    },
-    {
-      "id": 4,
       "image": "https://i.ibb.co/qLf2yyrM/FB-IMG-1783257533974.jpg",
       "altEn": "Beautiful smile makeover",
       "altAr": "تحول مذهل للابتسامة"
@@ -50,21 +44,21 @@
   "beforeAfter": [
     {
       "id": 1,
-      "beforeImage": "https://i.ibb.co/CpSs9Fm1/FB-IMG-1783257108856.jpg",
-      "afterImage": "https://i.ibb.co/qFj8HCWy/FB-IMG-1783257114055.jpg",
+      "beforeImage": "https://i.ibb.co/pvXgW8fp/FB-IMG-1783257122464.jpg",
+      "afterImage": "https://i.ibb.co/pvXgW8fp/FB-IMG-1783257122464.jpg",
       "titleEn": "Smile Transformation",
       "titleAr": "تحول الابتسامة"
     },
     {
       "id": 2,
-      "beforeImage": "https://i.ibb.co/yFmLsnHT/FB-IMG-1783257118019.jpg",
-      "afterImage": "https://i.ibb.co/pvXgW8fp/FB-IMG-1783257122464.jpg",
+      "beforeImage": "https://i.ibb.co/tpQX9hrC/FB-IMG-1783257129997.jpg",
+      "afterImage": "https://i.ibb.co/tpQX9hrC/FB-IMG-1783257129997.jpg",
       "titleEn": "Dental Restoration",
       "titleAr": "ترميم الأسنان"
     },
     {
       "id": 3,
-      "beforeImage": "https://i.ibb.co/tpQX9hrC/FB-IMG-1783257129997.jpg",
+      "beforeImage": "https://i.ibb.co/TqhWVcrR/FB-IMG-1783257137708.jpg",
       "afterImage": "https://i.ibb.co/TqhWVcrR/FB-IMG-1783257137708.jpg",
       "titleEn": "Cosmetic Treatment",
       "titleAr": "العلاج التجميلي"
