@@ -1,0 +1,108 @@
+{
+  "_comment": "============================================================",
+  "_instructions": [
+    "هذا الملف يحتوي على جميع البيانات المؤقتة (الصور، آراء المرضى، حالات قبل وبعد، إعدادات العيادة).",
+    "يمكنك تعديل أي قيمة هنا واستبدالها بالبيانات الحقيقية لاحقاً دون لمس الكود البرمجي.",
+    "---",
+    "This file contains all placeholder data (images, testimonials, before/after, clinic settings).",
+    "You can replace any value here with real data later without touching the source code."
+  ],
+  "_comment_end": "============================================================",
+
+  "clinic": {
+    "nameEn": "Dr. Dalia",
+    "nameAr": "د. داليا",
+    "whatsappNumber": "971501234567",
+    "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.7526148378657!2d55.27218!3d25.20485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDEyJzE3LjUiTiA1NcKwMTYnMjAuMCJF!5e0!3m2!1sen!2sae!4v1700000000000!5m2!1sen!2sae"
+  },
+
+  "heroBackground": "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1920&auto=format&fit=crop",
+
+  "gallery": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=600&auto=format&fit=crop",
+      "altEn": "Bright, confident smile after whitening",
+      "altAr": "ابتسامة مشرقة وواثقة بعد التبييض"
+    },
+    {
+      "id": 2,
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBaRzsoWHGrBYWC0o0Bece6Yf1WJ-IJdweBlzuhORT5kMGhn07rErDRsgjA5CfZ8J252CjBCq8XHWeOPDcqXJrTMGoqCVB2mnEJwE_Td9PDqYn9aPMw6nRRlm7BD9Dp0hvCO8RcgKChirFvqN2T4WN0Vck9zqolZkFv3YD76sV9LrC26TqQZTxEtRimRCj_0yQYk8FUrJ5ls1O7mugvaCdRtPSwzS_3dCynCJDnxxmgvDqiwoKCZJfZuA",
+      "altEn": "Porcelain veneers transformation",
+      "altAr": "تحول مذهل بقشور البورسلين"
+    },
+    {
+      "id": 3,
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqwFFgeCiC4uvVM4CExUElENjCGM7nc-CYuaw0BPPLYZdGL1-3Hd7ofERCqMT2mog30sFFXpr-WozhFphgAofnDf7n2J5HDBmx_RIk-4ESwUHKT_LqBOsNDlEdjFZRuOAiREkrXisd9gxaDoOeJ9P7GM41gVX7PY66s2VZZzbgkQfCM34E3Od1T0sBhnwQQE0pyunInkShayciufJ3QpJkrHcte9iRBO8rASP0Y_eyj7_Kav32FKbWNg",
+      "altEn": "Professional teeth cleaning result",
+      "altAr": "نتيجة تنظيف الأسنان الاحترافي"
+    },
+    {
+      "id": 4,
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAfkGDnLCb3JNTRczau2IyrRtNSTRucD9BQ8z-Nb8_iygALDkkRvzV3-luU4btuwmK7vOBLx7XWSqSkN1K-LKomEESWVvI-eWpxKkjecnDyJCx3VVJ1Blf_cuBoWFkJoFF8tgqBTQBta80mqDtfPraKw4O8TGmytDb8o2V3XOglkNq4Qg2ZixBvnUnvLq_OPTMkPsqXc7tBOVG8nUjBuhFho8pwvuQzj0KPIg66kQhBTz2U9D7afum-gQ",
+      "altEn": "Hollywood smile makeover",
+      "altAr": "ابتسامة هوليوود"
+    }
+  ],
+
+  "beforeAfter": [
+    {
+      "id": 1,
+      "beforeImage": "https://images.unsplash.com/photo-1598256989800-fea5ce5146ce?q=80&w=1200&auto=format&fit=crop",
+      "afterImage": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=1200&auto=format&fit=crop",
+      "titleEn": "Veneer Transformation",
+      "titleAr": "تحول الفينير"
+    }
+  ],
+
+  "aboutDoctorImage": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop",
+
+  "testimonials": [
+    {
+      "id": 1,
+      "nameEn": "Sarah Jenkins",
+      "nameAr": "سارة جينكينز",
+      "reviewEn": "Dr. Dalia completely transformed my smile! The clinic is beautiful and the care is top-notch. I couldn't be happier with my results.",
+      "reviewAr": "د. داليا غيرت ابتسامتي تماماً! العيادة جميلة والرعاية من الطراز الأول. لم أكن لأكون أسعد من ذلك بنتائجي.",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "nameEn": "Ahmed Al-Fayed",
+      "nameAr": "أحمد الفايد",
+      "reviewEn": "Professionalism at its best. I was always afraid of dentists, but Dr. Dalia's gentle approach completely changed my perspective.",
+      "reviewAr": "الاحترافية في أبهى صورها. كنت دائماً أخشى أطباء الأسنان، لكن أسلوب د. داليا اللطيف غيّر وجهة نظري تماماً.",
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "nameEn": "Maria Gonzalez",
+      "nameAr": "ماريا غونزاليس",
+      "reviewEn": "I travelled from abroad just for my veneers with Dr. Dalia. Best decision ever! The results exceeded all my expectations.",
+      "reviewAr": "سافرت من الخارج فقط للحصول على قشور الفينير مع د. داليا. أفضل قرار على الإطلاق! النتائج فاقت كل توقعاتي.",
+      "rating": 5
+    },
+    {
+      "id": 4,
+      "nameEn": "Fatima Al-Rashid",
+      "nameAr": "فاطمة الراشد",
+      "reviewEn": "From the moment I walked in, the clinic felt premium. Dr. Dalia listened carefully and delivered exactly what I wanted.",
+      "reviewAr": "منذ اللحظة التي دخلت فيها، شعرت أن العيادة فاخرة. د. داليا استمعت بعناية وقدمت بالضبط ما أردته.",
+      "rating": 5
+    },
+    {
+      "id": 5,
+      "nameEn": "James Mitchell",
+      "nameAr": "جيمس ميتشل",
+      "reviewEn": "World-class dental care. My implants look and feel completely natural. Highly recommend Dr. Dalia to anyone.",
+      "reviewAr": "رعاية أسنان عالمية المستوى. زراعاتي تبدو وتشعر طبيعية تماماً. أوصي بشدة بالدكتورة داليا لأي شخص.",
+      "rating": 5
+    }
+  ],
+
+  "socialLinks": {
+    "instagram": "https://instagram.com/drdalia",
+    "facebook": "https://facebook.com/drdalia",
+    "tiktok": "https://tiktok.com/@drdalia"
+  }
+}
