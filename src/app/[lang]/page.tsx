@@ -6,6 +6,14 @@ import { motion, Variants } from "framer-motion";
 import { CheckCircle, Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Services from "@/components/Services";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import {
   translations,
   galleryItems,
@@ -55,7 +63,7 @@ export default function LandingPage({
           className="relative min-h-[700px] flex items-center justify-center overflow-hidden bg-background pt-24 pb-12 px-4 md:px-12"
         >
           <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-8 z-10 relative">
-            <div className="space-y-4 text-left">
+            <div className="space-y-4 text-start">
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -138,63 +146,16 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 3. Smile Gallery ──────── */}
-        <section id="gallery" className="py-12 px-4 md:px-12 bg-white">
-          <div className="max-w-[1200px] mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={sectionVariants}
-              className="text-center mb-10"
-            >
-              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
-                {t.gallery.title}
-              </h2>
-              <p className="text-sm leading-5 text-foreground/60">
-                {t.gallery.subtitle}
-              </p>
-            </motion.div>
-
-            <div className="flex flex-col gap-6">
-              {galleryItems.slice(0, 3).map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group relative rounded-xl overflow-hidden shadow-sm bg-background border border-border h-64"
-                >
-                  <Image
-                    src={item.image}
-                    alt={isAr ? item.altAr : item.altEn}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white">
-                    <p className="text-sm leading-5">
-                      {t.gallery.items[index]?.title}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ──────── 3. Our Services ──────── */}
+        <Services lang={currentLang} />
 
         {/* Divider */}
         <div className="flex justify-center py-2">
           <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
         </div>
 
-        {/* ──────── 4. Before & After ──────── */}
-        <section id="before-after" className="py-12 px-4 md:px-12 bg-muted/30">
+        {/* ──────── 5. Before & After ──────── */}
+        <section id="before-after" className="py-12 px-4 md:px-12 bg-background">
           <div className="max-w-[1200px] mx-auto">
             <motion.div
               initial="hidden"
@@ -245,8 +206,8 @@ export default function LandingPage({
           <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
         </div>
 
-        {/* ──────── 5. About Section ──────── */}
-        <section id="about" className="py-12 px-4 md:px-12 bg-muted/30">
+        {/* ──────── 6. About Section ──────── */}
+        <section id="about" className="py-12 px-4 md:px-12 bg-background">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex flex-col gap-8">
               <div className="space-y-4">
@@ -295,8 +256,58 @@ export default function LandingPage({
           <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
         </div>
 
-        {/* ──────── 6. Patient Stories ──────── */}
-        <section id="testimonials" className="py-12 px-4 md:px-12 bg-white">
+        {/* ──────── Kids' Smiles Gallery ──────── */}
+        <section id="gallery" className="py-12 px-4 md:px-12 bg-background">
+          <div className="max-w-[1200px] mx-auto">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={sectionVariants}
+              className="text-center mb-10"
+            >
+              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
+                {t.gallery.title}
+              </h2>
+              <p className="text-sm leading-5 text-foreground/60">
+                {t.gallery.subtitle}
+              </p>
+            </motion.div>
+
+            <div className="flex flex-col gap-6">
+              {galleryItems.slice(0, 3).map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group relative rounded-xl overflow-hidden shadow-sm bg-white border border-border h-64"
+                >
+                  <Image
+                    src={item.image}
+                    alt={isAr ? item.altAr : item.altEn}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white">
+                    <p className="text-sm leading-5">
+                      {t.gallery.items[index]?.title}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Divider */}
+        <div className="flex justify-center py-2">
+          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
+        </div>
+
+        {/* ──────── 7. Patient Stories ──────── */}
+        <section id="testimonials" className="py-12 px-4 md:px-12 bg-background">
           <div className="max-w-[1200px] mx-auto">
             <motion.div
               initial="hidden"
@@ -313,49 +324,61 @@ export default function LandingPage({
               </p>
             </motion.div>
 
-            <div className="flex flex-col gap-6">
-              {testimonialsList.slice(0, 2).map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-background p-6 rounded-xl shadow-sm border border-border flex flex-col"
-                >
-                  <div className="flex gap-1 mb-3 text-amber-400">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <svg
-                        key={i}
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="italic text-foreground/70 mb-6 leading-relaxed text-base">
-                    &ldquo;
-                    {isAr ? testimonial.reviewAr : testimonial.reviewEn}
-                    &rdquo;
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-border">
-                    <div className="w-10 h-10 rounded-full bg-brand-accent/30 flex items-center justify-center text-brand-primary font-semibold text-sm">
-                      {(isAr ? testimonial.nameAr : testimonial.nameEn).charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-brand-primary">
-                        {isAr ? testimonial.nameAr : testimonial.nameEn}
+            <Carousel
+              opts={{
+                loop: true,
+                align: "start",
+                direction: isAr ? "rtl" : "ltr",
+              }}
+              className="w-full max-w-[720px] mx-auto px-2 sm:px-0"
+            >
+              <CarouselContent className="items-start">
+                {testimonialsList.map((testimonial) => (
+                  <CarouselItem
+                    key={testimonial.id}
+                    className="md:basis-1/2"
+                  >
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-border flex flex-col">
+                      <div className="flex gap-1 mb-3 text-amber-400">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <svg
+                            key={i}
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="italic text-foreground/70 mb-6 leading-relaxed text-base">
+                        &ldquo;
+                        {isAr ? testimonial.reviewAr : testimonial.reviewEn}
+                        &rdquo;
                       </p>
-                      <p className="text-xs text-foreground/50">
-                        {isAr ? "مريض موثق" : "Verified Patient"}
-                      </p>
+                      <div className="flex items-center gap-3 pt-4 border-t border-border">
+                        <div className="w-10 h-10 rounded-full bg-brand-accent/30 flex items-center justify-center text-brand-primary font-semibold text-sm shrink-0">
+                          {(isAr ? testimonial.nameAr : testimonial.nameEn).charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-brand-primary">
+                            {isAr ? testimonial.nameAr : testimonial.nameEn}
+                          </p>
+                          <p className="text-xs text-foreground/50">
+                            {isAr ? "مريض موثق" : "Verified Patient"}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <CarouselPrevious className="static translate-x-0 translate-y-0 inset-auto h-10 w-10 bg-white text-brand-primary border-brand-accent hover:bg-brand-primary hover:text-white" />
+                <CarouselNext className="static translate-x-0 translate-y-0 inset-auto h-10 w-10 bg-white text-brand-primary border-brand-accent hover:bg-brand-primary hover:text-white" />
+              </div>
+            </Carousel>
           </div>
         </section>
 
@@ -364,8 +387,8 @@ export default function LandingPage({
           <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
         </div>
 
-        {/* ──────── 7. Our Clinic ──────── */}
-        <section id="clinic" className="py-12 px-4 md:px-12 bg-muted/30">
+        {/* ──────── 8. Our Clinic ──────── */}
+        <section id="clinic" className="py-12 px-4 md:px-12 bg-background">
           <div className="max-w-[1200px] mx-auto">
             <motion.div
               initial="hidden"
@@ -458,8 +481,22 @@ export default function LandingPage({
         </section>
       </main>
 
-      {/* ──────── 8. Footer ──────── */}
+      {/* ──────── 9. Footer ──────── */}
       <Footer lang={currentLang} />
+
+      {/* ──────── Floating WhatsApp Button ──────── */}
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.hero.cta}
+        className="fixed bottom-4 left-3 md:bottom-6 md:left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#1ebe5d] transition-all duration-300"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.117 1.519 5.852L.06 23.498a.5.5 0 00.612.612l5.65-1.46A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.38-1.57.5.5 0 00-.38-.063l-3.654.945.945-3.654a.5.5 0 00-.063-.38A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+        </svg>
+      </a>
     </div>
   );
 }

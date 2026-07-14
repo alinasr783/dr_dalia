@@ -1,4 +1,5 @@
 import siteData from "@/data/siteData.json";
+import servicesData from "@/data/servicesData.json";
 
 export type Language = "en" | "ar";
 
@@ -9,7 +10,8 @@ export const translations = {
   en: {
     nav: {
       home: "Home",
-      gallery: "Gallery",
+      services: "Services",
+      gallery: "Kids' Smiles",
       beforeAfter: "Before & After",
       about: "About",
       testimonials: "Patient Stories",
@@ -22,13 +24,13 @@ export const translations = {
       cta: "Book on WhatsApp",
     },
     gallery: {
-      title: "Smile Gallery",
+      title: "Kids' Smiles",
       subtitle:
-        "Professional results that reflect our commitment to the highest standards of quality in cosmetic and restorative dentistry.",
+        "We make dental visits fun and stress-free for children, with gentle care that keeps their little smiles healthy and happy.",
       items: [
-        { title: "Whitening & Cosmetics" },
-        { title: "Clear Aligners" },
-        { title: "Cosmetic Restorations" },
+        { title: "Happy Little Smiles" },
+        { title: "Gentle Kids' Care" },
+        { title: "Cavity-Free Kids" },
       ],
     },
     beforeAfter: {
@@ -51,11 +53,11 @@ export const translations = {
     about: {
       badge: "Experience & Excellence",
       title: "About Dr. Dalia",
-      bio: "Specialist in oral and dental medicine at Qasr El Ainy. Aesthetic dental fillings and root canal treatment using the latest devices, pain-free. Expert in dealing with patients and always keen on perfection. Treatment of gum bleeding and its causes such as gum recession. Educating children and dealing with their fears, and how to protect adults' and children's teeth from decay. Dental implants of all types. Removing stains and whitening. Latest devices and highest technologies available. Follow-up of cases before and after with photos. 30% discount on clinic services on the occasion of the clinic's anniversary.",
+      bio: "Dr. Dalia is a dental consultant and a graduate of the Faculty of Dentistry, Qasr El Ainy. She cares about making every visit comfortable and pain-free. She is gentle with patients, and great with kids and easing their fear of the dentist. Her services include tooth fillings, root canal treatment, dental implants, teeth whitening, and gum care.",
       degrees: [
-        "Specialist in Oral and Dental Medicine - Qasr El Ainy",
-        "Aesthetic Fillings & Painless Root Canal Treatment",
-        "Dental Implants, Whitening & Gum Treatment",
+        "Dental Consultant - Graduate of Faculty of Dentistry, Qasr El Ainy",
+        "Fillings & Painless Root Canal Treatment",
+        "Dental Implants, Whitening & Gum Care",
       ],
     },
     testimonials: {
@@ -96,7 +98,8 @@ export const translations = {
   ar: {
     nav: {
       home: "الرئيسية",
-      gallery: "معرض الابتسامات",
+      services: "خدماتنا",
+      gallery: "ابتسامات أطفال",
       beforeAfter: "قبل وبعد",
       about: "عن الطبيبة",
       testimonials: "قصص المرضى",
@@ -109,13 +112,13 @@ export const translations = {
       cta: "احجز عبر واتساب",
     },
     gallery: {
-      title: "معرض الابتسامات",
+      title: "ابتسامات أطفال",
       subtitle:
-        "نتائج احترافية تعكس التزامنا بأعلى معايير الجودة في طب الأسنان التجميلي والترميمي.",
+        "بنخلي زيارة الأسنان تجربة ممتعة ومريحة لأطفالك، مع تعامل لطيف يحافظ على ابتساماتهم الصغيرة صحية وسعيدة.",
       items: [
-        { title: "التبييض والتجميل" },
-        { title: "التقويم الشفاف" },
-        { title: "التركيبات التجميلية" },
+        { title: "ابتسامات صغيرة سعيدة" },
+        { title: "رعاية لطيفة للأطفال" },
+        { title: "أسنان أطفال بدون تسوس" },
       ],
     },
     beforeAfter: {
@@ -137,11 +140,11 @@ export const translations = {
     about: {
       badge: "الخبرة والتميز",
       title: "عن د. داليا",
-      bio: "اخصائي الفم و الأسنان بالقصر العيني. حشو تجميلي للاسنان وعلاج العصب بأحدث الأجهزة بدون الم. تجيد التعامل مع المرضى وتسعى دائماً لاتقان العمل. علاج نزيف اللثه والمسببات له مثل انحصار اللثه. توعيه الأطفال والتعامل مع خوفهم وكيفيه حمايه أسنان الكبار والأطفال من التسوس. زراعه الأسنان بكل الأنواع. ازالة التصبغات والتبييض. متاح أحدث الاجهزه واعلي التقنيات ومتابعه الحاله قبل وبعد بالصور. خصم ٣٠ في المائة علي خدمات العياده بمناسبه عيد ميلاد العيادة.",
+      bio: "د. داليا استشاري أسنان وخريجة كلية طب الأسنان – القصر العيني. بتهتم إن كل زيارة تكون مريحة ومن غير ألم. لطيفة في التعامل مع المرضى، وشاطرة جداً مع الأطفال وتهدية خوفهم من دكتور الأسنان. من خدماتها: حشو الأسنان، علاج العصب، زراعة الأسنان، التبييض، والعناية باللثة.",
       degrees: [
-        "اخصائي الفم و الأسنان - القصر العيني",
-        "حشو تجميلي وعلاج عصب بدون الم",
-        "زراعة أسنان وتبييض وعلاج اللثة",
+        "استشاري أسنان – خريجة كلية طب الأسنان، القصر العيني",
+        "حشو وعلاج عصب بدون ألم",
+        "زراعة أسنان وتبييض وعناية باللثة",
       ],
     },
     testimonials: {
@@ -189,3 +192,4 @@ export const beforeAfterCases = siteData.beforeAfter;
 export const aboutDoctorImage = siteData.aboutDoctorImage;
 export const testimonialsList = siteData.testimonials;
 export const socialLinks = siteData.socialLinks;
+export const servicesDataJson = servicesData;

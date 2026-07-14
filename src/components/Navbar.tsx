@@ -57,9 +57,10 @@ export default function Navbar({ lang }: { lang: Language }) {
 
   const navLinks = [
     { href: "#home", label: t.home },
-    { href: "#gallery", label: t.gallery },
+    { href: "#services", label: t.services },
     { href: "#before-after", label: t.beforeAfter },
     { href: "#about", label: t.about },
+    { href: "#gallery", label: t.gallery },
     { href: "#testimonials", label: t.testimonials },
     { href: "#clinic", label: t.clinic },
   ];

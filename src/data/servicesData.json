@@ -1,0 +1,138 @@
+{
+  "_comment": "============================================================",
+  "_instructions": [
+    "ملف بيانات قسم 'خدماتنا / Our Services' بتنسيق مخصص للجمهور المصري والخليجي.",
+    "تم تحديث روابط صور الفلورايد والجز على الأسنان بروابط فائقة الموثوقية والاستقرار."
+  ],
+  "_comment_end": "============================================================",
+
+  "servicesSection": {
+    "titleEn": "Our Services",
+    "titleAr": "خدماتنا",
+    "subtitleEn": "Experience premium, pain-free dental care tailored to your comfort and a flawless smile.",
+    "subtitleAr": "عشان ضحكتك تهمنا.. بنقدملك رعاية متكاملة لأسنانك بأحدث التقنيات وبدون ألم، لتستمتع بابتسامة تملأ وجهك ثقة."
+  },
+
+  "services": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Dental Implants",
+      "altAr": "زراعة الأسنان وتجميلها",
+      "titleEn": "Dental Implants & Restoration",
+      "titleAr": "تقويم وزراعة الأسنان بأفضل الخامات",
+      "descEn": "Restore your missing teeth and confidence with advanced, lifelong dental implants using premium global materials.",
+      "descAr": "رجع ضحكتك الطبيعية وقوتها مع أحدث تقنيات زراعة وتقويم الأسنان. بنستخدم أفضل وأجود الخامات العالمية عشان تدوم معاك العمر كله وبأعلى نسب نجاح."
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Root Canal Treatment",
+      "altAr": "علاج جذور الأسنان",
+      "titleEn": "Painless Root Canal Treatment",
+      "titleAr": "علاج آلام الأسنان والجذور بدون ألم",
+      "descEn": "Save your natural teeth with painless, precise root canal therapies utilizing state-of-the-art diagnostic equipment.",
+      "descAr": "تخلص من وجع الضرس نهائياً في جلسة واحدة وبدون ألم! بنعالج القنوات العصبية المصابة وبنحافظ على سنك الطبيعي بأحدث الأجهزة الدقيقة."
+    },
+    {
+      "id": 3,
+      "image": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Cosmetic Fillings",
+      "altAr": "الحشوات التجميلية",
+      "titleEn": "Cosmetic Fillings",
+      "titleAr": "الحشوات التجميلية الحديثة",
+      "descEn": "Repair dental decay seamlessly with high-durability composite fillings matching your tooth color perfectly.",
+      "descAr": "انسى شكل الحشوات القديمة؛ بنعالج تسوس الأسنان ونرجع شكلها الطبيعي بنسبة 100% باستخدام حشوات تجميلية متينة وتطابق لون أسنانك تماماً."
+    },
+    {
+      "id": 4,
+      "image": "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?auto=format&fit=crop&q=80&w=600",
+      "altEn": "E-max & Zirconia Prosthetics",
+      "altAr": "تركيبات الزركونيوم والإي ماكس",
+      "titleEn": "Premium Crowns & Bridges (E-max / Zirconia)",
+      "titleAr": "تركيبات الأسنان الثابتة (إي ماكس وزركونيا)",
+      "descEn": "Protect and beautify your teeth with durable, highly aesthetic E-max and Zirconia crowns designed to last.",
+      "descAr": "حماية كاملة ومظهر غاية في الجمال لأسنانك الضعيفة أو المفقودة مع تيجان وجسور الإي ماكس والزركونيوم التي تتميز بصلابتها الفائقة ومظهرها الطبيعي."
+    },
+    {
+      "id": 5,
+      "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Hollywood Smile",
+      "altAr": "ابتسامة هوليود",
+      "titleEn": "Hollywood Smile & Smile Design",
+      "titleAr": "ابتسامة هوليود وتصميم الابتسامة",
+      "descEn": "Get your customized, sparkling dream smile through state-of-the-art aesthetic dentistry techniques.",
+      "descAr": "احصل على ابتسامة المشاهير التي تحلم بها! بنصمم ضحكتك الخاصة لتناسب ملامح وجهك وتمنحك إشراقة وثقة لا تقاوم في كل مناسبة."
+    },
+    {
+      "id": 6,
+      "image": "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Gum Bleaching & Depigmentation",
+      "altAr": "إزالة تصبغات اللثة",
+      "titleEn": "Gum Depigmentation (Laser Gum Bleaching)",
+      "titleAr": "إزالة تصبغات اللثة بالليزر",
+      "descEn": "Restore the healthy, natural pink appearance of your gums gently and quickly with advanced laser therapy.",
+      "descAr": "إذا كانت تصبغات اللثة الداكنة تضايقك عند الضحك، بنرجع لك لون اللثة الوردي الطبيعي والصحي في جلسة ليزر سريعة وآمنة تماماً وبدون ألم."
+    },
+    {
+      "id": 7,
+      "image": "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Gummy Smile Treatment",
+      "altAr": "علاج الضحكة اللثوية",
+      "titleEn": "Gummy Smile Correction (Botox, Fillers & Laser)",
+      "titleAr": "علاج الضحكة اللثوية (بالبوتوكس والفلير أو الليزر)",
+      "descEn": "Optimize your smile dynamics by reducing excessive gum display using non-surgical Botox/filler or gentle laser styling.",
+      "descAr": "ننسق ضحكتك ونقلل ظهور اللثة الزائد بلمسات تجميلية بسيطة وغير جراحية؛ سواء عن طريق حقن البوتوكس والفلير السريعة أو باستخدام الليزر المتطور."
+    },
+    {
+      "id": 8,
+      "image": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=600",
+      "altEn": "No-Prep Veneers",
+      "altAr": "فينيرز الأسنان بدون برد",
+      "titleEn": "No-Prep Veneers (Fixed & Moveable Hollywood Smile)",
+      "titleAr": "ابتسامة هوليود (ثابتة أو متحركة) بدون برد للأسنان",
+      "descEn": "Achieve beautiful Veneers or snap-on smiles without any painful shaving or preparation of your natural teeth.",
+      "descAr": "احصل على ابتسامة هوليود جذابة (سواء الثابتة كالفينيرز الفاخرة أو المتحركة سهلة الاستخدام) من غير أي برد أو إضرار لأسنانك الطبيعية وبأمان تام."
+    },
+    {
+      "id": 9,
+      "image": "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Pediatric Dentistry",
+      "altAr": "علاج أسنان الأطفال",
+      "titleEn": "Fear-Free Pediatric Dentistry (No-Numbing & General Anesthesia)",
+      "titleAr": "علاج أسنان الأطفال (بدون بنج أو تحت التخدير الكلي)",
+      "descEn": "Provide your child with a highly comfortable dental visit using specialized techniques, from needle-free care to safe general anesthesia.",
+      "descAr": "رعاية خاصة جداً لأبطالنا الصغار! بنوفر علاج أسنان الأطفال بدون إبر وبنج يسبب لهم الخوف، ومتاح أيضاً رعاية متكاملة تحت التخدير الكلي الآمن لراحة طفلك التامة."
+    },
+    {
+      "id": 10,
+      "image": "https://images.unsplash.com/photo-1512223792601-592a9809eed4?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Fluoride & Prevention",
+      "altAr": "جلسات الفلورايد للأسنان",
+      "titleEn": "Fluoride Application Treatments for Kids & Adults",
+      "titleAr": "جلسات فلورايد لحماية أسنان الأطفال والكبار من التسوس",
+      "descEn": "Strengthen tooth enamel and drastically lower decay risk with quick and protective professional fluoride applications.",
+      "descAr": "الوقاية دايماً أفضل من العلاج؛ جلسات الفلورايد السريعة تحمي أسنان أطفالك وتقوي مينا الأسنان عند الكبار لمنع التسوس تماماً والحفاظ عليها سليمة."
+    },
+    {
+      "id": 11,
+      "image": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Bruxism & Jaw Pain",
+      "altAr": "علاج الجز على الأسنان وآلام الفكين",
+      "titleEn": "Bruxism (Teeth Grinding) & TMJ Pain Therapy",
+      "titleAr": "علاج الجز على الأسنان (Bruxism) وآلام الفكين",
+      "descEn": "Relieve jaw muscle tension, chronic joint headaches, and protect your teeth from grinding with custom nightguards and therapies.",
+      "descAr": "بتصحى من النوم حاسس بصداع أو ألم في فكك؟ بنعالج مشكلة الجز على الأسنان أثناء النوم وبنحميك من تآكل الأسنان وآلام مفصل الفك بأساليب طبية متطورة."
+    },
+    {
+      "id": 12,
+      "image": "https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&q=80&w=600",
+      "altEn": "Gum Treatment & Halitosis",
+      "altAr": "علاج التهاب اللثة ورائحة الفم الكريهة",
+      "titleEn": "Gum Bleeding Care & Bad Breath Treatments",
+      "titleAr": "علاج احمرار ونزيف اللثة ورائحة الفم الكريهة",
+      "descEn": "Effectively treat active gum bleeding, chronic inflammation, and refresh your breath with professional deep cleaning.",
+      "descAr": "تخلص من نزيف اللثة المزعج عند غسيل الأسنان ومن رائحة الفم غير المستحبة. بنقدم رعاية عميقة للثة والوقاية من الالتهابات لترجع أنفاسك منعشة وصحية."
+    }
+  ]
+}
