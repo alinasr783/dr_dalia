@@ -18,26 +18,26 @@
     "googleMapsEmbedUrl": "https://maps.google.com/maps?q=29.9742821,31.2753871&t=k&z=17&ie=UTF8&iwloc=&output=embed"
   },
 
-  "heroBackground": "https://i.ibb.co/DDrFNqsd/file-0000000088787246b884095151e44a92.png",
+  "heroBackground": "https://i.ibb.co/j9p2HbjS/IMG-20260715-WA0001-2.jpg",
 
   "gallery": [
     {
       "id": 1,
       "image": "https://i.ibb.co/20sg9Bjm/FB-IMG-1783257512874.jpg",
-      "altEn": "Smile transformation result",
-      "altAr": "نتيجة تحول الابتسامة"
+      "altEn": "Cheerful Grins",
+      "altAr": "ابتسامات مبهجة"
     },
     {
       "id": 2,
       "image": "https://i.ibb.co/WvDMV8fX/FB-IMG-1783257519740.jpg",
-      "altEn": "Dental cosmetic treatment",
-      "altAr": "علاج تجميلي للأسنان"
+      "altEn": "Smiles Made Simple",
+      "altAr": "ابتسامات سهلة"
     },
     {
       "id": 3,
       "image": "https://i.ibb.co/qLf2yyrM/FB-IMG-1783257533974.jpg",
-      "altEn": "Beautiful smile makeover",
-      "altAr": "تحول مذهل للابتسامة"
+      "altEn": "Bright Smiles",
+      "altAr": "ابتسامات مشرقة"
     }
   ],
 
@@ -65,7 +65,7 @@
     }
   ],
 
-  "aboutDoctorImage": "https://i.ibb.co/DDrFNqsd/file-0000000088787246b884095151e44a92.png",
+  "aboutDoctorImage": "https://i.ibb.co/j9p2HbjS/IMG-20260715-WA0001-2.jpg",
 
   "testimonials": [
     {
@@ -106,6 +106,270 @@
       "nameAr": "ميا مدحت",
       "reviewEn": "Dr. Dalia's work is outstanding and she has a conscience in her work, not to mention her taste in dealing with patients, honestly.",
       "reviewAr": "دكتورة داليا شغلها مميز وعندها ضمير في شغلها دا غير الزوق في التعامل بصراحة",
+      "rating": 5
+    },
+    {
+      "id": 6,
+      "nameEn": "Wissam Fawzy",
+      "nameAr": "وسام فوزي",
+      "reviewEn": "A very good place, a skilled doctor, clean tools, and the doctor is extremely respectful in dealing. Honestly, an excellent experience and one of the best clinics I have dealt with.",
+      "reviewAr": "مكان كويس جداً ودكتورة شاطرة وأدوات نظيفة والدكتورة قمة فى الاحترام في التعامل تجربة ممتازة بصراحه ومن أحسن العيادات اللى اتعاملت معاه",
+      "rating": 5
+    },
+    {
+      "id": 7,
+      "nameEn": "Sama Ahmed",
+      "nameAr": "سما أحمد",
+      "reviewEn": "The clinic is very excellent and the team is wonderful.",
+      "reviewAr": "العياده ممتازه جدا والفريق جميل",
+      "rating": 5
+    },
+    {
+      "id": 8,
+      "nameEn": "Ahmed Mostafa",
+      "nameAr": "أحمد مصطفى",
+      "reviewEn": "One of the best dental clinics, attention, cleanliness, and precision in work.",
+      "reviewAr": "من أفضل عيادات الأسنان، اهتمام ونظافة ودقة في الشغل",
+      "rating": 5
+    },
+    {
+      "id": 9,
+      "nameEn": "Abu Yasser",
+      "nameAr": "ابو ياسر",
+      "reviewEn": "The doctor is very skilled in her work.",
+      "reviewAr": "الدكتوره شطرا جدا في شغلها",
+      "rating": 5
+    },
+    {
+      "id": 10,
+      "nameEn": "Om Youssef",
+      "nameAr": "ام يوسف",
+      "reviewEn": "The doctor is very excellent.",
+      "reviewAr": "الدكتوره ممتازه جدا❤❤",
+      "rating": 5
+    },
+    {
+      "id": 11,
+      "nameEn": "Shohanda Lamloom",
+      "nameAr": "شوهندا لملوم",
+      "reviewEn": "Dr. Dalia is a very trustworthy doctor and excellent in her work. May God bless her, and from success to success.",
+      "reviewAr": "د. داليا دكتورة امينه جدا و ممتازة في شغلها ربنا يبارك فيها و من نجاح ل نجاح",
+      "rating": 5
+    },
+    {
+      "id": 12,
+      "nameEn": "Shrouk Mowafy",
+      "nameAr": "شروق موافي",
+      "reviewEn": "Professional work and classy dealing. One of the best dentists I have tried.",
+      "reviewAr": "شغل احترافي وتعامل راقي 👏 من أحسن دكاترة الأسنان اللي جربتهم 👍",
+      "rating": 5
+    },
+    {
+      "id": 13,
+      "nameEn": "Gege Awad",
+      "nameAr": "جيجي عوض",
+      "reviewEn": "Dr. Dalia is truly one of the best dentists, skilled, light-handed, and her equipment is modern.",
+      "reviewAr": "دكتوره داليا حقيقي من افضل الدكاتره بتاعت الاسنان شاطره واديها خفيفه واجهزتها حديثه",
+      "rating": 5
+    },
+    {
+      "id": 14,
+      "nameEn": "Esraa Mohamed",
+      "nameAr": "إسراء محمد",
+      "reviewEn": "Dr. Dalia is excellent, light-handed, and has a conscience in treatment. The place is clean, and the equipment is modern and sterilized.",
+      "reviewAr": "دكتوره داليا ممتازه وايديها خفيفه وعندها ضمير في المعامله والمكان نظيف والأجهزة حديثه ومعقمه",
+      "rating": 5
+    },
+    {
+      "id": 15,
+      "nameEn": "Tsabeeh Mohamed",
+      "nameAr": "تسبيح محمد",
+      "reviewEn": "Dr. Dalia is very skilled, takes care to explain all details to you, very polite, the place is clean and good, and the treatment is excellent.",
+      "reviewAr": "دكتور داليا شاطره جدا وبتهتم تعرفك كل التفاصيل وذوق والمكان نضيف وكويس والمعامله ممتازه",
+      "rating": 5
+    },
+    {
+      "id": 16,
+      "nameEn": "Maya Ellozy",
+      "nameAr": "مايا اللوزي",
+      "reviewEn": "Dr. Dalia is an excellent doctor, very comforting in her work, precise, and cares deeply about the patient. The clinic is very clean.",
+      "reviewAr": "دكتوره داليا دكتوره ممتازه ومريحه جدا ف شغلها ودقيقة وبتهتم جدا بالمريض والعياده نظيفه جدا .❤️",
+      "rating": 5
+    },
+    {
+      "id": 17,
+      "nameEn": "Lilia Mohammed",
+      "nameAr": "ليليا محمد",
+      "reviewEn": "Dr. Dalia is one of the excellent doctors who cares very much about the patient, and her clinic is very clean.",
+      "reviewAr": "دكتوره داليا من الدكاتره الممتازه بتهتم جدا بالمريض والعياده بتاعتها نظيفه جدا",
+      "rating": 5
+    },
+    {
+      "id": 18,
+      "nameEn": "Rahma Ezzat",
+      "nameAr": "رحمة عزت",
+      "reviewEn": "Ma Sha' Allah, Dr. Dalia is excellent and very tasteful.",
+      "reviewAr": "ماشاء الله دكتوره داليا ممتازه وذوق جدا",
+      "rating": 5
+    },
+    {
+      "id": 19,
+      "nameEn": "Randa Sedky",
+      "nameAr": "راندا صدقي",
+      "reviewEn": "Great clinic and very professional doctor highly recommended",
+      "reviewAr": "عيادة عظيمة ودكتورة احترافية للغاية، أوصي بها بشدة",
+      "rating": 5
+    },
+    {
+      "id": 20,
+      "nameEn": "Aya Tawfeek",
+      "nameAr": "آية توفيق",
+      "reviewEn": "Dr. Dalia is an excellent doctor, very comforting in her work, and the clinic is very clean.",
+      "reviewAr": "دكتوره داليا دكتوره ممتازه ومريحه جدا ف شغلها والعياده نظيفه جدا",
+      "rating": 5
+    },
+    {
+      "id": 21,
+      "nameEn": "Asmaa Ahmed",
+      "nameAr": "أسماء أحمد",
+      "reviewEn": "Dr. Dalia, Ma Sha' Allah on her, her work is very beautiful.",
+      "reviewAr": "دكتور داليا ماشاء الله عليها شغلها جميل جداً",
+      "rating": 5
+    },
+    {
+      "id": 22,
+      "nameEn": "Merna Wael",
+      "nameAr": "ميرنا وائل",
+      "reviewEn": "A doctor who is top in politeness, and a very clean place.",
+      "reviewAr": "دكتوره قمه ف زوق ومكان نظيف جدا",
+      "rating": 5
+    },
+    {
+      "id": 23,
+      "nameEn": "Samar Sayma",
+      "nameAr": "سمر سيمة",
+      "reviewEn": "Excellent service and great attention to the patient. Dr. Dalia is very skilled, and the place is comfortable and clean.",
+      "reviewAr": "خدمة ممتازة واهتمام كبير بالمريض. د. داليا شاطرة جدًا والمكان مريح ونظيف",
+      "rating": 5
+    },
+    {
+      "id": 24,
+      "nameEn": "Gog Gog",
+      "nameAr": "جوج جوج",
+      "reviewEn": "The clinic is very comfortable, and the doctor, Ma Sha' Allah, her work is very nice and she is very tasteful in dealing.",
+      "reviewAr": "العيادة مريحه جدا والدكتورة ماشاء الله عليها شغلها حلو اوي وذوق جدآ فالتعامل",
+      "rating": 5
+    },
+    {
+      "id": 25,
+      "nameEn": "Neven Beshet",
+      "nameAr": "نيفين بشت",
+      "reviewEn": "Dr. Dalia, Ma Sha' Allah, is very skilled, the clinic is wonderful, and her prices are very good.",
+      "reviewAr": "د داليا ما شاء شاطره جدااا والعياده تحفه وأسعارها حلوه أوى",
+      "rating": 5
+    },
+    {
+      "id": 26,
+      "nameEn": "Hor Mahmoud",
+      "nameAr": "حور محمود",
+      "reviewEn": "A very excellent experience! Dr. Dalia is top in taste and professionalism, she deals calmly and explains every step before starting. The clinic is very clean and organization is excellent. I recommend anyone looking for a skilled and comforting doctor to go to Dr. Dalia Abd ElMougood. ❤️",
+      "reviewAr": "تجربة ممتازة جدًا! د. داليا قمة في الذوق والاحتراف، بتتعامل بهدوء وبتشرح كل خطوة قبل ما تبدأ. العيادة نظيفة جدًا والتنظيم ممتاز. أنصح أي حد يدور على دكتورة شاطرة ومريحة يروح لد. داليا عبد الموجود ❤️",
+      "rating": 5
+    },
+    {
+      "id": 27,
+      "nameEn": "Mona Kamalow",
+      "nameAr": "منى كمالو",
+      "reviewEn": "Dr. Dalia is one of the most competent dentists I have met, precise in her work and keeps the patient comfortable throughout the session. The clinic is very comfortable and clean. 👏",
+      "reviewAr": "دكتورة داليا من أكفأ دكاترة الأسنان اللي قابلتهم، دقيقة في شغلها وبتخلي المريض مرتاح طول الجلسة. العيادة مريحة ونظيفة جدًا 👏",
+      "rating": 5
+    },
+    {
+      "id": 28,
+      "nameEn": "Ghada Kamalow",
+      "nameAr": "غادة كمالو",
+      "reviewEn": "A very respectful doctor, clean work, and precise in her work. May God bless her. ❤️",
+      "reviewAr": "دكتورة محترمة جدا وشغلها نضيف ودقيقة في شغلها، ربنا يبارك فيها ❤️",
+      "rating": 5
+    },
+    {
+      "id": 29,
+      "nameEn": "Hazem Ali",
+      "nameAr": "حازم علي",
+      "reviewEn": "A respectful and ideal place with top-level services alongside banking facilities.",
+      "reviewAr": "المكان محترم ومثالى والخدمات على أعلى مستوى مع التسهيلات البنكية",
+      "rating": 5
+    },
+    {
+      "id": 30,
+      "nameEn": "Rowida Gamal",
+      "nameAr": "رويدا جمال",
+      "reviewEn": "Dr. Dalia is excellent, the place is organized, and the services are professional. Best of luck.",
+      "reviewAr": "دكتورة داليا ممتازة والمكان منظم والخدمات بروفيشنال، بالتوفيق",
+      "rating": 5
+    },
+    {
+      "id": 31,
+      "nameEn": "Lolo Elsayed",
+      "nameAr": "لولو السيد",
+      "reviewEn": "Dr. Dalia is excellent and the place is very clean. ❤️",
+      "reviewAr": "دكتوره داليا ممتازه والمكان نضيف جدا ❤️",
+      "rating": 5
+    },
+    {
+      "id": 32,
+      "nameEn": "Fatma Dardery",
+      "nameAr": "فاطمة الدرديري",
+      "reviewEn": "Dr. Dalia is excellent. I wish you success, God willing.",
+      "reviewAr": "دكتورة داليا ممتازة. أتمنى لك التوفيق إن شاء الله.",
+      "rating": 5
+    },
+    {
+      "id": 33,
+      "nameEn": "Esraa Harpy",
+      "nameAr": "إسراء حربي",
+      "reviewEn": "Ma Sha' Allah, Dr. Dalia is skilled, the place is clean, and they care a lot about sterilization. Best of luck.",
+      "reviewAr": "ماشاء الله دكتورة داليا شاطرة والمكان نظيف وبيهتموا بالتعقيم جدا .بالتوفيق",
+      "rating": 5
+    },
+    {
+      "id": 34,
+      "nameEn": "Ebtesam Fathy",
+      "nameAr": "ابتسام فتحي",
+      "reviewEn": "One of the most skilled doctors, especially in pediatric dentistry.",
+      "reviewAr": "من اشطر الدكاترة خصوصا فى اسنان الاطفال",
+      "rating": 5
+    },
+    {
+      "id": 35,
+      "nameEn": "Toosy Magdy",
+      "nameAr": "طوسي مجدي",
+      "reviewEn": "Ma Sha' Allah, an excellent doctor. ❤❤",
+      "reviewAr": "ماشاء الله دكتورة ممتازة ❤❤",
+      "rating": 5
+    },
+    {
+      "id": 36,
+      "nameEn": "Mariam Abdelghany",
+      "nameAr": "مريم عبد الغني",
+      "reviewEn": "Dr. Dalia is very excellent, Ma Sha' Allah, and the place is very clean. ❤️❤️",
+      "reviewAr": "د. داليا ممتازه جدا ما شاءالله و المكان نضيف جدا ❤️❤️",
+      "rating": 5
+    },
+    {
+      "id": 37,
+      "nameEn": "Asmaa Reda",
+      "nameAr": "أسماء رضا",
+      "reviewEn": "Very excellent and their work is very clean.",
+      "reviewAr": "ممتازين جدا وشغلهم نظيف جدا",
+      "rating": 5
+    },
+    {
+      "id": 38,
+      "nameEn": "Ahmed Tohamy",
+      "nameAr": "أحمد التهامي",
+      "reviewEn": "Clean clinic, easy to reach location, and an excellent doctor.",
+      "reviewAr": "عيادة نظيفة ومكان سهل الوصول ودكتورة ممتازة",
       "rating": 5
     }
   ],

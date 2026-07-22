@@ -115,14 +115,14 @@ export default function Footer({ lang }: FooterProps) {
               <div className="w-9 h-9 bg-brand-accent/20 rounded-lg flex items-center justify-center shrink-0">
                 <ToothIcon className="w-5 h-5 text-brand-accent" />
               </div>
-              <div>
-                <h3 className="text-base font-bold text-white leading-tight">
-                  {isAr ? clinicInfo.nameAr : clinicInfo.nameEn}
-                </h3>
-                <p className="text-[10px] text-brand-accent/80 font-medium">
-                  {isAr ? "طب الأسنان التجميلي" : "Cosmetic Dentistry"}
-                </p>
-              </div>
+            <div>
+              <h3 className="text-base font-bold text-white leading-tight">
+                {isAr ? clinicInfo.nameAr : clinicInfo.nameEn}
+              </h3>
+              <p className="text-[10px] text-brand-accent/80 font-medium">
+                {isAr ? "طب أسنان بلا ألم" : "Painless Dentistry"}
+              </p>
+            </div>
             </div>
 
             {/* Description */}

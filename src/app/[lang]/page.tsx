@@ -38,8 +38,8 @@ export default function LandingPage({
   const isAr = currentLang === "ar";
 
   const whatsappMessage = isAr
-    ? "مرحباً دكتورة داليا، أود حجز موعد استشارة."
-    : "Hello Dr. Dalia, I would like to book a consultation appointment.";
+    ? "مرحباً دكتورة داليا، أود حجز موعد استشارة Painless."
+    : "Hello Dr. Dalia, I would like to book a Painless consultation appointment.";
   const whatsappUrl = clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const sectionVariants: Variants = {
@@ -81,7 +81,7 @@ export default function LandingPage({
                         {/* Inner hand-drawn circle - blue, different irregularity */}
                         <path className="hand-circle circle-2" d="M62,8 C82,5 112,12 118,22 C122,32 116,40 96,44 C72,48 44,46 26,42 C10,38 8,26 12,18 C16,8 40,6 62,8" />
                       </svg>
-                    </span> smile, by design
+                    </span> Painless smile, by design
                   </>
                 )}
               </motion.h1>
@@ -103,7 +103,7 @@ export default function LandingPage({
             >
               <Image
                 src={aboutDoctorImage}
-                alt="Dr. Dalia - Professional Dentist"
+                alt="Dr. Dalia - Painless Dentistry"
                 fill
                 className="object-cover"
                 priority
@@ -227,11 +227,11 @@ export default function LandingPage({
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md border border-border bg-muted flex items-center justify-center"
+                className="relative h-80 w-full rounded-2xl overflow-hidden shadow-md border border-border bg-muted flex items-center justify-center"
               >
                 <Image
                   src={aboutDoctorImage}
-                  alt="Dr. Dalia - Clinical Portrait"
+                  alt="Dr. Dalia - Painless Clinical Portrait"
                   fill
                   className="object-cover"
                 />
@@ -365,7 +365,7 @@ export default function LandingPage({
                             {isAr ? testimonial.nameAr : testimonial.nameEn}
                           </p>
                           <p className="text-xs text-foreground/50">
-                            {isAr ? "مريض موثق" : "Verified Patient"}
+                            {isAr ? "مريض موثق - Painless" : "Verified Painless Patient"}
                           </p>
                         </div>
                       </div>

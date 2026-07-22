@@ -81,6 +81,9 @@ export default function Navbar({ lang }: { lang: Language }) {
       <span className="text-lg font-extrabold text-brand-primary tracking-tight">
         {isAr ? clinicInfo.nameAr : clinicInfo.nameEn}
       </span>
+      <span className="hidden md:inline text-[10px] font-bold text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+        {isAr ? "Painless" : "Painless"}
+      </span>
     </div>
   );
 

@@ -45,7 +45,7 @@ export default function Services({ lang }: ServicesProps) {
           className="text-center mb-10"
         >
           <span className="inline-block px-3 py-1 rounded-full bg-brand-accent/20 text-brand-primary text-xs font-bold tracking-wider uppercase mb-4">
-            {isAr ? "الخدمات" : "What We Offer"}
+            {isAr ? "خدماتنا بلا ألم" : "Painless Services"}
           </span>
           <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
             {title}
