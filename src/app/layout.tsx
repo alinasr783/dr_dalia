@@ -23,8 +23,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Dr. Dalia | Premium Dental Clinic",
-  description: "Experience the flawless smile transformation with Dr. Dalia's premium dental care.",
+  title: "Dr. Dalia AbdElMougood Zariaa | Premium Dental Clinic",
+  description: "Experience the flawless smile transformation with Dr. Dalia AbdElMougood Zariaa's premium dental care.",
 };
 
 export default function RootLayout({

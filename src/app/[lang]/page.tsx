@@ -38,8 +38,8 @@ export default function LandingPage({
   const isAr = currentLang === "ar";
 
   const whatsappMessage = isAr
-    ? "مرحباً دكتورة داليا، أود حجز موعد استشارة Painless."
-    : "Hello Dr. Dalia, I would like to book a Painless consultation appointment.";
+    ? "مرحباً دكتورة داليا عبد الموجود زارع، أود حجز موعد استشارة Painless."
+    : "Hello Dr. Dalia AbdElMougood Zariaa, I would like to book a Painless consultation appointment.";
   const whatsappUrl = clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const sectionVariants: Variants = {
@@ -103,7 +103,7 @@ export default function LandingPage({
             >
               <Image
                 src={aboutDoctorImage}
-                alt="Dr. Dalia - Painless Dentistry"
+                alt="Dr. Dalia AbdElMougood Zariaa - Painless Dentistry"
                 fill
                 className="object-cover"
                 priority
@@ -190,11 +190,6 @@ export default function LandingPage({
                       className="object-cover"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-[18px] leading-[24px] font-semibold text-brand-primary">
-                      {isAr ? item.titleAr : item.titleEn}
-                    </h3>
-                  </div>
                 </motion.div>
               ))}
             </div>
@@ -231,7 +226,7 @@ export default function LandingPage({
               >
                 <Image
                   src={aboutDoctorImage}
-                  alt="Dr. Dalia - Painless Clinical Portrait"
+                  alt="Dr. Dalia AbdElMougood Zariaa - Painless Clinical Portrait"
                   fill
                   className="object-cover"
                 />

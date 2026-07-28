@@ -12,8 +12,10 @@
   "clinic": {
     "nameEn": "Dr. Dalia",
     "nameAr": "د. داليا",
+    "nameFullEn": "Dr. Dalia AbdElMougood Zariaa",
+    "nameFullAr": "د. داليا عبد الموجود زارع",
     "whatsappNumber": "201112521494",
-    "phone": "01027268370",
+    "phone": "01112521494",
     "whatsappLink": "https://api.whatsapp.com/send/?phone=%2B201112521494&text&type=phone_number&app_absent=0",
     "googleMapsEmbedUrl": "https://maps.google.com/maps?q=29.9742821,31.2753871&t=k&z=17&ie=UTF8&iwloc=&output=embed"
   },

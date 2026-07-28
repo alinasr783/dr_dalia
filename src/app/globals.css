@@ -59,7 +59,7 @@
   
   --brand-primary: #06446F;
   --brand-accent: #A3DBE4;
-  --brand-action: #F39223;
+  --brand-action: #1575B5;
 
   --card: #FFFFFF;
   --card-foreground: #1e293b;
@@ -87,7 +87,7 @@
   
   --brand-primary: #06446F;
   --brand-accent: #A3DBE4;
-  --brand-action: #F39223;
+  --brand-action: #1575B5;
 
   --card: #1e293b;
   --card-foreground: #f8fafc;
@@ -116,6 +116,16 @@
   }
   html {
     @apply scroll-smooth;
+  }
+
+  /* Hide scrollbar */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
   }
 }
 

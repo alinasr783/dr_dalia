@@ -20,7 +20,7 @@ export const translations = {
     hero: {
       headline: "A healthy, Painless smile, by design",
       subheadline:
-        "Expert Painless dental care and modern aesthetics by Dr. Dalia. We focus on precise, painless treatments to ensure your teeth stay healthy and look natural.",
+        "Expert Painless dental care and modern aesthetics by Dr. Dalia AbdElMougood Zariaa. We focus on precise, painless treatments to ensure your teeth stay healthy and look natural.",
       cta: "Book a Painless Visit",
     },
     gallery: {
@@ -46,21 +46,21 @@ export const translations = {
         },
         {
           title: "Painless Veneers & Whitening",
-          description: "Full Painless smile makeover with custom porcelain veneers.",
+          description: "Full Painless smile makeover with custom Emax veneers.",
         },
       ],
     },
     about: {
       badge: "Painless Experience & Excellence",
-      title: "About Dr. Dalia",
-      bio: "Dr. Dalia is a dental consultant and a graduate of the Faculty of Dentistry, Qasr El Ainy. She cares about making every visit comfortable and Painless. She is gentle with patients, and great with kids and easing their fear of the dentist. Her services include Painless tooth fillings, Painless root canal treatment, Painless dental implants, teeth whitening, and gum care.",
+      title: "About Dr. Dalia AbdElMougood Zariaa",
+      bio: "Dr. Dalia AbdElMougood Zariaa is a dental consultant and a graduate of the Faculty of Dentistry, Qasr El Ainy. She cares about making every visit comfortable and Painless. She is gentle with patients, and great with kids and easing their fear of the dentist. Her services include Painless tooth fillings, Painless root canal treatment, Painless dental implants, teeth whitening, and gum care.",
       degrees: [
         "Dental Consultant - Graduate of Faculty of Dentistry, Qasr El Ainy",
         "Painless Fillings & Root Canal Treatment",
         "Painless Dental Implants, Whitening & Gum Care",
         "Painless Cosmetic Fillings",
         "Painless Premium Crowns & Bridges (E-max / Zirconia)",
-        "Painless Hollywood Smile & Smile Design",
+        "Hollywood Smile / Smile Design",
         "Painless Pediatric Dentistry",
         "Painless Gum Depigmentation (Laser)",
       ],
@@ -92,7 +92,7 @@ export const translations = {
       getDirections: "Get Directions",
     },
     footer: {
-      copyright: `© ${new Date().getFullYear()} Dr. Dalia Dental Clinic - Painless Dentistry. All rights reserved.`,
+      copyright: `© ${new Date().getFullYear()} Dr. Dalia AbdElMougood Zariaa Dental Clinic - Painless Dentistry. All rights reserved.`,
       followUs: "Follow Us",
       description:
         "Comprehensive and advanced Painless dental care in the heart of Maadi.",
@@ -113,7 +113,7 @@ export const translations = {
     hero: {
       headline: "ابتسامة صحية بلا ألم، بتصميم مدروس",
       subheadline:
-        "رعاية أسنان متخصصة وجماليات عصرية من د. داليا. نركّز على علاجات دقيقة وبدون ألم لضمان صحة أسنانك ومظهرها الطبيعي.",
+        "رعاية أسنان متخصصة وجماليات عصرية من د. داليا عبد الموجود زارع. نركّز على علاجات دقيقة وبدون ألم لضمان صحة أسنانك ومظهرها الطبيعي.",
       cta: "احجز زيارتك بلا ألم",
     },
     gallery: {
@@ -144,15 +144,15 @@ export const translations = {
     },
     about: {
       badge: "خبرة وتميز بلا ألم",
-      title: "عن د. داليا",
-      bio: "د. داليا استشاري أسنان وخريجة كلية طب الأسنان – القصر العيني. بتهتم إن كل زيارة تكون مريحة ومن غير ألم. لطيفة في التعامل مع المرضى، وشاطرة جداً مع الأطفال وتهدية خوفهم من دكتور الأسنان. من خدماتها: حشو الأسنان بلا ألم، علاج العصب بلا ألم، زراعة الأسنان بلا ألم، التبييض، والعناية باللثة.",
+      title: "عن د. داليا عبد الموجود زارع",
+      bio: "د. داليا عبد الموجود زارع استشاري أسنان وخريجة كلية طب الأسنان – القصر العيني. بتهتم إن كل زيارة تكون مريحة ومن غير ألم. لطيفة في التعامل مع المرضى، وشاطرة جداً مع الأطفال وتهدية خوفهم من دكتور الأسنان. من خدماتها: حشو الأسنان بلا ألم، علاج العصب بلا ألم، زراعة الأسنان بلا ألم، التبييض، والعناية باللثة.",
       degrees: [
         "استشاري أسنان – خريجة كلية طب الأسنان، القصر العيني",
         "حشو وعلاج عصب بلا ألم",
         "زراعة أسنان وتبييض وعناية باللثة بلا ألم",
         "الحشوات التجميلية الحديثة بلا ألم",
         "تركيبات الأسنان الثابتة بلا ألم (إي ماكس وزركونيا)",
-        "ابتسامة هوليود وتصميم الابتسامة بلا ألم",
+        "ابتسامة هوليود / تصميم الابتسامة",
         "علاج أسنان الأطفال بلا ألم",
         "إزالة تصبغات اللثة بالليزر بلا ألم",
       ],
@@ -183,7 +183,7 @@ export const translations = {
       getDirections: "الاتجاهات",
     },
     footer: {
-      copyright: `© ${new Date().getFullYear()} عيادة د. داليا لطب الأسنان - طب أسنان بلا ألم. جميع الحقوق محفوظة.`,
+      copyright: `© ${new Date().getFullYear()} عيادة د. داليا عبد الموجود زارع لطب الأسنان - طب أسنان بلا ألم. جميع الحقوق محفوظة.`,
       followUs: "تابعنا",
       description: "رعاية أسنان شاملة ومتقدمة وبدون ألم في قلب المعادي.",
       contactUs: "تواصل معنا",

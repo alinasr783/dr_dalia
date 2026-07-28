@@ -17,6 +17,16 @@
     {
       "id": 1,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "altEn": "Dental Implants",
+      "altAr": "زراعة الأسنان",
+      "titleEn": "Dental Implants",
+      "titleAr": "زراعة الأسنان",
+      "descEn": "Replace missing teeth permanently with painless, expert implant placement and state-of-the-art digital planning for a natural look and feel.",
+      "descAr": "تعويض الأسنان المفقودة بشكل دائم بطرق painless وبتخطيط رقمي دقيق لنتائج طبيعية تدوم طويلاً."
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Gum Depigmentation",
       "altAr": "إزالة تصبغات اللثة",
       "titleEn": "Gum Depigmentation",
@@ -25,7 +35,7 @@
       "descAr": "رجع لون اللثة الوردي الطبيعي والصحي في جلسة ليزر سريعة وآمنة تماماً و painless بدون أي ألم."
     },
     {
-      "id": 2,
+      "id": 3,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Gummy Smile Correction",
       "altAr": "علاج الضحكة اللثوية",
@@ -35,27 +45,37 @@
       "descAr": "ننسق ضحكتك ونقلل ظهور اللثة الزائد بلمسات تجميلية painless وغير جراحية عن طريق حقن البوتوكس والفيلر السريعة."
     },
     {
-      "id": 3,
+      "id": 4,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
-      "altEn": "Laser Gummy Smile",
-      "altAr": "الضحكة اللثوية بالليزر",
-      "titleEn": "Laser Gummy",
-      "titleAr": "لثوية بالليزر",
+      "altEn": "Laser Gum Contouring",
+      "altAr": "تحديد اللثة بالليزر",
+      "titleEn": "Laser Gum Contouring",
+      "titleAr": "تحديد اللثة بالليزر",
       "descEn": "Contour your gum line precisely and completely painless using state-of-the-art dental laser technology.",
       "descAr": "إعادة رسم وتنسيق خط اللثة بدقة متناهية وبدون ألم painless باستخدام أحدث تقنيات الليزر الطبي."
     },
     {
-      "id": 4,
+      "id": 5,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
-      "altEn": "Hollywood Smile",
-      "altAr": "هوليود سمايل ثابتة",
-      "titleEn": "Hollywood Smile",
-      "titleAr": "هوليود ثابتة",
-      "descEn": "Achieve your dream flawless smile permanently with a painless, ultra-thin veneer procedure requiring no reduction.",
-      "descAr": "احصل على ابتسامة المشاهير الدائمة بأرقى الخامات وبشكل painless وبدون أي برد مؤلم أو إضرار لأسنانك."
+      "altEn": "Hollywood Smile Veneers & Crowns",
+      "altAr": "فينيرز وتلبيسات هوليود",
+      "titleEn": "Hollywood Smile – Veneers & Crowns",
+      "titleAr": "هوليود سمايل – فينيرز وتلبيسات",
+      "descEn": "Achieve your dream flawless smile permanently with expert preparation and custom veneers or crowns designed for a natural, radiant Hollywood look.",
+      "descAr": "احصل على ابتسامة المشاهير الدائمة بأرقى الخامات ومن خلال برد بسيط وتنسيق دقيق للحصول على مظهر طبيعي متكامل."
     },
     {
-      "id": 5,
+      "id": 6,
+      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "altEn": "Composite Veneers",
+      "altAr": "فينيرز الكومبوزيت",
+      "titleEn": "Composite Veneers",
+      "titleAr": "فينيرز الكومبوزيت",
+      "descEn": "Get a stunning Hollywood smile with no preparation or tooth reduction — composite material applied directly to your teeth, ideal for select cases.",
+      "descAr": "ابتسامة هوليود بدون أي برد أو تحضير للأسنان — طبقة كومبوزيت راقية مباشرة على الأسنان، مناسبة لحالات معينة ومختارة."
+    },
+    {
+      "id": 7,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Removable Smile",
       "altAr": "هوليود متحركة",
@@ -65,17 +85,17 @@
       "descAr": "تمتع بابتسامة بيضاء ومشرقة فورية وسهلة التركيب painless وقتما تشاء، بدون أي حفر أو تخدير أو برد."
     },
     {
-      "id": 6,
+      "id": 8,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Dental Veneers",
       "altAr": "فينيرز الأسنان",
       "titleEn": "Dental Veneers",
       "titleAr": "فينيرز الأسنان",
-      "descEn": "Transform your smile with painless custom porcelain or E-max veneers designed to mask imperfections.",
-      "descAr": "قشور الفينييرز الثابتة المصنوعة من أجود خامات البورسلين لإخفاء التصبغات والكسور بشكل painless."
+      "descEn": "Transform your smile with painless custom Emax veneers designed to mask imperfections.",
+      "descAr": "قشور الفينييرز الثابتة المصنوعة من أجود خامات الإيماكس لإخفاء التصبغات والكسور بشكل painless."
     },
     {
-      "id": 7,
+      "id": 9,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Pediatric Dentistry",
       "altAr": "أسنان الأطفال",
@@ -85,7 +105,7 @@
       "descAr": "رعاية حنونة ومتخصصة painless لأطفالنا بدون خوف أو إبر مخيفة؛ لضمان تجربة علاج ممتعة ومريحة."
     },
     {
-      "id": 8,
+      "id": 10,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Sedation Dentistry",
       "altAr": "تخدير كلي للأطفال",
@@ -95,7 +115,7 @@
       "descAr": "علاج شامل ومتكامل لأسنان الأطفال في جلسة واحدة painless وتحت الإشراف الطبي الكامل والتخدير الآمن."
     },
     {
-      "id": 9,
+      "id": 11,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Fluoride Treatment",
       "altAr": "جلسات الفلورايد",
@@ -105,17 +125,17 @@
       "descAr": "جلسات فلوريد وقائية مركزة painless لتقوية طبقة المينا وحماية أسنان الصغار والكبار من التسوس."
     },
     {
-      "id": 10,
+      "id": 12,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Bruxism Therapy",
       "altAr": "علاج الجز",
-      "titleEn": "Jaw Pain Guard",
-      "titleAr": "علاج الجز والفكين",
+      "titleEn": "Night Guard",
+      "titleAr": "واقي الأسنان الليلي",
       "descEn": "Protect your teeth from grinding and relieve jaw tension with painless custom night guards and therapies.",
       "descAr": "حماية الأسنان من التآكل الناتج عن الجز اللاإرادي وعلاج آلام الفكين بشكل painless باستخدام واقي الأسنان."
     },
     {
-      "id": 11,
+      "id": 13,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Gum Care",
       "altAr": "علاج نزيف اللثة",
@@ -125,24 +145,24 @@
       "descAr": "علاج التهابات ونزيف اللثة والقضاء على رائحة الفم الكريهة عبر التنظيف العميق وجلسات painless."
     },
     {
-      "id": 12,
+      "id": 14,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
       "altEn": "Dental Pain Relief",
       "altAr": "علاج آلام الأسنان",
       "titleEn": "Pain Relief",
       "titleAr": "علاج آلام الأسنان",
-      "descEn": "Relieve dental pain instantly and restore damaged teeth using painless cutting-edge techniques and global materials.",
-      "descAr": "تخلص من آلام الأسنان المبرحة فوراً وبشكل painless وأعد بناء وتجميل أسنانك التالفة بأجود الخامات."
+      "descEn": "Relieve dental pain instantly with painless endodontic treatments followed by crowns crafted from the best global materials.",
+      "descAr": "تخلص من آلام الأسنان المبرحة فوراً وبشكل painless مع علاج عصب متكامل متبوع بتركيبات من أفضل الخامات العالمية."
     },
     {
-      "id": 13,
+      "id": 15,
       "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
-      "altEn": "Ortho & Implants",
-      "altAr": "تقويم وزراعة الأسنان",
-      "titleEn": "Ortho & Implants",
-      "titleAr": "تقويم وزراعة",
-      "descEn": "Straighten your teeth and replace missing ones permanently with painless expert orthodontics and implants.",
-      "descAr": "استعد اصطفاف أسنانك بالتقويم الحديث وقم بتعويض الأسنان المفقودة بزراعة متطورة وبشكل painless."
+      "altEn": "Orthodontics",
+      "altAr": "تقويم الأسنان",
+      "titleEn": "Orthodontics",
+      "titleAr": "تقويم الأسنان",
+      "descEn": "Straighten your teeth and achieve a perfectly aligned smile with painless modern orthodontic treatments tailored to your case.",
+      "descAr": "استعد اصطفاف أسنانك واحصل على ابتسامة متناسقة مع تقويم حديث وبدون ألم مصمم خصيصاً لحالتك."
     }
   ]
 }

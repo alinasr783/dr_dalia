@@ -117,7 +117,7 @@ export default function Footer({ lang }: FooterProps) {
               </div>
             <div>
               <h3 className="text-base font-bold text-white leading-tight">
-                {isAr ? clinicInfo.nameAr : clinicInfo.nameEn}
+                {isAr ? clinicInfo.nameFullAr : clinicInfo.nameFullEn}
               </h3>
               <p className="text-[10px] text-brand-accent/80 font-medium">
                 {isAr ? "طب أسنان بلا ألم" : "Painless Dentistry"}
