@@ -16,7 +16,7 @@
   "services": [
     {
       "id": 1,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Dental Implants",
       "altAr": "زراعة الأسنان",
       "titleEn": "Dental Implants",
@@ -26,7 +26,7 @@
     },
     {
       "id": 2,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Gum Depigmentation",
       "altAr": "إزالة تصبغات اللثة",
       "titleEn": "Gum Depigmentation",
@@ -36,7 +36,7 @@
     },
     {
       "id": 3,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png", 
       "altEn": "Gummy Smile Correction",
       "altAr": "علاج الضحكة اللثوية",
       "titleEn": "Gummy Smile",
@@ -46,7 +46,7 @@
     },
     {
       "id": 4,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Laser Gum Contouring",
       "altAr": "تحديد اللثة بالليزر",
       "titleEn": "Laser Gum Contouring",
@@ -56,7 +56,7 @@
     },
     {
       "id": 5,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Hollywood Smile Veneers & Crowns",
       "altAr": "فينيرز وتلبيسات هوليود",
       "titleEn": "Hollywood Smile – Veneers & Crowns",
@@ -66,7 +66,7 @@
     },
     {
       "id": 6,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Composite Veneers",
       "altAr": "فينيرز الكومبوزيت",
       "titleEn": "Composite Veneers",
@@ -76,7 +76,7 @@
     },
     {
       "id": 7,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Removable Smile",
       "altAr": "هوليود متحركة",
       "titleEn": "Snap-On Smile",
@@ -86,7 +86,7 @@
     },
     {
       "id": 8,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Dental Veneers",
       "altAr": "فينيرز الأسنان",
       "titleEn": "Dental Veneers",
@@ -96,7 +96,7 @@
     },
     {
       "id": 9,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Pediatric Dentistry",
       "altAr": "أسنان الأطفال",
       "titleEn": "Kids Dentistry",
@@ -106,7 +106,7 @@
     },
     {
       "id": 10,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Sedation Dentistry",
       "altAr": "تخدير كلي للأطفال",
       "titleEn": "Sleep Dentistry",
@@ -116,7 +116,7 @@
     },
     {
       "id": 11,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Fluoride Treatment",
       "altAr": "جلسات الفلورايد",
       "titleEn": "Fluoride Care",
@@ -126,7 +126,7 @@
     },
     {
       "id": 12,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Bruxism Therapy",
       "altAr": "علاج الجز",
       "titleEn": "Night Guard",
@@ -136,7 +136,7 @@
     },
     {
       "id": 13,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Gum Care",
       "altAr": "علاج نزيف اللثة",
       "titleEn": "Gum Therapy",
@@ -146,7 +146,7 @@
     },
     {
       "id": 14,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Dental Pain Relief",
       "altAr": "علاج آلام الأسنان",
       "titleEn": "Pain Relief",
@@ -156,7 +156,7 @@
     },
     {
       "id": 15,
-      "image": "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800",
+      "image": "https://i.ibb.co/kVmMHXQx/Gemini-Generated-Image-kerqtykerqtykerq.png",
       "altEn": "Orthodontics",
       "altAr": "تقويم الأسنان",
       "titleEn": "Orthodontics",
