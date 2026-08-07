@@ -38,7 +38,7 @@ export default function LandingPage({
   const isAr = currentLang === "ar";
 
   const whatsappMessage = isAr
-    ? "مرحباً دكتورة داليا عبد الموجود زارع، أود حجز موعد استشارة Painless."
+    ? "مرحباً دكتورة داليا عبد الموجود زارع، أود حجز موعد استشارة بدون ألم."
     : "Hello Dr. Dalia AbdElMougood Zariaa, I would like to book a Painless consultation appointment.";
   const whatsappUrl = clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
@@ -360,7 +360,7 @@ export default function LandingPage({
                             {isAr ? testimonial.nameAr : testimonial.nameEn}
                           </p>
                           <p className="text-xs text-foreground/50">
-                            {isAr ? "مريض موثق - Painless" : "Verified Painless Patient"}
+                            {isAr ? "مريض موثق - بدون ألم" : "Verified Painless Patient"}
                           </p>
                         </div>
                       </div>

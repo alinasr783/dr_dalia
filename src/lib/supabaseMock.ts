@@ -53,7 +53,7 @@ export const translations = {
     about: {
       badge: "Painless Experience & Excellence",
       title: "About Dr. Dalia AbdElMougood Zariaa",
-      bio: "Dr. Dalia AbdElMougood Zariaa is a dental consultant and a graduate of the Faculty of Dentistry, Qasr El Ainy. She cares about making every visit comfortable and Painless. She is gentle with patients, and great with kids and easing their fear of the dentist. Her services include Painless tooth fillings, Painless root canal treatment, Painless dental implants, teeth whitening, and gum care.",
+      bio: "Dr. Dalia AbdElMougood Zariaa is a dental consultant with over 20 years of experience and a graduate of the Faculty of Dentistry, Qasr El Ainy. She cares about making every visit comfortable and Painless. She is gentle with patients, and great with kids and easing their fear of the dentist. Her services include Painless tooth fillings, Painless root canal treatment, Painless dental implants, teeth whitening, and gum care.",
       degrees: [
         "Dental Consultant - Graduate of Faculty of Dentistry, Qasr El Ainy",
         "Painless Fillings & Root Canal Treatment",
@@ -145,7 +145,7 @@ export const translations = {
     about: {
       badge: "خبرة وتميز بلا ألم",
       title: "عن د. داليا عبد الموجود زارع",
-      bio: "د. داليا عبد الموجود زارع استشاري أسنان وخريجة كلية طب الأسنان – القصر العيني. بتهتم إن كل زيارة تكون مريحة ومن غير ألم. لطيفة في التعامل مع المرضى، وشاطرة جداً مع الأطفال وتهدية خوفهم من دكتور الأسنان. من خدماتها: حشو الأسنان بلا ألم، علاج العصب بلا ألم، زراعة الأسنان بلا ألم، التبييض، والعناية باللثة.",
+      bio: "د. داليا عبد الموجود زارع استشاري أسنان خبرة أكثر من 20 سنة وخريجة كلية طب الأسنان – القصر العيني. بتهتم إن كل زيارة تكون مريحة ومن غير ألم. لطيفة في التعامل مع المرضى، وشاطرة جداً مع الأطفال وتهدية خوفهم من دكتور الأسنان. من خدماتها: حشو الأسنان بلا ألم، علاج العصب بلا ألم، زراعة الأسنان بلا ألم، التبييض، والعناية باللثة.",
       degrees: [
         "استشاري أسنان – خريجة كلية طب الأسنان، القصر العيني",
         "حشو وعلاج عصب بلا ألم",

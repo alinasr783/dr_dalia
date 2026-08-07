@@ -51,6 +51,14 @@ function TikTokIcon({ className }: { className?: string }) {
   );
 }
 
+function SnapchatIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm.11 14.5c-.92 0-1.72-.35-2.36-.92-.58.14-1.08.22-1.5.22-.36 0-.64-.08-.83-.19-.17-.11-.25-.24-.25-.38 0-.19.14-.33.4-.42.38-.14.88-.22 1.45-.28-.05-.14-.08-.28-.08-.42 0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25c0 .14-.03.28-.08.42.57.06 1.07.14 1.45.28.26.09.4.23.4.42 0 .14-.08.27-.25.38-.19.11-.47.19-.83.19-.42 0-.92-.08-1.5-.22-.64.57-1.44.92-2.36.92z" />
+    </svg>
+  );
+}
+
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -94,6 +102,7 @@ export default function Footer({ lang }: FooterProps) {
   const socialLinksData = [
     { icon: FacebookIcon, href: socialLinks.facebook, label: "Facebook" },
     { icon: InstagramIcon, href: socialLinks.instagram, label: "Instagram" },
+    { icon: SnapchatIcon, href: socialLinks.snapchat, label: "Snapchat" },
     { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: "WhatsApp" },
   ];
 

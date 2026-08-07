@@ -10,7 +10,7 @@
     "titleEn": "Our Services",
     "titleAr": "خدماتنا",
     "subtitleEn": "Experience premium, painless dental care tailored to your comfort and a flawless smile.",
-    "subtitleAr": "عشان ضحكتك تهمنا.. بنقدملك رعاية متكاملة لأسنانك بأحدث التقنيات وبدون ألم (painless)، لتستمتع بابتسامة تملأ وجهك ثقة."
+    "subtitleAr": "عشان ضحكتك تهمنا.. بنقدملك رعاية متكاملة لأسنانك بأحدث التقنيات وبدون ألم، لتستمتع بابتسامة تملأ وجهك ثقة."
   },
 
   "services": [
@@ -22,7 +22,7 @@
       "titleEn": "Dental Implants",
       "titleAr": "زراعة الأسنان",
       "descEn": "Replace missing teeth permanently with painless, expert implant placement and state-of-the-art digital planning for a natural look and feel.",
-      "descAr": "تعويض الأسنان المفقودة بشكل دائم بطرق painless وبتخطيط رقمي دقيق لنتائج طبيعية تدوم طويلاً."
+      "descAr": "تعويض الأسنان المفقودة بشكل دائم بطرق بدون ألم وبتخطيط رقمي دقيق لنتائج طبيعية تدوم طويلاً."
     },
     {
       "id": 2,
@@ -32,7 +32,7 @@
       "titleEn": "Gum Depigmentation",
       "titleAr": "تصبغات اللثة",
       "descEn": "Restore the healthy, natural pink appearance of your gums with a completely painless and advanced laser therapy.",
-      "descAr": "رجع لون اللثة الوردي الطبيعي والصحي في جلسة ليزر سريعة وآمنة تماماً و painless بدون أي ألم."
+      "descAr": "رجع لون اللثة الوردي الطبيعي والصحي في جلسة ليزر سريعة وآمنة تماماً وبدون أي ألم."
     },
     {
       "id": 3,
@@ -42,7 +42,7 @@
       "titleEn": "Gummy Smile",
       "titleAr": "الضحكة اللثوية",
       "descEn": "Optimize your smile dynamics with a painless, non-surgical Botox and filler technique for a balanced look.",
-      "descAr": "ننسق ضحكتك ونقلل ظهور اللثة الزائد بلمسات تجميلية painless وغير جراحية عن طريق حقن البوتوكس والفيلر السريعة."
+      "descAr": "ننسق ضحكتك ونقلل ظهور اللثة الزائد بلمسات تجميلية بدون ألم وغير جراحية عن طريق حقن البوتوكس والفيلر السريعة."
     },
     {
       "id": 4,
@@ -52,7 +52,7 @@
       "titleEn": "Laser Gum Contouring",
       "titleAr": "تحديد اللثة بالليزر",
       "descEn": "Contour your gum line precisely and completely painless using state-of-the-art dental laser technology.",
-      "descAr": "إعادة رسم وتنسيق خط اللثة بدقة متناهية وبدون ألم painless باستخدام أحدث تقنيات الليزر الطبي."
+      "descAr": "إعادة رسم وتنسيق خط اللثة بدقة متناهية وبدون ألم باستخدام أحدث تقنيات الليزر الطبي."
     },
     {
       "id": 5,
@@ -71,7 +71,7 @@
       "altAr": "فينيرز الكومبوزيت",
       "titleEn": "Composite Veneers",
       "titleAr": "فينيرز الكومبوزيت",
-      "descEn": "Get a stunning Hollywood smile with no preparation or tooth reduction — composite material applied directly to your teeth, ideal for select cases.",
+      "descEn": "Get a stunning Hollywood smile with no preparation or tooth reduction — composite material applied directly to your teeth, ideal for selected cases.",
       "descAr": "ابتسامة هوليود بدون أي برد أو تحضير للأسنان — طبقة كومبوزيت راقية مباشرة على الأسنان، مناسبة لحالات معينة ومختارة."
     },
     {
@@ -82,7 +82,7 @@
       "titleEn": "Snap-On Smile",
       "titleAr": "هوليود متحركة",
       "descEn": "Enjoy a sparkling removable snap-on smile instantly and painless without drilling or permanent alterations.",
-      "descAr": "تمتع بابتسامة بيضاء ومشرقة فورية وسهلة التركيب painless وقتما تشاء، بدون أي حفر أو تخدير أو برد."
+      "descAr": "تمتع بابتسامة بيضاء ومشرقة فورية وسهلة التركيب بدون ألم وقتما تشاء، بدون أي حفر أو تخدير أو برد."
     },
     {
       "id": 8,
@@ -92,7 +92,7 @@
       "titleEn": "Dental Veneers",
       "titleAr": "فينيرز الأسنان",
       "descEn": "Transform your smile with painless custom Emax veneers designed to mask imperfections.",
-      "descAr": "قشور الفينييرز الثابتة المصنوعة من أجود خامات الإيماكس لإخفاء التصبغات والكسور بشكل painless."
+      "descAr": "قشور الفينييرز الثابتة المصنوعة من أجود خامات الإيماكس لإخفاء التصبغات والكسور بشكل غير مؤلم."
     },
     {
       "id": 9,
@@ -102,7 +102,7 @@
       "titleEn": "Kids Dentistry",
       "titleAr": "أسنان الأطفال",
       "descEn": "Deliver gentle, painless, and fear-free dental care for children using advanced needle-free techniques.",
-      "descAr": "رعاية حنونة ومتخصصة painless لأطفالنا بدون خوف أو إبر مخيفة؛ لضمان تجربة علاج ممتعة ومريحة."
+      "descAr": "رعاية حنونة ومتخصصة بدون ألم لأطفالنا بدون خوف أو إبر مخيفة؛ لضمان تجربة علاج ممتعة ومريحة."
     },
     {
       "id": 10,
@@ -112,7 +112,7 @@
       "titleEn": "Sleep Dentistry",
       "titleAr": "تخدير كلي",
       "descEn": "Complete comprehensive dental restoration safely in a single painless visit under specialized general anesthesia.",
-      "descAr": "علاج شامل ومتكامل لأسنان الأطفال في جلسة واحدة painless وتحت الإشراف الطبي الكامل والتخدير الآمن."
+      "descAr": "علاج شامل ومتكامل لأسنان الأطفال في جلسة واحدة بدون ألم وتحت الإشراف الطبي الكامل والتخدير الآمن."
     },
     {
       "id": 11,
@@ -122,7 +122,7 @@
       "titleEn": "Fluoride Care",
       "titleAr": "جلسات الفلورايد",
       "descEn": "Strengthen tooth enamel and prevent decay effectively with painless high-concentration fluoride varnish.",
-      "descAr": "جلسات فلوريد وقائية مركزة painless لتقوية طبقة المينا وحماية أسنان الصغار والكبار من التسوس."
+      "descAr": "جلسات فلوريد وقائية مركزة بدون ألم لتقوية طبقة المينا وحماية أسنان الصغار والكبار من التسوس."
     },
     {
       "id": 12,
@@ -132,7 +132,7 @@
       "titleEn": "Night Guard",
       "titleAr": "واقي الأسنان الليلي",
       "descEn": "Protect your teeth from grinding and relieve jaw tension with painless custom night guards and therapies.",
-      "descAr": "حماية الأسنان من التآكل الناتج عن الجز اللاإرادي وعلاج آلام الفكين بشكل painless باستخدام واقي الأسنان."
+      "descAr": "حماية الأسنان من التآكل الناتج عن الجز اللاإرادي وعلاج آلام الفكين بشكل بدون ألم باستخدام واقي الأسنان."
     },
     {
       "id": 13,
@@ -142,7 +142,7 @@
       "titleEn": "Gum Therapy",
       "titleAr": "علاج اللثة",
       "descEn": "Eliminate gum inflammation and bad breath effectively with deep painless scaling and periodontal care.",
-      "descAr": "علاج التهابات ونزيف اللثة والقضاء على رائحة الفم الكريهة عبر التنظيف العميق وجلسات painless."
+      "descAr": "علاج التهابات ونزيف اللثة والقضاء على رائحة الفم الكريهة عبر التنظيف العميق وجلسات بدون ألم."
     },
     {
       "id": 14,
@@ -152,7 +152,7 @@
       "titleEn": "Pain Relief",
       "titleAr": "علاج آلام الأسنان",
       "descEn": "Relieve dental pain instantly with painless endodontic treatments followed by crowns crafted from the best global materials.",
-      "descAr": "تخلص من آلام الأسنان المبرحة فوراً وبشكل painless مع علاج عصب متكامل متبوع بتركيبات من أفضل الخامات العالمية."
+      "descAr": "تخلص من آلام الأسنان المبرحة فوراً وبشكل بدون ألم مع علاج عصب متكامل متبوع بتركيبات من أفضل الخامات العالمية."
     },
     {
       "id": 15,
@@ -162,7 +162,7 @@
       "titleEn": "Orthodontics",
       "titleAr": "تقويم الأسنان",
       "descEn": "Straighten your teeth and achieve a perfectly aligned smile with painless modern orthodontic treatments tailored to your case.",
-      "descAr": "استعد اصطفاف أسنانك واحصل على ابتسامة متناسقة مع تقويم حديث وبدون ألم مصمم خصيصاً لحالتك."
+      "descAr": "استعد اصطفاف أسنانك واحصل على ابتسامة متناسقة مع تقويم حديث بدون ألم مصمم خصيصاً لحالتك."
     }
   ]
 }
