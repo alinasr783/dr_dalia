@@ -31,6 +31,8 @@ export const translations = {
         { title: "Painless Cheerful Grins" },
         { title: "Smiles Made Painless" },
         { title: "Painless Bright Smiles" },
+        { title: "Painless Happy Little Smile" },
+        { title: "Painless Joyful Dental Visit" },
       ],
     },
     beforeAfter: {
@@ -125,6 +127,8 @@ export const translations = {
         { title: "ابتسامات مبهجة بلا ألم" },
         { title: "ابتسامات سهلة وبلا ألم" },
         { title: "ابتسامات مشرقة بلا ألم" },
+        { title: "ابتسامة طفل سعيدة بلا ألم" },
+        { title: "زيارة أسنان مبهجة بلا ألم" },
       ],
     },
     beforeAfter: {

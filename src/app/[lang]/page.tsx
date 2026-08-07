@@ -270,7 +270,7 @@ export default function LandingPage({
             </motion.div>
 
             <div className="flex flex-col gap-6">
-              {galleryItems.slice(0, 3).map((item, index) => (
+              {galleryItems.map((item, index) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, y: 20 }}
