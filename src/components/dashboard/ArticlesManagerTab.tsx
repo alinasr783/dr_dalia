@@ -601,14 +601,14 @@ export default function ArticlesManagerTab() {
       )}
 
       {/* Header & Primary Actions */}
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl md:text-2xl font-extrabold text-brand-primary flex items-center gap-2">
-            <FileText className="w-6 h-6 text-brand-action" />
-            <span>إدارة المقالات الطبية (CMS & SEO)</span>
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-sky-500" />
+            <span>إدارة المقالات الطبية (CMS & MCP)</span>
           </h1>
-          <p className="text-xs md:text-sm text-foreground/60 mt-1">
-            إضافة وتعديل وحذف المقالات، تحسين محركات البحث (SEO)، والربط مع وكيل الذكاء الاصطناعي عبر MCP
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            إضافة وتعديل وحذف المقالات، رفع الصور للسحابة، وتوفير أدوات MCP لكتّاب الذكاء الاصطناعي
           </p>
         </div>
 
@@ -616,16 +616,16 @@ export default function ArticlesManagerTab() {
           <button
             type="button"
             onClick={() => setMcpModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-accent/25 text-brand-primary hover:bg-brand-accent/40 font-bold text-xs md:text-sm transition-colors cursor-pointer border border-brand-accent"
+            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs sm:text-sm transition-all cursor-pointer border border-sky-200 active:scale-95"
           >
-            <Bot className="w-4 h-4 text-brand-action" />
-            <span>ربط وكيل الذكاء الاصطناعي (MCP)</span>
+            <Bot className="w-4 h-4 text-sky-600" />
+            <span>ربط الذكاء الاصطناعي (MCP)</span>
           </button>
 
           <button
             type="button"
             onClick={openCreateEditor}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-primary text-white hover:bg-brand-action font-bold text-xs md:text-sm shadow-sm transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white hover:from-sky-400 hover:to-blue-500 font-bold text-xs sm:text-sm shadow-md shadow-sky-500/25 transition-all cursor-pointer active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>إضافة مقال جديد</span>
@@ -635,58 +635,58 @@ export default function ArticlesManagerTab() {
 
       {/* Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm">
-          <span className="text-xs text-foreground/55 font-semibold">
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase">
             إجمالي المقالات
           </span>
-          <div className="text-2xl font-extrabold text-brand-primary mt-1">
+          <div className="text-2xl font-black text-slate-900 font-mono mt-1">
             {stats.total}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm">
-          <span className="text-xs text-emerald-600 font-semibold">
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+          <span className="text-[11px] font-bold text-emerald-600 uppercase">
             منشور (Published)
           </span>
-          <div className="text-2xl font-extrabold text-emerald-600 mt-1">
+          <div className="text-2xl font-black text-emerald-600 font-mono mt-1">
             {stats.published}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm">
-          <span className="text-xs text-amber-600 font-semibold">
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+          <span className="text-[11px] font-bold text-amber-600 uppercase">
             مسودات (Drafts)
           </span>
-          <div className="text-2xl font-extrabold text-amber-600 mt-1">
+          <div className="text-2xl font-black text-amber-600 font-mono mt-1">
             {stats.drafts}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm">
-          <span className="text-xs text-brand-action font-semibold">
-            مقالات مميزة (Featured)
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+          <span className="text-[11px] font-bold text-sky-600 uppercase">
+            مميزة (Featured)
           </span>
-          <div className="text-2xl font-extrabold text-brand-action mt-1">
+          <div className="text-2xl font-black text-sky-600 font-mono mt-1">
             {stats.featured}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm col-span-2 sm:col-span-1">
-          <span className="text-xs text-foreground/55 font-semibold">
-            إجمالي المشاهدات
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs col-span-2 sm:col-span-1">
+          <span className="text-[11px] font-bold text-slate-500 uppercase">
+            إجمالي المشاهدات الفعلية
           </span>
-          <div className="text-2xl font-extrabold text-brand-primary mt-1">
+          <div className="text-2xl font-black text-slate-900 font-mono mt-1">
             {stats.totalViews}
           </div>
         </div>
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-white rounded-2xl border border-border p-4 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-3 sm:p-4 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-foreground/45 absolute top-1/2 -translate-y-1/2 right-3.5 pointer-events-none" />
+          <Search className="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 right-3.5 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ابحث في المقالات بالعنوان، الـ Slug، الكلمات المفتاحية..."
-            className="w-full rounded-xl bg-background/70 border border-border pr-10 pl-4 py-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="w-full rounded-xl bg-slate-50 border border-slate-200 pr-10 pl-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
           />
         </div>
 
@@ -705,10 +705,10 @@ export default function ArticlesManagerTab() {
                   tab.id as "all" | "published" | "draft" | "featured"
                 )
               }
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === tab.id
-                  ? "bg-brand-primary text-white"
-                  : "bg-background text-foreground/70 hover:bg-brand-accent/25"
+                  ? "bg-slate-900 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
               {tab.label}
@@ -718,7 +718,7 @@ export default function ArticlesManagerTab() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="rounded-xl bg-background border border-border px-3 py-2 text-xs font-bold text-brand-primary focus:outline-none"
+            className="rounded-xl bg-slate-100 border border-slate-200 px-3 py-1.5 sm:py-2 text-xs font-bold text-slate-700 focus:outline-none"
           >
             <option value="all">جميع التصنيفات</option>
             {DEFAULT_CATEGORIES.map((c) => (
@@ -731,8 +731,8 @@ export default function ArticlesManagerTab() {
           <button
             type="button"
             onClick={loadPosts}
-            className="p-2 rounded-xl bg-background border border-border text-brand-primary hover:bg-brand-accent/20 cursor-pointer"
-            title="تحديث"
+            className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 cursor-pointer transition-colors"
+            title="تحديث قائمة المقالات"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -740,30 +740,127 @@ export default function ArticlesManagerTab() {
       </div>
 
       {/* Articles Table / List */}
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         {loading && posts.length === 0 ? (
-          <div className="p-12 text-center text-sm text-foreground/60">
+          <div className="p-12 text-center text-sm text-slate-500">
             جاري تحميل المقالات من Supabase...
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <p className="text-base font-bold text-brand-primary">
+            <p className="text-base font-bold text-slate-800">
               لا توجد مقالات مطابقة للبحث
             </p>
             <button
               type="button"
               onClick={openCreateEditor}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-bold cursor-pointer hover:bg-sky-600 transition-all shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>إنشاء أول مقال</span>
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-right border-collapse">
-              <thead>
-                <tr className="bg-background/80 border-b border-border text-[11px] font-extrabold text-foreground/60 uppercase">
+          <>
+            {/* Mobile Cards View (< md) */}
+            <div className="block md:hidden divide-y divide-slate-100">
+              {filteredPosts.map((post) => (
+                <div
+                  key={post.id}
+                  className="p-4 space-y-3 hover:bg-slate-50/70 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="relative w-20 h-16 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-xs">
+                      <Image
+                        src={post.cover_image}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 font-bold">
+                          {post.category}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickToggle(post, "status")}
+                          className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold transition-colors cursor-pointer ${
+                            post.status === "published"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-100 text-slate-600 border border-slate-200"
+                          }`}
+                        >
+                          {post.status === "published" ? "منشور" : "مسودة"}
+                        </button>
+                        {post.featured && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600 font-bold flex items-center gap-0.5">
+                            <Star className="w-2.5 h-2.5 fill-current" />
+                            مميز
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2">
+                        {post.title}
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100/80">
+                    <span className="flex items-center gap-1 font-mono text-slate-700 font-bold">
+                      <Eye className="w-3.5 h-3.5 text-sky-500" />
+                      {post.views || 0} قراءة فعلية
+                    </span>
+                    <span className="text-[11px] text-slate-400 font-mono">
+                      {new Date(post.published_at).toLocaleDateString("ar-EG")}
+                    </span>
+                  </div>
+
+                  {/* Touch-Friendly Action Buttons on Mobile */}
+                  <div className="grid grid-cols-4 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => openEditEditor(post)}
+                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>تعديل</span>
+                    </button>
+                    <Link
+                      href={`/ar/articles/${post.slug}`}
+                      target="_blank"
+                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>معاينة</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleDuplicate(post)}
+                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>نسخ</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(post)}
+                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>حذف</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-right border-collapse">
+                <thead>
+                  <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-extrabold text-slate-500 uppercase">
                   <th className="py-3.5 px-4">المقال</th>
                   <th className="py-3.5 px-3">التصنيف</th>
                   <th className="py-3.5 px-3">الحالة</th>
@@ -911,20 +1008,21 @@ export default function ArticlesManagerTab() {
               </tbody>
             </table>
           </div>
+        </>
         )}
       </div>
 
       {/* ===================================================================== */}
-      {/* Full Rich Article Editor Modal */}
+      {/* Full Rich Article Editor Modal (Mobile-Optimized Full Screen Sheet) */}
       {/* ===================================================================== */}
       {editorOpen && (
-        <div className="fixed inset-0 z-[80] bg-black/55 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-          <div className="bg-white w-full max-w-5xl rounded-3xl border border-border shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
+        <div className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-5xl h-full sm:h-auto sm:max-h-[92vh] rounded-none sm:rounded-3xl border-0 sm:border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
             {/* Modal Header */}
-            <div className="px-6 py-4 bg-brand-primary text-white flex items-center justify-between">
+            <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-between shrink-0 shadow-sm">
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-5 h-5 text-brand-accent" />
-                <h2 className="text-base md:text-lg font-extrabold">
+                <Sparkles className="w-5 h-5 text-sky-200" />
+                <h2 className="text-base md:text-lg font-black">
                   {form.id ? "تعديل المقال الطبي" : "إضافة مقال طبي جديد"}
                 </h2>
               </div>
@@ -1706,25 +1804,30 @@ export default function ArticlesManagerTab() {
                 </div>
               )}
 
-              {/* Modal Footer */}
-              <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
+              {/* Modal Footer (Sticky at bottom for seamless mobile experience) */}
+              <div className="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3.5 pb-3 px-4 sm:px-6 border-t border-slate-200 flex items-center justify-between gap-3 shadow-lg z-20 shrink-0">
                 <button
                   type="button"
                   onClick={() => setEditorOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-border text-xs md:text-sm font-bold text-foreground/70 hover:bg-background cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-7 py-2.5 rounded-xl bg-brand-primary text-white text-xs md:text-sm font-bold hover:bg-brand-action shadow-md transition-all cursor-pointer disabled:opacity-60"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 active:scale-95 text-white text-xs sm:text-sm font-bold shadow-md shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60 flex items-center gap-2"
                 >
-                  {saving
-                    ? "جاري الحفظ في Supabase..."
-                    : form.id
-                    ? "حفظ التعديلات"
-                    : "نشر وحفظ المقال في Supabase"}
+                  {saving ? (
+                    <>
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      <span>جاري الحفظ في Supabase...</span>
+                    </>
+                  ) : form.id ? (
+                    <span>حفظ التعديلات في السحابة</span>
+                  ) : (
+                    <span>نشر وحفظ المقال في Supabase</span>
+                  )}
                 </button>
               </div>
             </form>

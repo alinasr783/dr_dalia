@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/supabase/config";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -229,6 +230,7 @@ export default async function LangLayout({ children, params }: LayoutProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+      <AnalyticsTracker />
       {children}
     </div>
   );

@@ -118,4 +118,7 @@ export interface AnalyticsReport {
   devices: { device: string; label: string; count: number; percentage: number }[];
   countries: { country: string; label: string; count: number; percentage: number }[];
   recentEvents: AnalyticsEvent[];
+  latencyMs?: number;
+  totalEventsCount?: number;
+  isConnected?: boolean;
 }

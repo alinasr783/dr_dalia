@@ -65,7 +65,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 5,
-    views: 342,
+    views: 0,
     seo_title: "زراعة الأسنان بدون ألم في المعادي | د. داليا عبد الموجود زارع",
     seo_description: "تعرف على خطوات ومميزات زراعة الأسنان بدون ألم مع د. داليا عبد الموجود زارع استشاري طب الأسنان بالقصر العيني. نسب نجاح تتخطى 98% ونتائج طبيعية تدوم مدى الحياة.",
     focus_keyword: "زراعة الأسنان بدون ألم",
@@ -157,7 +157,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 4,
-    views: 289,
+    views: 0,
     seo_title: "علاج أسنان الأطفال بدون ألم في المعادي | د. داليا عبد الموجود زارع",
     seo_description: "تعرفي على 7 نصائح ذهبية للتغلب على خوف طفلك من طبيب الأسنان، وكيف تقدم د. داليا عبد الموجود زارع علاج أسنان الأطفال بدون ألم في المعادي.",
     focus_keyword: "علاج أسنان الأطفال بدون ألم",
@@ -242,7 +242,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 5,
-    views: 418,
+    views: 0,
     seo_title: "الفرق بين ابتسامة هوليود (فينيرز E-max) وتبييض الأسنان | د. داليا عبد الموجود",
     seo_description: "مقارنة شاملة بين فينيرز الإيماكس وتبييض الأسنان بدون ألم في عيادة د. داليا عبد الموجود زارع بالمعادي لاختيار الحل الأنسب لابتسامة ساحرة وطبيعية.",
     focus_keyword: "ابتسامة هوليود وفينيرز الأسنان",
@@ -321,7 +321,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 4,
-    views: 265,
+    views: 0,
     seo_title: "علاج وحشو العصب بدون ألم في جلسة واحدة | د. داليا عبد الموجود زارع",
     seo_description: "تخلص من ألم عصب الأسنان نهائياً وبدون ألم في جلسة واحدة بأحدث أجهزة علاج الجذور في عيادة د. داليا عبد الموجود زارع بالمعادي.",
     focus_keyword: "حشو العصب بدون ألم",
@@ -390,7 +390,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 4,
-    views: 194,
+    views: 0,
     seo_title: "توريد اللثة بالليزر وعلاج التهاب اللثة بدون ألم | د. داليا عبد الموجود",
     seo_description: "جلسة توريد اللثة بالليزر وتنظيف الجير بالموجات فوق الصوتية بدون ألم في عيادة د. داليا عبد الموجود زارع بالمعادي للحصول على لثة وردية صحية.",
     focus_keyword: "توريد اللثة بالليزر بدون ألم",
@@ -460,7 +460,7 @@ export const SEED_POSTS: Post[] = [
     author_role_en: "Dental Consultant - Qasr El Ainy, Cairo University",
     author_avatar: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
     reading_time: 5,
-    views: 231,
+    views: 0,
     seo_title: "الفرق بين تركيبات الزركونيا والإيماكس والحشوات التجميلية | د. داليا عبد الموجود",
     seo_description: "تعرف على الفرق بين تيجان الزركونيا والإيماكس والحشوات التجميلية بدون ألم في عيادة د. داليا عبد الموجود زارع بالمعادي.",
     focus_keyword: "تركيبات الزركونيا والإيماكس",
@@ -490,105 +490,6 @@ export const SEED_POSTS: Post[] = [
 ];
 
 export function generateSeedAnalytics(): AnalyticsEvent[] {
-  const events: AnalyticsEvent[] = [];
-  const now = new Date();
-  const sources = [
-    { source: "Google Search", referrer: "https://www.google.com/", weight: 42 },
-    { source: "Direct", referrer: "Direct", weight: 24 },
-    { source: "Facebook", referrer: "https://www.facebook.com/", weight: 16 },
-    { source: "Instagram", referrer: "https://www.instagram.com/", weight: 11 },
-    { source: "WhatsApp", referrer: "https://wa.me/", weight: 7 },
-  ];
-  const paths = [
-    { path: "/ar", title: "الرئيسية - عيادة د. داليا عبد الموجود زارع", article_slug: null },
-    { path: "/en", title: "Home - Dr. Dalia Dental Clinic", article_slug: null },
-    { path: "/ar/articles", title: "المقالات الطبية - د. داليا عبد الموجود", article_slug: null },
-    {
-      path: "/ar/articles/painless-dental-implants-guide-maadi",
-      title: "الدليل الشامل لزراعة الأسنان بدون ألم",
-      article_slug: "painless-dental-implants-guide-maadi",
-    },
-    {
-      path: "/ar/articles/hollywood-smile-emax-veneers-vs-whitening",
-      title: "ابتسامة هوليود والفينيرز أم تبييض الأسنان؟",
-      article_slug: "hollywood-smile-emax-veneers-vs-whitening",
-    },
-    {
-      path: "/ar/articles/how-to-overcome-child-fear-of-dentist",
-      title: "كيف نُنهي خوف الأطفال من طبيب الأسنان؟",
-      article_slug: "how-to-overcome-child-fear-of-dentist",
-    },
-    {
-      path: "/ar/articles/painless-root-canal-treatment-single-visit",
-      title: "علاج العصب بدون ألم في جلسة واحدة",
-      article_slug: "painless-root-canal-treatment-single-visit",
-    },
-  ];
-  const devices: ("Mobile" | "Desktop" | "Tablet")[] = [
-    "Mobile",
-    "Mobile",
-    "Mobile",
-    "Desktop",
-    "Desktop",
-    "Tablet",
-  ];
-  const countries = ["EG", "EG", "EG", "EG", "SA", "AE", "KW"];
-
-  let idCounter = 1;
-  // Generate realistic events over the last 14 days
-  for (let dayOffset = 13; dayOffset >= 0; dayOffset--) {
-    const dayDate = new Date(now);
-    dayDate.setDate(now.getDate() - dayOffset);
-    // Between 18 and 42 visits per day with an upward trend
-    const dailyCount = 18 + ((13 - dayOffset) * 2) + ((dayOffset * 7) % 11);
-
-    for (let i = 0; i < dailyCount; i++) {
-      const visitDate = new Date(dayDate);
-      visitDate.setHours((i * 3) % 24, (i * 17) % 60, (i * 29) % 60);
-
-      const srcPick = sources[(i + dayOffset) % sources.length];
-      const pathPick = paths[(i * 2 + dayOffset) % paths.length];
-      const devicePick = devices[(i + dayOffset) % devices.length];
-      const countryPick = countries[(i + dayOffset) % countries.length];
-      const visitorId = `v_${dayOffset}_${i % Math.max(10, Math.floor(dailyCount * 0.72))}`;
-
-      events.push({
-        id: `evt_seed_${idCounter++}`,
-        visitor_id: visitorId,
-        session_id: `sess_${visitorId}`,
-        path: pathPick.path,
-        page_title: pathPick.title,
-        referrer: srcPick.referrer,
-        source: srcPick.source,
-        device: devicePick,
-        browser: devicePick === "Mobile" ? "Chrome Mobile" : "Chrome",
-        country: countryPick,
-        language: pathPick.path.startsWith("/en") ? "en" : "ar",
-        article_slug: pathPick.article_slug,
-        event_type: pathPick.article_slug ? "article_view" : "pageview",
-        created_at: visitDate.toISOString(),
-      });
-
-      if (i % 6 === 0) {
-        events.push({
-          id: `evt_seed_${idCounter++}`,
-          visitor_id: visitorId,
-          session_id: `sess_${visitorId}`,
-          path: pathPick.path,
-          page_title: "النقر على حجز واتساب",
-          referrer: srcPick.referrer,
-          source: srcPick.source,
-          device: devicePick,
-          browser: "Chrome",
-          country: countryPick,
-          language: "ar",
-          article_slug: pathPick.article_slug,
-          event_type: "whatsapp_click",
-          created_at: visitDate.toISOString(),
-        });
-      }
-    }
-  }
-
-  return events;
+  // Real data only - returns empty list
+  return [];
 }
