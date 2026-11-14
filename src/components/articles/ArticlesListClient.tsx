@@ -120,7 +120,7 @@ export default function ArticlesListClient({ initialPosts, lang }: Props) {
   };
 
   const whatsappMessage = isAr
-    ? "مرحباً دكتورة داليا عبد الموجود زارع، قرأت مقالاتكم الطبية وأود حجز موعد استشارة بدون ألم."
+    ? "مرحباً دكتورة داليا عبد الموجود زارع، قرأت مقالاتكم الطبية وأود حجز موعد استشارة بدون ألم"
     : "Hello Dr. Dalia AbdElMougood Zariaa, I read your dental articles and would like to book a Painless consultation.";
   const whatsappUrl = `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(
     whatsappMessage
@@ -170,7 +170,7 @@ export default function ArticlesListClient({ initialPosts, lang }: Props) {
               </h1>
               <p className="text-sm md:text-base text-white/85 leading-relaxed">
                 {isAr
-                  ? "اكتشف أحدث المعلومات الطبية الموثوقة حول زراعة الأسنان، ابتسامة هوليود، علاج أسنان الأطفال بدون خوف، وحشو العصب في جلسة واحدة بدون ألم."
+                  ? "اكتشف أحدث المعلومات الطبية الموثوقة حول زراعة الأسنان، ابتسامة هوليود، علاج أسنان الأطفال بدون خوف، وحشو العصب في جلسة واحدة بدون ألم"
                   : "Explore evidence-based guides on painless dental implants, Hollywood Smile veneers, tear-free pediatric dentistry, and single-visit root canals."}
               </p>
 
@@ -473,7 +473,7 @@ export default function ArticlesListClient({ initialPosts, lang }: Props) {
               </h3>
               <p className="text-sm text-foreground/70 max-w-2xl">
                 {isAr
-                  ? "تواصل مباشرة مع عيادة د. داليا عبد الموجود زارع في المعادي لحجز موعد فحص واستشارة شاملة بدون ألم."
+                  ? "تواصل مباشرة مع عيادة د. داليا عبد الموجود زارع في المعادي لحجز موعد فحص واستشارة شاملة بدون ألم"
                   : "Contact Dr. Dalia AbdElMougood Zariaa's clinic in Maadi directly to book a gentle, painless dental consultation."}
               </p>
             </div>

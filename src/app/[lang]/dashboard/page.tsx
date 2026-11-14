@@ -4,7 +4,7 @@ import DashboardClient from "@/components/dashboard/DashboardClient";
 export const metadata: Metadata = {
   title: "لوحة التحكم | عيادة د. داليا عبد الموجود زريع",
   description:
-    "لوحة التحكم الخاصة بموقع عيادة الدكتورة داليا عبد الموجود زريع - نظرة عامة على الأداء وإدارة المقالات الطبية.",
+    "لوحة التحكم الخاصة بموقع عيادة الدكتورة داليا عبد الموجود زريع لمتابعة الزوار وإدارة المقالات الطبية",
   robots: {
     index: false,
     follow: false,

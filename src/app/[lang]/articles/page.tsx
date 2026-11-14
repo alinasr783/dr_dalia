@@ -22,7 +22,7 @@ export async function generateMetadata({
     : "Medical Articles & Painless Dentistry Blog | Dr. Dalia AbdElMougood Zariaa";
 
   const description = isAr
-    ? "اقرأ أحدث المقالات والنصائح الطبية الموثوقة من د. داليا عبد الموجود زارع استشاري طب وجراحة الأسنان بالقصر العيني حول زراعة الأسنان، ابتسامة هوليود، أسنان الأطفال، وعلاج العصب بدون ألم."
+    ? "اقرأ أحدث المقالات والنصائح الطبية الموثوقة من د. داليا عبد الموجود زارع استشاري طب وجراحة الأسنان بالقصر العيني حول زراعة الأسنان، ابتسامة هوليود، أسنان الأطفال، وعلاج العصب بدون ألم"
     : "Read expert dental articles and painless oral care guides by Dr. Dalia AbdElMougood Zariaa (Qasr El Ainy Dental Consultant) on dental implants, Hollywood Smile veneers, pediatric dentistry, and root canals.";
 
   return {

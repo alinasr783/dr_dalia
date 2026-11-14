@@ -11,13 +11,9 @@ import {
   User,
   Eye,
   EyeOff,
-  ShieldCheck,
+  CheckCircle2,
   Sparkles,
   Zap,
-  CheckCircle2,
-  AlertCircle,
-  Activity,
-  Layers,
 } from "lucide-react";
 import OverviewTab from "./OverviewTab";
 import ArticlesManagerTab from "./ArticlesManagerTab";
@@ -25,15 +21,25 @@ import {
   DASHBOARD_USERNAME,
   DASHBOARD_PASSWORD,
 } from "@/lib/supabase/config";
+import type { Post } from "@/lib/supabase/types";
 
 const AUTH_STORAGE_KEY = "dr_dalia_dashboard_auth_v1";
 
 type DashboardTab = "overview" | "articles";
 
+function ClinicToothIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 512 512" className={className} fill="currentColor">
+      <path d="M360.751 0c-38.107 0-75.756 14.348-104.746 39.219C227.007 14.345 189.358 0 151.253 0 66.47 0 .056 66.414.056 151.197c0 113.135 74.328 249.149 193.981 354.963 4.34 3.837 9.847 5.84 15.421 5.84 3.235 0 6.493-.675 9.556-2.054 8.347-3.761 13.714-12.066 13.714-21.219V333.576c0-12.833 10.44-23.273 23.273-23.273 12.833 0 23.273 10.44 23.273 23.273v155.152c0 9.152 5.367 17.458 13.712 21.219 8.347 3.761 18.122 2.279 24.979-3.786 58.639-51.859 108.307-114.91 143.633-182.334C440.063 247.383 457.943 186.074 457.943 136.718 511.944 66.414 445.532 0 360.751 0z" />
+    </svg>
+  );
+}
+
 export default function DashboardClient() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
+  const [editingPostFromOverview, setEditingPostFromOverview] = useState<Post | null>(null);
 
   // Login form state
   const [username, setUsername] = useState<string>("");
@@ -81,7 +87,7 @@ export default function DashboardClient() {
         return;
       }
 
-      // Direct verification fallback
+      // Direct fallback verification
       if (
         trimmedUser === DASHBOARD_USERNAME &&
         password === DASHBOARD_PASSWORD
@@ -136,86 +142,78 @@ export default function DashboardClient() {
     setPassword("");
   };
 
+  const handleEditPostRequest = (post: Post) => {
+    setEditingPostFromOverview(post);
+    setActiveTab("articles");
+  };
+
   if (checkingAuth) {
     return (
       <div
         dir="rtl"
-        className="min-h-screen bg-[#070B14] text-white flex items-center justify-center font-tajawal"
+        className="min-h-screen bg-[#E8F4FB] text-[#06446F] flex items-center justify-center font-tajawal"
       >
         <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="w-14 h-14 rounded-2xl border-2 border-sky-500/20 border-t-sky-400 animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
-            </div>
-          </div>
-          <p className="text-slate-400 text-sm font-medium">جاري التحقق من الصلاحيات...</p>
+          <div className="w-12 h-12 rounded-2xl border-4 border-[#06446F]/20 border-t-[#06446F] animate-spin" />
+          <p className="text-[#06446F] text-sm font-bold">جاري تحميل لوحة التحكم</p>
         </div>
       </div>
     );
   }
 
   // =========================================================================
-  // LUXURY CLINICAL LOGIN SCREEN (Mobile-Optimized & Ultra-Modern)
+  // CLINIC STYLE LOGIN SCREEN (Matches Landing Page: Baby Blue & Navy)
+  // No dashes, no periods, doctor-friendly, ultra mobile-first
   // =========================================================================
   if (!isAuthenticated) {
     return (
       <div
         dir="rtl"
-        className="min-h-screen bg-[#070B14] text-white flex items-center justify-center p-4 sm:p-6 font-tajawal relative overflow-hidden select-none"
+        className="min-h-screen bg-[#E8F4FB] flex items-center justify-center p-4 sm:p-6 font-tajawal relative overflow-hidden"
       >
-        {/* Dynamic ambient backdrop glows */}
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-sky-500/15 via-blue-600/10 to-transparent rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-[450px] h-[450px] bg-gradient-to-tr from-cyan-500/10 via-emerald-500/5 to-transparent rounded-full blur-[100px] pointer-events-none" />
+        {/* Soft cheerful background glow */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#A3DBE4]/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#1575B5]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10">
-          {/* Glass Card */}
-          <div className="bg-[#0F172A]/80 backdrop-blur-2xl rounded-3xl sm:rounded-[2rem] border border-slate-700/60 shadow-2xl shadow-black/60 p-6 sm:p-9 relative overflow-hidden">
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-600" />
+          <div className="bg-white rounded-3xl sm:rounded-[2rem] border border-sky-100 shadow-xl p-6 sm:p-9 relative">
+            {/* Top brand line */}
+            <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-[#06446F] via-[#1575B5] to-[#A3DBE4] rounded-t-3xl" />
 
-            {/* Brand Header */}
-            <div className="flex flex-col items-center text-center mb-7">
-              <div className="relative mb-3.5 group">
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 opacity-60 blur-md group-hover:opacity-100 transition duration-500" />
-                <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-xl">
-                  <svg
-                    viewBox="0 0 64 64"
-                    className="w-9 h-9 text-white"
-                    fill="currentColor"
-                  >
-                    <path d="M21.5 10C14.5 10 10 15.5 10 23c0 5.6 2.3 11 4.1 16.1 1.7 4.8 3.2 11.4 5.7 13.9 1.9 1.9 4.3 1.2 5.4-1.3 1.1-2.5 2.3-7.7 4.6-7.7h4.4c2.3 0 3.5 5.2 4.6 7.7 1.1 2.5 3.5 3.2 5.4 1.3 2.5-2.5 4-9.1 5.7-13.9C51.7 34 54 28.6 54 23c0-7.5-4.5-13-11.5-13-4.2 0-7.3 2.2-10.5 2.2S25.7 10 21.5 10z" />
-                  </svg>
-                </div>
+            {/* Clinic Logo Header */}
+            <div className="flex flex-col items-center text-center mb-6 pt-2">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#06446F] to-[#1575B5] flex items-center justify-center text-white shadow-lg shadow-[#06446F]/25 mb-3.5">
+                <ClinicToothIcon className="w-9 h-9" />
               </div>
 
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-bold mb-2">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>لوحة التحكم وإدارة المحتوى</span>
-              </div>
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E8F4FB] text-[#06446F] text-xs font-bold mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#1575B5]" />
+                لوحة إدارة العيادة الرسمية
+              </span>
 
-              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                عيادة د. داليا عبد الموجود زريع
+              <h1 className="text-xl sm:text-2xl font-black text-[#06446F]">
+                عيادة دكتورة داليا عبد الموجود زريع
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xs">
-                إدارة المقالات الطبية، التقارير الحقيقية، والربط الذكي مع الـ MCP
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                تسجيل الدخول لمتابعة زوار الموقع وإدارة المقالات الطبية
               </p>
             </div>
 
-            {/* Quick Fill Credentials Banner (Mobile friendly 1-tap) */}
-            <div className="mb-6 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-sky-950/40 via-slate-900/60 to-slate-900/40 border border-sky-500/30 flex items-center justify-between gap-3">
+            {/* Quick Fill Helper */}
+            <div className="mb-5 p-3.5 rounded-2xl bg-[#E8F4FB] border border-sky-200/80 flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="text-[11px] font-bold text-sky-300 flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-amber-400 shrink-0" />
-                  بيانات تسجيل الدخول المعتمدة:
+                <div className="text-xs font-bold text-[#06446F] flex items-center gap-1">
+                  <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  بيانات الدخول المعتمدة
                 </div>
-                <div className="text-[11px] text-slate-300 font-mono mt-0.5 truncate" dir="ltr">
-                  User: <span className="text-sky-400 font-bold">{DASHBOARD_USERNAME}</span> • Pass: <span className="text-sky-400 font-bold">{DASHBOARD_PASSWORD}</span>
+                <div className="text-[11px] text-slate-600 mt-0.5 truncate" dir="ltr">
+                  <span className="font-bold text-[#06446F]">{DASHBOARD_USERNAME}</span> / <span className="font-bold text-[#06446F]">{DASHBOARD_PASSWORD}</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={handleQuickFill}
-                className="shrink-0 px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 hover:text-white text-xs font-bold transition-all border border-sky-500/30 active:scale-95 cursor-pointer"
+                className="shrink-0 px-3 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-[#06446F] text-xs font-bold transition-all shadow-xs border border-sky-200 active:scale-95 cursor-pointer"
               >
                 تعبئة سريعة
               </button>
@@ -224,14 +222,13 @@ export default function DashboardClient() {
             {/* Form */}
             <form onSubmit={handleLogin} className="space-y-4">
               {errorMessage && (
-                <div className="p-3.5 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs sm:text-sm font-medium flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
-                  <span>{errorMessage}</span>
+                <div className="p-3.5 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm font-bold text-center">
+                  {errorMessage}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   اسم المستخدم
                 </label>
                 <div className="relative">
@@ -243,14 +240,14 @@ export default function DashboardClient() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="drdalia89is"
                     autoComplete="username"
-                    className="w-full pr-11 pl-4 py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all"
+                    className="w-full pr-11 pl-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:bg-white focus:border-[#1575B5] focus:ring-2 focus:ring-[#1575B5]/20 outline-none transition-all"
                     dir="ltr"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   كلمة المرور
                 </label>
                 <div className="relative">
@@ -262,13 +259,13 @@ export default function DashboardClient() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     autoComplete="current-password"
-                    className="w-full pr-11 pl-11 py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 outline-none transition-all"
+                    className="w-full pr-11 pl-11 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:bg-white focus:border-[#1575B5] focus:ring-2 focus:ring-[#1575B5]/20 outline-none transition-all"
                     dir="ltr"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors p-1"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
                     aria-label="إظهار أو إخفاء كلمة المرور"
                   >
                     {showPassword ? (
@@ -283,35 +280,21 @@ export default function DashboardClient() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-sky-500 via-sky-600 to-blue-600 hover:from-sky-400 hover:to-blue-500 active:scale-[0.98] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-sky-500/25 transition-all disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2 mt-2"
+                className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#06446F] to-[#1575B5] hover:from-[#05385c] hover:to-[#116298] text-white font-black text-sm sm:text-base shadow-md shadow-[#06446F]/20 active:scale-98 transition-all disabled:opacity-60 cursor-pointer mt-2"
               >
-                {submitting ? (
-                  <>
-                    <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                    <span>جاري التحقق من الدخول...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>تسجيل الدخول إلى لوحة التحكم</span>
-                    <Sparkles className="w-4 h-4 text-sky-200" />
-                  </>
-                )}
+                {submitting ? "جاري الدخول" : "تسجيل الدخول إلى لوحة التحكم"}
               </button>
             </form>
 
-            {/* Footer */}
-            <div className="mt-6 pt-5 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <Link
                 href="/ar"
-                className="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 text-[#1575B5] hover:underline font-bold"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                معاينة الموقع
+                العودة للموقع الرئيسي
               </Link>
-              <span className="flex items-center gap-1 text-slate-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Supabase Connected
-              </span>
+              <span className="font-medium text-slate-400">بوابة آمنة ومحمية</span>
             </div>
           </div>
         </div>
@@ -320,32 +303,29 @@ export default function DashboardClient() {
   }
 
   // =========================================================================
-  // AUTHENTICATED DASHBOARD (Ultra Mobile-Friendly: Bottom Dock + Sticky Topbar)
-  // Strictly TWO PAGES: 1. Overview (نظرة عامة) | 2. Articles (إدارة المقالات)
+  // CLINIC AUTHENTICATED DASHBOARD (Landing Page Style: Pure White & Baby Blue)
+  // Strictly 2 Pages: 1. Overview (نظرة عامة) | 2. Articles (إدارة المقالات)
   // =========================================================================
   return (
     <div
       dir="rtl"
-      className="min-h-screen bg-[#F8FAFC] text-slate-900 font-tajawal flex flex-col lg:flex-row antialiased"
+      className="min-h-screen bg-[#E8F4FB] text-[#1e293b] font-tajawal flex flex-col lg:flex-row antialiased"
     >
       {/* ------------------------------------------------------------------- */}
-      {/* MOBILE STICKY TOPBAR (<lg) */}
+      {/* MOBILE STICKY TOPBAR (< lg) */}
       {/* ------------------------------------------------------------------- */}
-      <header className="lg:hidden sticky top-0 z-40 bg-[#0B1120] text-white border-b border-slate-800/80 px-4 py-3 flex items-center justify-between shadow-md">
+      <header className="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-sky-100 px-4 py-3 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 shrink-0">
-            <svg viewBox="0 0 64 64" className="w-5 h-5" fill="currentColor">
-              <path d="M21.5 10C14.5 10 10 15.5 10 23c0 5.6 2.3 11 4.1 16.1 1.7 4.8 3.2 11.4 5.7 13.9 1.9 1.9 4.3 1.2 5.4-1.3 1.1-2.5 2.3-7.7 4.6-7.7h4.4c2.3 0 3.5 5.2 4.6 7.7 1.1 2.5 3.5 3.2 5.4 1.3 2.5-2.5 4-9.1 5.7-13.9C51.7 34 54 28.6 54 23c0-7.5-4.5-13-11.5-13-4.2 0-7.3 2.2-10.5 2.2S25.7 10 21.5 10z" />
-            </svg>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#06446F] to-[#1575B5] flex items-center justify-center text-white shadow-xs shrink-0">
+            <ClinicToothIcon className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <h1 className="font-extrabold text-sm text-white leading-tight truncate">
-              د. داليا عبد الموجود زريع
+            <h1 className="font-black text-sm text-[#06446F] truncate">
+              دكتورة داليا زريع
             </h1>
-            <div className="flex items-center gap-1.5 text-[10px] text-sky-400 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>لوحة التحكم الذكية</span>
-            </div>
+            <p className="text-[10px] text-slate-500 font-bold truncate">
+              لوحة التحكم وإدارة العيادة
+            </p>
           </div>
         </div>
 
@@ -353,7 +333,7 @@ export default function DashboardClient() {
           <Link
             href="/ar"
             target="_blank"
-            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
             title="معاينة الموقع"
           >
             <ExternalLink className="w-4 h-4" />
@@ -361,7 +341,7 @@ export default function DashboardClient() {
           <button
             type="button"
             onClick={handleLogout}
-            className="p-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-200 transition-colors"
+            className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
             title="تسجيل الخروج"
           >
             <LogOut className="w-4 h-4" />
@@ -370,33 +350,31 @@ export default function DashboardClient() {
       </header>
 
       {/* ------------------------------------------------------------------- */}
-      {/* DESKTOP SIDEBAR (>=lg) */}
+      {/* DESKTOP SIDEBAR (>= lg) */}
       {/* ------------------------------------------------------------------- */}
-      <aside className="hidden lg:flex w-72 bg-[#0B1120] text-white min-h-screen flex-col justify-between shrink-0 border-l border-slate-800/80 sticky top-0 h-screen overflow-y-auto">
+      <aside className="hidden lg:flex w-72 bg-white min-h-screen flex-col justify-between shrink-0 border-l border-sky-100 sticky top-0 h-screen overflow-y-auto shadow-sm">
         <div>
-          {/* Brand Header */}
-          <div className="p-6 border-b border-slate-800/80">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/25 shrink-0">
-                <svg viewBox="0 0 64 64" className="w-7 h-7" fill="currentColor">
-                  <path d="M21.5 10C14.5 10 10 15.5 10 23c0 5.6 2.3 11 4.1 16.1 1.7 4.8 3.2 11.4 5.7 13.9 1.9 1.9 4.3 1.2 5.4-1.3 1.1-2.5 2.3-7.7 4.6-7.7h4.4c2.3 0 3.5 5.2 4.6 7.7 1.1 2.5 3.5 3.2 5.4 1.3 2.5-2.5 4-9.1 5.7-13.9C51.7 34 54 28.6 54 23c0-7.5-4.5-13-11.5-13-4.2 0-7.3 2.2-10.5 2.2S25.7 10 21.5 10z" />
-                </svg>
+          {/* Clinic Brand Box */}
+          <div className="p-6 border-b border-sky-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#06446F] to-[#1575B5] flex items-center justify-center text-white shadow-md shadow-[#06446F]/20 shrink-0">
+                <ClinicToothIcon className="w-7 h-7" />
               </div>
               <div className="min-w-0">
-                <h1 className="font-black text-base text-white leading-tight truncate">
-                  د. داليا عبد الموجود
+                <h1 className="font-black text-base text-[#06446F] leading-tight truncate">
+                  دكتورة داليا زريع
                 </h1>
-                <p className="text-xs text-sky-400 font-medium mt-0.5 truncate">
+                <p className="text-xs text-[#1575B5] font-bold mt-0.5 truncate">
                   استشاري طب وجراحة الأسنان
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Navigation Items (STRICTLY 2 PAGES) */}
-          <div className="p-4 space-y-1">
-            <div className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-2">
-              القائمة الرئيسية (صفحتان فقط)
+          {/* Navigation Items (ONLY 2 PAGES) */}
+          <div className="p-4 space-y-1.5">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5">
+              صفحات لوحة التحكم
             </div>
 
             <button
@@ -404,8 +382,8 @@ export default function DashboardClient() {
               onClick={() => setActiveTab("overview")}
               className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-right font-bold text-sm transition-all cursor-pointer ${
                 activeTab === "overview"
-                  ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/25"
-                  : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
+                  ? "bg-[#06446F] text-white shadow-md shadow-[#06446F]/25"
+                  : "text-slate-600 hover:bg-[#E8F4FB] hover:text-[#06446F]"
               }`}
             >
               <BarChart3 className="w-5 h-5 shrink-0" />
@@ -416,7 +394,7 @@ export default function DashboardClient() {
                     activeTab === "overview" ? "text-sky-100" : "text-slate-400"
                   }`}
                 >
-                  تقرير الزوار الحقيقي ومصادرهم
+                  تقرير الزوار والمقالات المعلقة
                 </div>
               </div>
             </button>
@@ -426,8 +404,8 @@ export default function DashboardClient() {
               onClick={() => setActiveTab("articles")}
               className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-right font-bold text-sm transition-all cursor-pointer ${
                 activeTab === "articles"
-                  ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/25"
-                  : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
+                  ? "bg-[#06446F] text-white shadow-md shadow-[#06446F]/25"
+                  : "text-slate-600 hover:bg-[#E8F4FB] hover:text-[#06446F]"
               }`}
             >
               <FileText className="w-5 h-5 shrink-0" />
@@ -438,72 +416,51 @@ export default function DashboardClient() {
                     activeTab === "articles" ? "text-sky-100" : "text-slate-400"
                   }`}
                 >
-                  إضافة، تعديل، حذف، SEO والـ MCP
+                  كتابة وتعديل ونشر المقالات
                 </div>
               </div>
             </button>
           </div>
         </div>
 
-        {/* Desktop Bottom Box */}
-        <div className="p-4 border-t border-slate-800/80 space-y-3">
-          <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-bold text-sky-400 flex items-center gap-1.5">
-                <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                Supabase Live
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-mono">
-                Real-Time
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed font-mono">
-              المشروع: <span className="text-slate-200">dr dalia</span>
-              <br />
-              المستخدم: <span className="text-slate-200">drdalia89is</span>
-            </p>
-          </div>
+        {/* Desktop Sidebar Bottom */}
+        <div className="p-4 border-t border-sky-100 space-y-2.5">
+          <Link
+            href="/ar"
+            target="_blank"
+            className="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-[#E8F4FB] hover:bg-[#d6ecf9] text-[#06446F] text-xs font-bold transition-colors"
+          >
+            <span>زيارة الموقع الرئيسي</span>
+            <ExternalLink className="w-3.5 h-3.5 text-[#1575B5]" />
+          </Link>
 
-          <div className="flex flex-col gap-2">
-            <Link
-              href="/ar"
-              target="_blank"
-              className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-slate-850 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-colors"
-            >
-              <span>معاينة الموقع الحي</span>
-              <ExternalLink className="w-3.5 h-3.5 text-sky-400" />
-            </Link>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-300 text-xs font-bold transition-colors cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" />
-              تسجيل الخروج
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold transition-colors cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>تسجيل الخروج</span>
+          </button>
         </div>
       </aside>
 
       {/* ------------------------------------------------------------------- */}
-      {/* MAIN CONTENT AREA */}
+      {/* MAIN CONTENT AREA (Clean Landing Page Style) */}
       {/* ------------------------------------------------------------------- */}
       <main className="flex-1 min-w-0 p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full pb-28 lg:pb-8">
-        {/* Top contextual header card */}
-        <div className="mb-5 sm:mb-6 flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs">
+        {/* Top Header Card */}
+        <div className="mb-5 sm:mb-6 flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-sky-100 shadow-xs">
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <h2 className="text-base sm:text-xl font-black text-slate-900 truncate">
-                {activeTab === "overview"
-                  ? "نظرة عامة — تقرير أداء الموقع والزيارات الحقيقية"
-                  : "إدارة المقالات — نظام النشر الطبي والـ MCP"}
-              </h2>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 truncate">
+            <h2 className="text-base sm:text-xl font-black text-[#06446F] truncate">
               {activeTab === "overview"
-                ? "إحصائيات حقيقية مباشرة ومسجلة من زوار الموقع في Supabase"
-                : "تحكم كامل في المقالات الطبية، صور السحابة، محركات البحث (SEO)، والـ AI Agent"}
+                ? "نظرة عامة على أداء الموقع والزيارات"
+                : "إدارة المقالات الطبية ونشر المحتوى"}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5 truncate">
+              {activeTab === "overview"
+                ? "متابعة أرقام الزيارات الفعلية والمقالات التي تحتاج موافقتك للنشر"
+                : "إضافة وتعديل وحذف مقالات العيادة ومشاركتها مع المرضى"}
             </p>
           </div>
 
@@ -512,7 +469,7 @@ export default function DashboardClient() {
               <button
                 type="button"
                 onClick={() => setActiveTab("articles")}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#06446F] hover:bg-[#1575B5] text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer active:scale-95"
               >
                 <FileText className="w-4 h-4" />
                 <span>إدارة المقالات</span>
@@ -521,31 +478,35 @@ export default function DashboardClient() {
               <button
                 type="button"
                 onClick={() => setActiveTab("overview")}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold transition-all cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#E8F4FB] hover:bg-[#d6ecf9] text-[#06446F] text-xs sm:text-sm font-bold transition-all cursor-pointer active:scale-95"
               >
                 <BarChart3 className="w-4 h-4" />
-                <span>تقرير الزوار</span>
+                <span>نظرة عامة</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Render Tab Content */}
-        {activeTab === "overview" ? <OverviewTab /> : <ArticlesManagerTab />}
+        {/* Render Tab */}
+        {activeTab === "overview" ? (
+          <OverviewTab onEditPostRequest={handleEditPostRequest} />
+        ) : (
+          <ArticlesManagerTab initialEditingPost={editingPostFromOverview} />
+        )}
       </main>
 
       {/* ------------------------------------------------------------------- */}
-      {/* MOBILE BOTTOM DOCK (FIXED APP-LIKE DOCK <lg) */}
+      {/* MOBILE BOTTOM DOCK (< lg) */}
       {/* ------------------------------------------------------------------- */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-[#0B1120]/95 backdrop-blur-xl border-t border-slate-800/90 px-3 py-2 shadow-2xl safe-area-bottom">
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-sky-100 px-3 py-2 shadow-xl safe-area-bottom">
         <div className="grid grid-cols-2 gap-2 max-w-md mx-auto">
           <button
             type="button"
             onClick={() => setActiveTab("overview")}
             className={`flex items-center justify-center gap-2 py-3 px-3 rounded-2xl font-bold text-xs transition-all ${
               activeTab === "overview"
-                ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/25"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#06446F] text-white shadow-md shadow-[#06446F]/25"
+                : "text-slate-600 hover:text-[#06446F] hover:bg-sky-50"
             }`}
           >
             <BarChart3 className="w-4 h-4" />
@@ -557,8 +518,8 @@ export default function DashboardClient() {
             onClick={() => setActiveTab("articles")}
             className={`flex items-center justify-center gap-2 py-3 px-3 rounded-2xl font-bold text-xs transition-all ${
               activeTab === "articles"
-                ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/25"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-[#06446F] text-white shadow-md shadow-[#06446F]/25"
+                : "text-slate-600 hover:text-[#06446F] hover:bg-sky-50"
             }`}
           >
             <FileText className="w-4 h-4" />

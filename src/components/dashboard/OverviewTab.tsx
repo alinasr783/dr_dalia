@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Users,
@@ -16,67 +17,76 @@ import {
   ExternalLink,
   Clock,
   BarChart3,
-  Share2,
-  Activity,
   CheckCircle2,
+  Edit3,
   Sparkles,
-  Zap,
-  Radio,
-  Layers,
+  Check,
+  AlertCircle,
 } from "lucide-react";
-import type { AnalyticsReport } from "@/lib/supabase/types";
+import type { AnalyticsReport, Post } from "@/lib/supabase/types";
 
-export default function OverviewTab() {
+type OverviewTabProps = {
+  onEditPostRequest?: (post: Post) => void;
+};
+
+export default function OverviewTab({ onEditPostRequest }: OverviewTabProps) {
   const [days, setDays] = useState<number>(14);
   const [report, setReport] = useState<AnalyticsReport | null>(null);
+  const [draftPosts, setDraftPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [testPinging, setTestPinging] = useState<boolean>(false);
-  const [pingSuccess, setPingSuccess] = useState<boolean>(false);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
+  const [noticeMessage, setNoticeMessage] = useState<string | null>(null);
 
-  const fetchReport = useCallback(async (selectedDays: number) => {
+  const fetchOverviewData = useCallback(async (selectedDays: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/analytics?days=${selectedDays}`, {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      if (data?.success && data.report) {
-        setReport(data.report);
+      const [analyticsRes, postsRes] = await Promise.all([
+        fetch(`/api/analytics?days=${selectedDays}`, { cache: "no-store" }),
+        fetch("/api/posts?status=draft&limit=20", { cache: "no-store" }),
+      ]);
+
+      const analyticsData = await analyticsRes.json();
+      if (analyticsData?.success && analyticsData.report) {
+        setReport(analyticsData.report);
+      }
+
+      const postsData = await postsRes.json();
+      if (postsData?.success && Array.isArray(postsData.posts)) {
+        setDraftPosts(postsData.posts);
       }
     } catch {
-      // Ignore
+      // ignore
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchReport(days);
-  }, [days, fetchReport]);
+    fetchOverviewData(days);
+  }, [days, fetchOverviewData]);
 
-  // Live test ping to prove real data recording in Supabase
-  const handleTestPing = async () => {
-    setTestPinging(true);
-    setPingSuccess(false);
+  // One-click quick approve & publish for drafts
+  const handleApprovePublish = async (post: Post) => {
+    setApprovingId(post.id);
     try {
-      await fetch("/api/analytics", {
-        method: "POST",
+      const res = await fetch(`/api/posts/${post.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          path: "/ar",
-          page_title: "زيارة فحص حي من لوحة التحكم",
-          referrer: "Direct",
-          device: "Desktop",
-          event_type: "pageview",
-        }),
+        body: JSON.stringify({ status: "published" }),
       });
-      setPingSuccess(true);
-      await fetchReport(days);
-      setTimeout(() => setPingSuccess(false), 3000);
+      const data = await res.json();
+      if (data?.success) {
+        setDraftPosts((prev) => prev.filter((p) => p.id !== post.id));
+        setNoticeMessage("تمت الموافقة ونشر المقال بنجاح");
+        setTimeout(() => setNoticeMessage(null), 4000);
+        // refresh report numbers
+        fetchOverviewData(days);
+      }
     } catch {
-      // ignore
+      setNoticeMessage("تعذر نشر المقال حالياً");
+      setTimeout(() => setNoticeMessage(null), 4000);
     } finally {
-      setTestPinging(false);
+      setApprovingId(null);
     }
   };
 
@@ -87,76 +97,43 @@ export default function OverviewTab() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Toast Notice */}
+      {noticeMessage && (
+        <div className="fixed bottom-5 left-5 z-50 px-5 py-3 rounded-2xl bg-[#06446F] text-white text-xs sm:text-sm font-bold shadow-xl flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{noticeMessage}</span>
+        </div>
+      )}
+
       {/* ------------------------------------------------------------------- */}
-      {/* REAL-TIME SYSTEM STATUS & TIMEFRAME FILTER BAR */}
+      {/* TOP BAR & DATE FILTER */}
       {/* ------------------------------------------------------------------- */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 shrink-0">
-            <Radio className="w-5 h-5 animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
-                تقرير الأداء والزيارات الحقيقية
-              </h2>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                بيانات حقيقية مباشرة
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              متصل بـ Supabase • الاستجابة:{" "}
-              <span className="font-mono font-bold text-slate-700">
-                {report?.latencyMs || 18}ms
-              </span>{" "}
-              • الأحداث المسجلة:{" "}
-              <span className="font-mono font-bold text-slate-700">
-                {report?.totalEventsCount ?? report?.totalVisits ?? 0}
-              </span>
-            </p>
-          </div>
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-base sm:text-lg font-black text-[#06446F] flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-[#1575B5]" />
+            <span>نظرة عامة على أداء الموقع</span>
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            متابعة إحصائيات الزوار وطلبات الحجز والمقالات التي تحتاج موافقة للنشر
+          </p>
         </div>
 
-        {/* Filter pills and test button */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Real Ping Button */}
-          <button
-            type="button"
-            onClick={handleTestPing}
-            disabled={testPinging}
-            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer ${
-              pingSuccess
-                ? "bg-emerald-500 text-white shadow-sm"
-                : "bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100"
-            }`}
-            title="تسجيل زيارة حقيقية فورية في Supabase وتحديث الأرقام"
-          >
-            {testPinging ? (
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-            ) : pingSuccess ? (
-              <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-            ) : (
-              <Zap className="w-3.5 h-3.5 text-amber-500" />
-            )}
-            <span>{pingSuccess ? "تم تسجيل الزيارة!" : "فحص زيارة حية"}</span>
-          </button>
-
-          {/* Timeframe selector */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+          <div className="flex items-center bg-[#E8F4FB] p-1 rounded-2xl">
             {[
-              { label: "7 أيام", value: 7 },
-              { label: "14 يوم", value: 14 },
-              { label: "30 يوم", value: 30 },
+              { label: "اليوم", value: 1 },
+              { label: "آخر 7 أيام", value: 7 },
+              { label: "آخر 30 يوم", value: 30 },
             ].map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => setDays(opt.value)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   days === opt.value
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-[#06446F] text-white shadow-xs"
+                    : "text-[#06446F] hover:bg-white"
                 }`}
               >
                 {opt.label}
@@ -166,10 +143,10 @@ export default function OverviewTab() {
 
           <button
             type="button"
-            onClick={() => fetchReport(days)}
+            onClick={() => fetchOverviewData(days)}
             disabled={loading}
-            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-            title="تحديث الأرقام الآن"
+            className="p-2.5 rounded-2xl bg-[#E8F4FB] text-[#06446F] hover:bg-[#d6ecf9] transition-colors cursor-pointer"
+            title="تحديث البيانات"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -177,118 +154,217 @@ export default function OverviewTab() {
       </div>
 
       {/* ------------------------------------------------------------------- */}
-      {/* 4 HIGH-IMPACT KPI SUMMARY CARDS */}
+      {/* 4 SUMMARY METRIC CARDS (Landing Page Colors) */}
       {/* ------------------------------------------------------------------- */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Metric 1: Total Visits */}
-        <div className="rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:border-sky-300 transition-all">
+        {/* Card 1: Total Visits */}
+        <div className="rounded-2xl sm:rounded-3xl bg-white border border-sky-100 p-4 sm:p-5 shadow-xs hover:border-sky-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] sm:text-xs font-extrabold text-slate-500">
-              إجمالي الزيارات الفعلية
+            <span className="text-xs font-bold text-slate-500">
+              إجمالي زيارات الموقع
             </span>
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-[#E8F4FB] text-[#06446F] flex items-center justify-center shrink-0">
+              <TrendingUp className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-2 sm:mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-[#06446F]">
               {loading && !report ? "..." : report?.totalVisits ?? 0}
             </div>
-            <p className="text-[10px] sm:text-xs text-sky-600 font-bold mt-1">
-              معدل {report?.avgDailyVisits ?? 0} زيارة / يوم
+            <p className="text-[11px] text-[#1575B5] font-bold mt-1">
+              معدل {report?.avgDailyVisits ?? 0} زيارة يومياً
             </p>
           </div>
         </div>
 
-        {/* Metric 2: Unique Visitors */}
-        <div className="rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:border-cyan-300 transition-all">
+        {/* Card 2: Unique Visitors */}
+        <div className="rounded-2xl sm:rounded-3xl bg-white border border-sky-100 p-4 sm:p-5 shadow-xs hover:border-sky-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] sm:text-xs font-extrabold text-slate-500">
-              الزوار الفريدون
+            <span className="text-xs font-bold text-slate-500">
+              الزوار المهتمون
             </span>
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-sky-50 text-[#1575B5] flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-2 sm:mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-[#06446F]">
               {loading && !report ? "..." : report?.uniqueVisitors ?? 0}
             </div>
-            <p className="text-[10px] sm:text-xs text-slate-500 font-medium mt-1">
-              متصفح فريد خلال {days} يوم
+            <p className="text-[11px] text-slate-500 font-medium mt-1">
+              زائر مميز خلال هذه الفترة
             </p>
           </div>
         </div>
 
-        {/* Metric 3: Article Views */}
-        <div className="rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all">
+        {/* Card 3: Article Views */}
+        <div className="rounded-2xl sm:rounded-3xl bg-white border border-sky-100 p-4 sm:p-5 shadow-xs hover:border-sky-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] sm:text-xs font-extrabold text-slate-500">
+            <span className="text-xs font-bold text-slate-500">
               قراءات المقالات
             </span>
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-700 flex items-center justify-center shrink-0">
+              <Eye className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-2 sm:mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-[#06446F]">
               {loading && !report ? "..." : report?.articleViews ?? 0}
             </div>
-            <p className="text-[10px] sm:text-xs text-blue-600 font-bold mt-1">
-              {report?.publishedArticlesCount ?? 0} مقال منشور
+            <p className="text-[11px] text-[#1575B5] font-bold mt-1">
+              {report?.publishedArticlesCount ?? 0} مقال منشور حالياً
             </p>
           </div>
         </div>
 
-        {/* Metric 4: WhatsApp Clicks */}
-        <div className="rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-all">
+        {/* Card 4: WhatsApp Clicks */}
+        <div className="rounded-2xl sm:rounded-3xl bg-white border border-sky-100 p-4 sm:p-5 shadow-xs hover:border-emerald-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] sm:text-xs font-extrabold text-slate-500">
-              نقرات حجز الواتساب
+            <span className="text-xs font-bold text-slate-500">
+              طلبات حجز الواتساب
             </span>
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <MessageCircle className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-2 sm:mt-3">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+          <div className="mt-3">
+            <div className="text-2xl sm:text-3xl font-black text-[#06446F]">
               {loading && !report ? "..." : report?.whatsappClicks ?? 0}
             </div>
-            <p className="text-[10px] sm:text-xs text-emerald-600 font-bold mt-1">
-              تحويلات حجز مباشرة
+            <p className="text-[11px] text-emerald-600 font-bold mt-1">
+              تواصلوا لحجز موعد بالعيادة
             </p>
           </div>
         </div>
       </div>
 
       {/* ------------------------------------------------------------------- */}
-      {/* TIMELINE CHART (Daily Visits) */}
+      {/* PENDING DRAFTS SECTION (Review & Approve Feature) */}
       {/* ------------------------------------------------------------------- */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <FileText className="w-4 h-4" />
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-[#06446F]">
+                المقالات التي بانتظار موافقتك للنشر
+              </h3>
+              {draftPosts.length > 0 && (
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
+                  {draftPosts.length} مسودة
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              يمكنك مراجعة المسودات وتعديلها أو الموافقة عليها مباشرة لتنشر في الموقع فوراً
+            </p>
+          </div>
+        </div>
+
+        {draftPosts.length > 0 ? (
+          <div className="divide-y divide-slate-100">
+            {draftPosts.map((post) => (
+              <div
+                key={post.id}
+                className="py-4 first:pt-1 last:pb-1 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-slate-50/60 transition-colors rounded-xl px-2"
+              >
+                <div className="flex items-start gap-3 min-w-0">
+                  <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                    <Image
+                      src={post.cover_image}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#E8F4FB] text-[#06446F] font-bold">
+                        {post.category}
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold">
+                        مسودة
+                      </span>
+                    </div>
+                    <h4 className="font-extrabold text-[#06446F] text-sm truncate">
+                      {post.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                      {post.excerpt}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                  <button
+                    type="button"
+                    onClick={() => onEditPostRequest?.(post)}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#06446F] text-xs font-bold transition-all cursor-pointer active:scale-95"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>تعديل المقال</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={approvingId === post.id}
+                    onClick={() => handleApprovePublish(post)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95 disabled:opacity-60"
+                  >
+                    {approvingId === post.id ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Check className="w-3.5 h-3.5" />
+                    )}
+                    <span>موافقة ونشر الآن</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-6 text-center rounded-2xl bg-[#E8F4FB]/50 border border-sky-100">
+            <CheckCircle2 className="w-7 h-7 text-emerald-500 mx-auto mb-2" />
+            <p className="text-sm font-bold text-[#06446F]">
+              جميع المقالات منشورة وجاهزة ولا توجد مسودات معلقة حالياً
+            </p>
+            <p className="text-xs text-slate-500 mt-0.5">
+              عند إضافة مقال جديد كمسودة أو كتابته بواسطة المساعد الذكي سيظهر هنا لمراجعتك
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* ------------------------------------------------------------------- */}
+      {/* TIMELINE CHART (Clean Bar Chart) */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-6 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
           <div>
-            <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-sky-500" />
-              <span>الخط الزمني للزيارات (Timeline)</span>
+            <h3 className="text-base sm:text-lg font-black text-[#06446F] flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#1575B5]" />
+              <span>معدل الزيارات اليومية</span>
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              رصد حركة الزوار اليومية وقراءات المقالات خلال آخر {days} يوم
+              متابعة عدد الزوار اليومي وقراءات المقالات
             </p>
           </div>
           <div className="flex items-center gap-4 text-xs font-bold text-slate-500">
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-md bg-gradient-to-t from-sky-500 to-blue-600" />
-              الزيارات اليومية
+              <span className="w-3 h-3 rounded-md bg-[#06446F]" />
+              زيارات الموقع
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-md bg-cyan-400" />
+              <span className="w-3 h-3 rounded-md bg-[#1575B5]" />
               قراءات المقالات
             </span>
           </div>
         </div>
 
-        {/* Responsive Bar Chart */}
-        <div className="h-52 sm:h-64 flex items-end gap-1.5 sm:gap-2.5 pt-6 pb-2 px-1 border-b border-slate-100 overflow-x-auto no-scrollbar">
+        <div className="h-48 sm:h-56 flex items-end gap-1.5 sm:gap-2.5 pt-4 pb-2 px-1 border-b border-sky-100 overflow-x-auto no-scrollbar">
           {report?.timeline && report.timeline.length > 0 ? (
             report.timeline.map((point) => {
               const visitHeightPct = Math.max(
@@ -305,25 +381,19 @@ export default function OverviewTab() {
                   key={point.date}
                   className="flex-1 min-w-[28px] sm:min-w-[36px] flex flex-col items-center gap-1 group relative h-full justify-end"
                 >
-                  {/* Tooltip on hover/touch */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-12 z-20 pointer-events-none bg-slate-900 text-white text-[11px] font-mono px-2.5 py-1.5 rounded-xl shadow-xl whitespace-nowrap">
-                    <div>{point.label}</div>
-                    <div className="text-sky-300 font-bold">
-                      {point.visits} زيارة • {point.articleViews} قراءة
-                    </div>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-10 z-20 pointer-events-none bg-[#06446F] text-white text-[11px] font-bold px-2 py-1 rounded-xl shadow-lg whitespace-nowrap">
+                    {point.visits} زيارة
                   </div>
 
                   <div className="w-full flex items-end justify-center gap-0.5 h-full">
-                    {/* Visits Bar */}
                     <div
                       style={{ height: `${visitHeightPct}%` }}
-                      className="w-full max-w-[16px] sm:max-w-[20px] rounded-t-lg bg-gradient-to-t from-sky-600 to-sky-400 group-hover:from-sky-500 group-hover:to-cyan-300 transition-all"
+                      className="w-full max-w-[16px] sm:max-w-[20px] rounded-t-lg bg-gradient-to-t from-[#06446F] to-[#1575B5] group-hover:to-sky-400 transition-all"
                     />
-                    {/* Article Views Bar (if any) */}
                     {articleHeightPct > 0 && (
                       <div
                         style={{ height: `${articleHeightPct}%` }}
-                        className="w-1.5 sm:w-2 rounded-t-md bg-cyan-400 group-hover:bg-cyan-300 transition-all"
+                        className="w-1.5 sm:w-2 rounded-t-md bg-[#A3DBE4] transition-all"
                       />
                     )}
                   </div>
@@ -335,72 +405,58 @@ export default function OverviewTab() {
               );
             })
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 text-xs">
-              <Activity className="w-8 h-8 text-slate-300 mb-2 animate-pulse" />
-              <span>نظام التتبع جاهز لتسجيل أولى الزيارات</span>
+            <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+              سيظهر المخطط البياني تلقائياً مع تصفح زوار العيادة
             </div>
           )}
         </div>
       </div>
 
       {/* ------------------------------------------------------------------- */}
-      {/* 2-COLUMN BREAKDOWN: Traffic Sources & Devices */}
+      {/* 2 COLUMNS: Traffic Sources & Devices */}
       {/* ------------------------------------------------------------------- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        {/* Traffic Sources */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Globe className="w-5 h-5 text-sky-500" />
-              <span>مصادر الزيارات الفعلية (Traffic Sources)</span>
-            </h3>
-            <span className="text-xs text-slate-400 font-mono">
-              {report?.sources?.length || 0} مصادر
-            </span>
-          </div>
+        {/* Sources */}
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-6 shadow-xs">
+          <h3 className="text-base font-black text-[#06446F] flex items-center gap-2 mb-4">
+            <Globe className="w-5 h-5 text-[#1575B5]" />
+            <span>من أين يأتي زوار العيادة</span>
+          </h3>
 
-          <div className="space-y-3.5">
+          <div className="space-y-3">
             {report?.sources && report.sources.length > 0 ? (
               report.sources.map((src) => (
-                <div key={src.source} className="space-y-1.5">
+                <div key={src.source} className="space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-                    <span className="flex items-center gap-1.5 truncate">
-                      <span className="w-2 h-2 rounded-full bg-sky-500" />
-                      {src.label}
-                    </span>
-                    <span className="font-mono text-slate-900">
+                    <span>{src.label}</span>
+                    <span className="text-[#06446F]">
                       {src.count} ({src.percentage}%)
                     </span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                     <div
                       style={{ width: `${Math.max(4, src.percentage)}%` }}
-                      className="h-full rounded-full bg-gradient-to-r from-sky-500 to-blue-600"
+                      className="h-full rounded-full bg-[#1575B5]"
                     />
                   </div>
                 </div>
               ))
             ) : (
               <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
-                لا توجد مصادر زيارات مسجلة بعد — يتم تصنيف الزوار لحظياً فور وصولهم
+                يتم رصد مصدر كل زائر تلقائياً فور دخوله الموقع
               </div>
             )}
           </div>
         </div>
 
-        {/* Devices Breakdown */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-sky-500" />
-              <span>أنواع الأجهزة (Devices)</span>
-            </h3>
-            <span className="text-xs text-slate-400 font-mono">
-              معدل الارتداد: {report?.bounceRate ?? 0}%
-            </span>
-          </div>
+        {/* Devices */}
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-6 shadow-xs">
+          <h3 className="text-base font-black text-[#06446F] flex items-center gap-2 mb-4">
+            <Smartphone className="w-5 h-5 text-[#1575B5]" />
+            <span>أجهزة الزوار</span>
+          </h3>
 
-          <div className="space-y-3.5">
+          <div className="space-y-3">
             {report?.devices && report.devices.length > 0 ? (
               report.devices.map((dev) => {
                 const Icon =
@@ -411,20 +467,20 @@ export default function OverviewTab() {
                     : Monitor;
 
                 return (
-                  <div key={dev.device} className="space-y-1.5">
+                  <div key={dev.device} className="space-y-1">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                       <span className="flex items-center gap-1.5">
-                        <Icon className="w-4 h-4 text-slate-500" />
+                        <Icon className="w-4 h-4 text-[#1575B5]" />
                         {dev.label}
                       </span>
-                      <span className="font-mono text-slate-900">
+                      <span className="text-[#06446F]">
                         {dev.count} ({dev.percentage}%)
                       </span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                       <div
                         style={{ width: `${Math.max(4, dev.percentage)}%` }}
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-sky-600"
+                        className="h-full rounded-full bg-gradient-to-r from-[#1575B5] to-[#A3DBE4]"
                       />
                     </div>
                   </div>
@@ -432,7 +488,7 @@ export default function OverviewTab() {
               })
             ) : (
               <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
-                يتم الكشف عن نوع الجهاز تلقائياً مع أول زيارة
+                يتم تحديد نوع الهاتف أو الكمبيوتر لكل زائر مباشرة
               </div>
             )}
           </div>
@@ -440,175 +496,49 @@ export default function OverviewTab() {
       </div>
 
       {/* ------------------------------------------------------------------- */}
-      {/* 2-COLUMN BREAKDOWN: Top Pages & Top Articles */}
+      {/* MOST READ ARTICLES */}
       {/* ------------------------------------------------------------------- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        {/* Top Pages */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
-          <h3 className="text-base font-black text-slate-900 flex items-center gap-2 mb-4">
-            <Layers className="w-5 h-5 text-sky-500" />
-            <span>أكثر الصفحات زيارة (Top Pages)</span>
-          </h3>
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-6 shadow-xs">
+        <h3 className="text-base font-black text-[#06446F] flex items-center gap-2 mb-4">
+          <FileText className="w-5 h-5 text-[#1575B5]" />
+          <span>أكثر المقالات قراءة</span>
+        </h3>
 
-          <div className="divide-y divide-slate-100">
-            {report?.topPages && report.topPages.length > 0 ? (
-              report.topPages.map((pg) => (
-                <div
-                  key={pg.path}
-                  className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-2"
-                >
-                  <div className="min-w-0">
-                    <p className="text-xs font-extrabold text-slate-800 truncate">
-                      {pg.title || pg.path}
-                    </p>
-                    <p className="text-[11px] text-slate-400 font-mono mt-0.5 truncate" dir="ltr">
-                      {pg.path}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-xs font-mono font-bold">
-                      {pg.views} زيارة
-                    </span>
-                    <Link
-                      href={pg.path}
-                      target="_blank"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+        <div className="divide-y divide-slate-100">
+          {report?.topArticles && report.topArticles.length > 0 ? (
+            report.topArticles.map((art) => (
+              <div
+                key={art.slug}
+                className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-[#06446F] truncate">
+                    {art.title}
+                  </p>
+                  <span className="inline-block mt-0.5 text-[10px] px-2 py-0.5 rounded-md bg-[#E8F4FB] text-[#06446F] font-bold">
+                    {art.category}
+                  </span>
                 </div>
-              ))
-            ) : (
-              <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
-                لا توجد صفحات مسجلة حتى الآن
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Top Articles */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
-          <h3 className="text-base font-black text-slate-900 flex items-center gap-2 mb-4">
-            <FileText className="w-5 h-5 text-sky-500" />
-            <span>أكثر المقالات قراءة (Top Articles)</span>
-          </h3>
-
-          <div className="divide-y divide-slate-100">
-            {report?.topArticles && report.topArticles.length > 0 ? (
-              report.topArticles.map((art) => (
-                <div
-                  key={art.slug}
-                  className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-2"
-                >
-                  <div className="min-w-0">
-                    <p className="text-xs font-extrabold text-slate-800 truncate">
-                      {art.title}
-                    </p>
-                    <span className="inline-block mt-0.5 text-[10px] px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 font-bold">
-                      {art.category}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="px-2.5 py-1 rounded-xl bg-sky-50 text-sky-700 text-xs font-mono font-bold">
-                      {art.views} قراءة
-                    </span>
-                    <Link
-                      href={`/ar/articles/${art.slug}`}
-                      target="_blank"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-3 py-1 rounded-xl bg-sky-50 text-[#1575B5] text-xs font-bold">
+                    {art.views} قراءة
+                  </span>
+                  <Link
+                    href={`/ar/articles/${art.slug}`}
+                    target="_blank"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-[#06446F] transition-colors"
+                    title="معاينة المقال"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </Link>
                 </div>
-              ))
-            ) : (
-              <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
-                ستظهر المقالات الأكثر قراءة هنا بمجرد تفاعل الزوار
               </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ------------------------------------------------------------------- */}
-      {/* RECENT REAL ACTIVITY STREAM */}
-      {/* ------------------------------------------------------------------- */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-xs">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-sky-500" />
-              <span>سجل النشاط اللحظي المباشر (Live Activity Log)</span>
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              آخر الزيارات والأحداث الحقيقية المسجلة من المتصفح في Supabase
-            </p>
-          </div>
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-        </div>
-
-        <div className="overflow-x-auto no-scrollbar">
-          <table className="w-full text-right text-xs">
-            <thead>
-              <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase text-[11px]">
-                <th className="py-2.5 px-3">نوع الحدث</th>
-                <th className="py-2.5 px-3">الصفحة / المقال</th>
-                <th className="py-2.5 px-3">المصدر (Referrer)</th>
-                <th className="py-2.5 px-3">الجهاز</th>
-                <th className="py-2.5 px-3">التوقيت</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
-              {report?.recentEvents && report.recentEvents.length > 0 ? (
-                report.recentEvents.map((ev) => (
-                  <tr key={ev.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-2.5 px-3 whitespace-nowrap">
-                      {ev.event_type === "whatsapp_click" ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
-                          <MessageCircle className="w-3 h-3" />
-                          حجز واتساب
-                        </span>
-                      ) : ev.event_type === "article_view" || ev.article_slug ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-bold">
-                          <Eye className="w-3 h-3" />
-                          قراءة مقال
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[11px] font-bold">
-                          <TrendingUp className="w-3 h-3" />
-                          زيارة صفحة
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-2.5 px-3 font-medium max-w-[200px] truncate" title={ev.page_title || ev.path}>
-                      {ev.page_title || ev.path}
-                    </td>
-                    <td className="py-2.5 px-3 whitespace-nowrap text-slate-500 font-mono">
-                      {ev.source || "Direct"}
-                    </td>
-                    <td className="py-2.5 px-3 whitespace-nowrap font-medium">
-                      {ev.device}
-                    </td>
-                    <td className="py-2.5 px-3 whitespace-nowrap text-slate-400 font-mono" dir="ltr">
-                      {new Date(ev.created_at).toLocaleTimeString("ar-EG", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-400">
-                    لا توجد أحداث مسجلة بعد — اضغط على &quot;فحص زيارة حية&quot; بالأعلى لتجربة التسجيل الفوري في Supabase
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+            ))
+          ) : (
+            <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
+              ستظهر هنا المقالات الأكثر قراءة وتفاعلاً من قبل المرضى
+            </div>
+          )}
         </div>
       </div>
     </div>

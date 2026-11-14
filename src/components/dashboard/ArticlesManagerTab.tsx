@@ -20,7 +20,6 @@ import {
   ExternalLink,
   RefreshCw,
   Bot,
-  Globe,
   HelpCircle,
   ListChecks,
   Heading2,
@@ -32,10 +31,8 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   AlertTriangle,
-  Home,
 } from "lucide-react";
 import type { Post, ArticleFAQ } from "@/lib/supabase/types";
-import { MCP_TOOLS_SUMMARY } from "@/lib/mcp";
 
 const DEFAULT_CATEGORIES = [
   { ar: "زراعة الأسنان", en: "Dental Implants" },
@@ -88,7 +85,7 @@ const EMPTY_FORM: FormState = {
   image_caption: "",
   category: "زراعة الأسنان",
   category_en: "Dental Implants",
-  tags: "طب الأسنان بلا ألم, عيادة أسنان المعادي, دكتورة داليا عبد الموجود",
+  tags: "طب أسنان، دكتورة داليا عبد الموجود",
   status: "published",
   featured: false,
   show_on_homepage: true,
@@ -96,16 +93,8 @@ const EMPTY_FORM: FormState = {
   seo_title: "",
   seo_description: "",
   focus_keyword: "",
-  key_takeaways: [
-    "إجراء طبي آمن ومريح بالكامل بدون ألم في عيادة د. داليا عبد الموجود زارع.",
-  ],
-  faqs: [
-    {
-      question: "هل الإجراء مؤلم؟",
-      answer:
-        "لا على الإطلاق، يتم الإجراء تحت تخدير موضعي متطور يضمن راحة المريض التامة بدون أي ألم.",
-    },
-  ],
+  key_takeaways: [""],
+  faqs: [{ question: "", answer: "" }],
 };
 
 function generateClientSlug(text: string): string {
@@ -121,7 +110,11 @@ function generateClientSlug(text: string): string {
   );
 }
 
-export default function ArticlesManagerTab() {
+export default function ArticlesManagerTab({
+  initialEditingPost,
+}: {
+  initialEditingPost?: Post | null;
+}) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
@@ -147,13 +140,8 @@ export default function ArticlesManagerTab() {
   const [previewMode, setPreviewMode] = useState(false);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [deleteTarget, setDeleteTarget] = useState<Post | null>(null);
-  const [mcpModalOpen, setMcpModalOpen] = useState(false);
-  const [mcpCopiedKey, setMcpCopiedKey] = useState<string | null>(null);
-  const [mcpStatus, setMcpStatus] = useState<{
-    testing: boolean;
-    online?: boolean;
-    message?: string;
-  }>({ testing: false });
+  const [assistantModalOpen, setAssistantModalOpen] = useState(false);
+  const [assistantCopied, setAssistantCopied] = useState(false);
 
   const contentTextareaRef = useRef<HTMLTextAreaElement | null>(null);
   const inlineImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -186,12 +174,26 @@ export default function ArticlesManagerTab() {
     loadPosts();
   }, [loadPosts]);
 
+  // Handle edit request from overview tab
+  useEffect(() => {
+    if (initialEditingPost) {
+      openEditEditor(initialEditingPost);
+    }
+  }, [initialEditingPost]);
+
   const filteredPosts = useMemo(() => {
     return posts.filter((p) => {
       if (statusFilter === "published" && p.status !== "published") return false;
       if (statusFilter === "draft" && p.status !== "draft") return false;
       if (statusFilter === "featured" && !p.featured) return false;
-      if (categoryFilter !== "all" && p.category !== categoryFilter) return false;
+
+      if (
+        categoryFilter !== "all" &&
+        p.category !== categoryFilter &&
+        p.category_en !== categoryFilter
+      ) {
+        return false;
+      }
 
       if (searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
@@ -278,13 +280,9 @@ export default function ArticlesManagerTab() {
         slug:
           form.slug.trim() ||
           generateClientSlug(form.title_en || form.title),
-        tags: form.tags
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean),
-        key_takeaways: form.key_takeaways.map((k) => k.trim()).filter(Boolean),
+        key_takeaways: form.key_takeaways.filter((t) => t.trim().length > 0),
         faqs: form.faqs.filter(
-          (f) => f.question.trim() && f.answer.trim()
+          (f) => f.question.trim().length > 0 && f.answer.trim().length > 0
         ),
       };
 
@@ -297,15 +295,14 @@ export default function ArticlesManagerTab() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
       if (!res.ok || !data?.success) {
         throw new Error(data?.error || "فشل حفظ المقال");
       }
 
       showNotice(
-        isEdit
-          ? "تم تحديث المقال بنجاح في Supabase!"
-          : "تم إنشاء ونشر المقال بنجاح في Supabase!"
+        isEdit ? "تم حفظ تعديلات المقال بنجاح" : "تم إنشاء ونشر المقال بنجاح"
       );
       setEditorOpen(false);
       await loadPosts();
@@ -323,27 +320,35 @@ export default function ArticlesManagerTab() {
     post: Post,
     field: "status" | "featured" | "show_on_homepage"
   ) => {
-    const nextValue =
-      field === "status"
-        ? post.status === "published"
-          ? "draft"
-          : "published"
-        : !post[field];
-
     try {
+      let update: Partial<Post> = {};
+      if (field === "status") {
+        update.status = post.status === "published" ? "draft" : "published";
+      } else if (field === "featured") {
+        update.featured = !post.featured;
+      } else if (field === "show_on_homepage") {
+        update.show_on_homepage = !post.show_on_homepage;
+      }
+
+      // Optimistic update
+      setPosts((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, ...update } : p))
+      );
+
       const res = await fetch(`/api/posts/${post.id}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [field]: nextValue }),
+        body: JSON.stringify(update),
       });
       const data = await res.json();
-      if (data?.success && data.post) {
-        setPosts((prev) =>
-          prev.map((p) => (p.id === post.id ? data.post : p))
-        );
+      if (!data?.success) {
+        await loadPosts();
+        showNotice("تعذر تحديث المقال", "error");
+      } else {
         showNotice("تم تحديث حالة المقال بنجاح");
       }
     } catch {
+      await loadPosts();
       showNotice("تعذر تحديث المقال", "error");
     }
   };
@@ -354,16 +359,14 @@ export default function ArticlesManagerTab() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: `${post.title} (نسخة)`,
-          title_en: post.title_en ? `${post.title_en} (Copy)` : "",
-          slug: `${post.slug}-copy-${Date.now().toString(36).slice(-4)}`,
+          title: `نسخة من ${post.title}`,
+          title_en: post.title_en ? `Copy of ${post.title_en}` : "",
+          slug: `${post.slug}-copy-${Date.now().toString(36)}`,
           excerpt: post.excerpt,
           excerpt_en: post.excerpt_en,
           content: post.content,
           content_en: post.content_en,
           cover_image: post.cover_image,
-          image_alt: post.image_alt,
-          image_caption: post.image_caption,
           category: post.category,
           category_en: post.category_en,
           tags: post.tags,
@@ -379,7 +382,7 @@ export default function ArticlesManagerTab() {
       });
       const data = await res.json();
       if (data?.success) {
-        showNotice("تم تكرار المقال كمسودة بنجاح");
+        showNotice("تم إنشاء نسخة من المقال بنجاح");
         await loadPosts();
       }
     } catch {
@@ -396,7 +399,7 @@ export default function ArticlesManagerTab() {
       const data = await res.json();
       if (data?.success) {
         setPosts((prev) => prev.filter((p) => p.id !== deleteTarget.id));
-        showNotice("تم حذف المقال نهائياً من Supabase");
+        showNotice("تم حذف المقال بنجاح");
       }
     } catch {
       showNotice("تعذر حذف المقال", "error");
@@ -419,7 +422,7 @@ export default function ArticlesManagerTab() {
       const data = await res.json();
       if (data?.success && data.url) {
         setForm((prev) => ({ ...prev, cover_image: data.url }));
-        showNotice("تم رفع صورة الغلاف إلى Supabase Storage بنجاح!");
+        showNotice("تم رفع صورة الغلاف بنجاح");
       } else {
         throw new Error(data?.error || "فشل رفع الصورة");
       }
@@ -455,7 +458,7 @@ export default function ArticlesManagerTab() {
           }" /><figcaption>${form.title || ""}</figcaption></figure>\n`,
           ""
         );
-        showNotice("تم رفع وإدراج الصورة داخل المقال!");
+        showNotice("تم إدراج الصورة داخل المقال بنجاح");
       }
     } catch {
       showNotice("فشل رفع الصورة", "error");
@@ -470,162 +473,144 @@ export default function ArticlesManagerTab() {
     if (!el) {
       setForm((prev) => ({
         ...prev,
-        content: `${prev.content}${prefix}${suffix}`,
+        content: prev.content + prefix + suffix,
       }));
       return;
     }
     const start = el.selectionStart || 0;
     const end = el.selectionEnd || 0;
-    const selected = form.content.slice(start, end) || "النص هنا";
-    const nextContent =
-      form.content.slice(0, start) +
-      prefix +
-      selected +
-      suffix +
-      form.content.slice(end);
-    setForm((prev) => ({ ...prev, content: nextContent }));
+    const selected = form.content.slice(start, end);
+    const replacement = `${prefix}${selected || ""}${suffix}`;
+    const newContent =
+      form.content.slice(0, start) + replacement + form.content.slice(end);
+
+    setForm((prev) => ({ ...prev, content: newContent }));
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(
+        start + prefix.length,
+        start + prefix.length + selected.length
+      );
+    }, 50);
   };
 
-  // SEO Score Calculator
   const seoEvaluation = useMemo(() => {
-    const checks = [
-      {
-        label: "عنوان المقال يحتوي على طول مثالي (30 - 75 حرفاً)",
-        passed: form.title.trim().length >= 25 && form.title.trim().length <= 85,
-      },
-      {
-        label: "ملخص ووصف الميتا للـ SEO مضاف (80 - 170 حرفاً)",
-        passed:
-          (form.seo_description || form.excerpt).trim().length >= 60,
-      },
-      {
-        label: "الكلمة المفتاحية الرئيسية محددة وموجودة في العنوان أو المحتوى",
-        passed:
-          Boolean(form.focus_keyword.trim()) &&
-          (form.title.includes(form.focus_keyword.trim()) ||
-            form.content.includes(form.focus_keyword.trim())),
-      },
-      {
-        label: "المحتوى غني ومقسم بعناوين فرعية (H2 / H3)",
-        passed: /<h[23]|##\s/i.test(form.content) && form.content.length > 300,
-      },
-      {
-        label: "صورة الغلاف والنص البديل (Alt Text) مضافان لتحسين ظهور الصور في جوجل",
-        passed: Boolean(form.cover_image.trim()) && Boolean(form.image_alt.trim()),
-      },
-      {
-        label: "الأسئلة الشائعة (FAQ Schema) مضافة لتصدر نتائج البحث الغنية",
-        passed: form.faqs.some((f) => f.question.trim() && f.answer.trim()),
-      },
-    ];
-    const passedCount = checks.filter((c) => c.passed).length;
-    const score = Math.round((passedCount / checks.length) * 100);
-    return { score, checks };
+    const titleLen = form.seo_title.trim().length || form.title.trim().length;
+    const descLen =
+      form.seo_description.trim().length || form.excerpt.trim().length;
+    const wordCount = form.content
+      .replace(/<[^>]*>/g, " ")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length;
+    const kw = form.focus_keyword.trim().toLowerCase();
+
+    let score = 0;
+    const checks: { label: string; passed: boolean }[] = [];
+
+    const titleOk = titleLen >= 30 && titleLen <= 65;
+    if (titleOk) score += 20;
+    checks.push({
+      label: "طول عنوان المقال مناسب لمحركات البحث بين 30 و 65 حرف",
+      passed: titleOk,
+    });
+
+    const descOk = descLen >= 110 && descLen <= 170;
+    if (descOk) score += 20;
+    checks.push({
+      label: "وصف المقال مناسب بين 110 و 170 حرف",
+      passed: descOk,
+    });
+
+    const wordsOk = wordCount >= 300;
+    if (wordsOk) score += 20;
+    checks.push({
+      label: "المحتوى غني ومفصل أكثر من 300 كلمة",
+      passed: wordsOk,
+    });
+
+    const hasImages =
+      Boolean(form.cover_image) || /<img\b/i.test(form.content);
+    if (hasImages) score += 15;
+    checks.push({
+      label: "يحتوي المقال على صور توضيحية للمرضى",
+      passed: hasImages,
+    });
+
+    const hasFaqs = form.faqs.some(
+      (f) => f.question.trim().length > 0 && f.answer.trim().length > 0
+    );
+    if (hasFaqs) score += 15;
+    checks.push({
+      label: "يحتوي على أسئلة شائعة لإفادة الزائر",
+      passed: hasFaqs,
+    });
+
+    const kwOk =
+      Boolean(kw) &&
+      (form.title.toLowerCase().includes(kw) ||
+        form.content.toLowerCase().includes(kw));
+    if (kwOk) score += 10;
+    checks.push({
+      label: "الكلمة المفتاحية مذكورة في العنوان والمحتوى",
+      passed: kwOk,
+    });
+
+    return { score: Math.min(100, score), checks };
   }, [form]);
 
-  const mcpEndpointUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/api/mcp`
-      : "https://drdalia-dental.com/api/mcp";
-
-  const mcpConfigJson = JSON.stringify(
-    {
-      mcpServers: {
-        "dr-dalia-articles": {
-          url: mcpEndpointUrl,
-          type: "http",
-        },
-      },
-    },
-    null,
-    2
-  );
-
-  const agentPromptText = `أنت كاتب محتوى طبي وخبير SEO متخصص لعيادة د. داليا عبد الموجود زارع (استشاري طب وجراحة الأسنان بالقصر العيني - المعادي، القاهرة).
-استخدم أدوات MCP المتصلة (dr-dalia-articles):
-1. استدعِ أولاً أداة get_clinic_seo_context و list_categories لمعرفة خدمات العيادة والكلمات المفتاحية والتصنيفات.
-2. اكتب مقالاً طبياً شاملاً ومتوافقاً مع معايير SEO بنسبة 100% ومقسماً بعناوين <h2> و <h3> ونقاط key_takeaways وأسئلة شائعة faqs.
-3. استخدم أداة create_article لإضافة المقال ونشره مباشرة في قاعدة بيانات Supabase الخاصة بالموقع.`;
-
-  const copyText = async (key: string, text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setMcpCopiedKey(key);
-      setTimeout(() => setMcpCopiedKey(null), 2000);
-    } catch {
-      // Ignore
-    }
-  };
-
-  const testMcpConnection = async () => {
-    setMcpStatus({ testing: true });
-    try {
-      const res = await fetch("/api/mcp?info=1");
-      const data = await res.json();
-      if (data?.status === "online") {
-        setMcpStatus({
-          testing: false,
-          online: true,
-          message: `متصل بنجاح! الخادم (${data.name}) جاهز ويحتوي على ${data.tools?.length || 7} أدوات فعالة مربوطة بـ Supabase.`,
-        });
-      } else {
-        setMcpStatus({
-          testing: false,
-          online: false,
-          message: "استجابة غير متوقعة من الخادم",
-        });
-      }
-    } catch {
-      setMcpStatus({
-        testing: false,
-        online: false,
-        message: "تعذر الاتصال بنقطة النهاية",
-      });
-    }
+  const copyAssistantLink = () => {
+    const url = typeof window !== "undefined" ? `${window.location.origin}/api/mcp` : "/api/mcp";
+    navigator.clipboard.writeText(url);
+    setAssistantCopied(true);
+    showNotice("تم نسخ رابط المساعد الذكي بنجاح");
+    setTimeout(() => setAssistantCopied(false), 3000);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Toast Notification */}
+    <div className="space-y-4 sm:space-y-6">
+      {/* Toast Notice */}
       {toast && (
         <div
-          className={`fixed bottom-5 left-5 z-[100] px-5 py-3.5 rounded-2xl shadow-xl font-bold text-xs md:text-sm flex items-center gap-2.5 transition-all ${
+          className={`fixed bottom-5 left-5 z-50 px-5 py-3 rounded-2xl shadow-xl font-bold text-xs sm:text-sm flex items-center gap-2 ${
             toast.type === "error"
               ? "bg-red-600 text-white"
-              : "bg-brand-primary text-white border border-brand-accent"
+              : "bg-[#06446F] text-white"
           }`}
         >
-          <Sparkles className="w-4 h-4 text-brand-accent shrink-0" />
+          <Sparkles className="w-4 h-4 text-[#A3DBE4] shrink-0" />
           <span>{toast.message}</span>
         </div>
       )}
 
-      {/* Header & Primary Actions */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      {/* ------------------------------------------------------------------- */}
+      {/* HEADER & ACTIONS (Landing Page Style) */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 sm:p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-sky-500" />
-            <span>إدارة المقالات الطبية (CMS & MCP)</span>
+          <h1 className="text-base sm:text-lg font-black text-[#06446F] flex items-center gap-2">
+            <FileText className="w-5 h-5 text-[#1575B5]" />
+            <span>إدارة ونشر المقالات الطبية</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            إضافة وتعديل وحذف المقالات، رفع الصور للسحابة، وتوفير أدوات MCP لكتّاب الذكاء الاصطناعي
+          <p className="text-xs text-slate-500 mt-0.5">
+            إضافة وتعديل مقالات العيادة ومشاركتها مع زوار الموقع والمرضى
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             type="button"
-            onClick={() => setMcpModalOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs sm:text-sm transition-all cursor-pointer border border-sky-200 active:scale-95"
+            onClick={() => setAssistantModalOpen(true)}
+            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-[#E8F4FB] text-[#06446F] hover:bg-[#d6ecf9] font-bold text-xs sm:text-sm transition-all cursor-pointer border border-sky-200 active:scale-95"
           >
-            <Bot className="w-4 h-4 text-sky-600" />
-            <span>ربط الذكاء الاصطناعي (MCP)</span>
+            <Bot className="w-4 h-4 text-[#1575B5]" />
+            <span>المساعد الذكي لكتابة المقالات</span>
           </button>
 
           <button
             type="button"
             onClick={openCreateEditor}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white hover:from-sky-400 hover:to-blue-500 font-bold text-xs sm:text-sm shadow-md shadow-sky-500/25 transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#06446F] hover:bg-[#1575B5] text-white font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>إضافة مقال جديد</span>
@@ -633,60 +618,59 @@ export default function ArticlesManagerTab() {
         </div>
       </div>
 
-      {/* Stats Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-slate-500 uppercase">
+      {/* ------------------------------------------------------------------- */}
+      {/* STATS STRIP */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 shadow-xs">
+          <span className="text-xs font-bold text-slate-500">
             إجمالي المقالات
           </span>
-          <div className="text-2xl font-black text-slate-900 font-mono mt-1">
+          <div className="text-2xl font-black text-[#06446F] mt-1">
             {stats.total}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-emerald-600 uppercase">
-            منشور (Published)
+
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 shadow-xs">
+          <span className="text-xs font-bold text-emerald-600">
+            المقالات المنشورة
           </span>
-          <div className="text-2xl font-black text-emerald-600 font-mono mt-1">
+          <div className="text-2xl font-black text-emerald-600 mt-1">
             {stats.published}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-amber-600 uppercase">
-            مسودات (Drafts)
+
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 shadow-xs">
+          <span className="text-xs font-bold text-amber-600">
+            المسودات المعلقة
           </span>
-          <div className="text-2xl font-black text-amber-600 font-mono mt-1">
+          <div className="text-2xl font-black text-amber-600 mt-1">
             {stats.drafts}
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-sky-600 uppercase">
-            مميزة (Featured)
+
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-4 shadow-xs">
+          <span className="text-xs font-bold text-[#1575B5]">
+            المقالات المميزة
           </span>
-          <div className="text-2xl font-black text-sky-600 font-mono mt-1">
+          <div className="text-2xl font-black text-[#1575B5] mt-1">
             {stats.featured}
-          </div>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs col-span-2 sm:col-span-1">
-          <span className="text-[11px] font-bold text-slate-500 uppercase">
-            إجمالي المشاهدات الفعلية
-          </span>
-          <div className="text-2xl font-black text-slate-900 font-mono mt-1">
-            {stats.totalViews}
           </div>
         </div>
       </div>
 
-      {/* Search & Filter Toolbar */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-3 sm:p-4 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      {/* ------------------------------------------------------------------- */}
+      {/* SEARCH & FILTERS */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 p-3 sm:p-4 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 right-3.5 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="ابحث في المقالات بالعنوان، الـ Slug، الكلمات المفتاحية..."
-            className="w-full rounded-xl bg-slate-50 border border-slate-200 pr-10 pl-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+            placeholder="ابحث في المقالات بالعنوان أو التصنيف"
+            className="w-full rounded-2xl bg-slate-50 border border-slate-200 pr-10 pl-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1575B5]/20 focus:border-[#1575B5] transition-all"
           />
         </div>
 
@@ -707,8 +691,8 @@ export default function ArticlesManagerTab() {
               }
               className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === tab.id
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[#06446F] text-white shadow-xs"
+                  : "bg-[#E8F4FB] text-[#06446F] hover:bg-[#d6ecf9]"
               }`}
             >
               {tab.label}
@@ -718,7 +702,7 @@ export default function ArticlesManagerTab() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="rounded-xl bg-slate-100 border border-slate-200 px-3 py-1.5 sm:py-2 text-xs font-bold text-slate-700 focus:outline-none"
+            className="rounded-xl bg-[#E8F4FB] border border-sky-200 px-3 py-1.5 sm:py-2 text-xs font-bold text-[#06446F] focus:outline-none"
           >
             <option value="all">جميع التصنيفات</option>
             {DEFAULT_CATEGORIES.map((c) => (
@@ -731,7 +715,7 @@ export default function ArticlesManagerTab() {
           <button
             type="button"
             onClick={loadPosts}
-            className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 cursor-pointer transition-colors"
+            className="p-2 rounded-xl bg-[#E8F4FB] text-[#06446F] hover:bg-[#d6ecf9] cursor-pointer transition-colors"
             title="تحديث قائمة المقالات"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
@@ -739,24 +723,26 @@ export default function ArticlesManagerTab() {
         </div>
       </div>
 
-      {/* Articles Table / List */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      {/* ------------------------------------------------------------------- */}
+      {/* ARTICLES LIST: Mobile Cards (< md) & Desktop Table (>= md) */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-sky-100 shadow-xs overflow-hidden">
         {loading && posts.length === 0 ? (
           <div className="p-12 text-center text-sm text-slate-500">
-            جاري تحميل المقالات من Supabase...
+            جاري تحميل المقالات
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <p className="text-base font-bold text-slate-800">
+            <p className="text-base font-bold text-[#06446F]">
               لا توجد مقالات مطابقة للبحث
             </p>
             <button
               type="button"
               onClick={openCreateEditor}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-bold cursor-pointer hover:bg-sky-600 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#06446F] text-white text-xs font-bold cursor-pointer hover:bg-[#1575B5] transition-all shadow-xs"
             >
               <Plus className="w-4 h-4" />
-              <span>إنشاء أول مقال</span>
+              <span>إضافة أول مقال</span>
             </button>
           </div>
         ) : (
@@ -780,7 +766,7 @@ export default function ArticlesManagerTab() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 font-bold">
+                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#E8F4FB] text-[#06446F] font-bold">
                           {post.category}
                         </span>
                         <button
@@ -789,7 +775,7 @@ export default function ArticlesManagerTab() {
                           className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold transition-colors cursor-pointer ${
                             post.status === "published"
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-slate-100 text-slate-600 border border-slate-200"
+                              : "bg-amber-50 text-amber-700 border border-amber-200"
                           }`}
                         >
                           {post.status === "published" ? "منشور" : "مسودة"}
@@ -801,28 +787,28 @@ export default function ArticlesManagerTab() {
                           </span>
                         )}
                       </div>
-                      <h4 className="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2">
+                      <h4 className="font-extrabold text-[#06446F] text-sm leading-snug line-clamp-2">
                         {post.title}
                       </h4>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100/80">
-                    <span className="flex items-center gap-1 font-mono text-slate-700 font-bold">
-                      <Eye className="w-3.5 h-3.5 text-sky-500" />
-                      {post.views || 0} قراءة فعلية
+                    <span className="flex items-center gap-1 text-[#1575B5] font-bold">
+                      <Eye className="w-3.5 h-3.5" />
+                      {post.views || 0} قراءة
                     </span>
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <span className="text-[11px] text-slate-400">
                       {new Date(post.published_at).toLocaleDateString("ar-EG")}
                     </span>
                   </div>
 
-                  {/* Touch-Friendly Action Buttons on Mobile */}
+                  {/* Touch Friendly Action Buttons on Mobile */}
                   <div className="grid grid-cols-4 gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => openEditEditor(post)}
-                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+                      className="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-[#E8F4FB] hover:bg-[#d6ecf9] text-[#06446F] text-xs font-bold transition-all active:scale-95 cursor-pointer"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                       <span>تعديل</span>
@@ -860,210 +846,184 @@ export default function ArticlesManagerTab() {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-right border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-extrabold text-slate-500 uppercase">
-                  <th className="py-3.5 px-4">المقال</th>
-                  <th className="py-3.5 px-3">التصنيف</th>
-                  <th className="py-3.5 px-3">الحالة</th>
-                  <th className="py-3.5 px-3">الظهور</th>
-                  <th className="py-3.5 px-3">المشاهدات</th>
-                  <th className="py-3.5 px-3">التاريخ</th>
-                  <th className="py-3.5 px-4 text-left">إجراءات التحكم</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border text-xs md:text-sm">
-                {filteredPosts.map((post) => (
-                  <tr
-                    key={post.id}
-                    className="hover:bg-brand-accent/5 transition-colors"
-                  >
-                    <td className="py-3.5 px-4 max-w-md">
-                      <div className="flex items-center gap-3">
-                        <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-muted border border-border shrink-0">
-                          <Image
-                            src={post.cover_image}
-                            alt={post.title}
-                            fill
-                            className="object-cover"
-                            sizes="64px"
-                          />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-bold text-brand-primary line-clamp-1">
-                            {post.title}
-                          </p>
-                          <p
-                            className="text-[11px] text-foreground/50 truncate"
-                            dir="ltr"
-                          >
-                            /{post.slug}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td className="py-3.5 px-3 whitespace-nowrap">
-                      <span className="px-2.5 py-1 rounded-lg bg-brand-primary/10 text-brand-primary text-xs font-bold">
-                        {post.category}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-3 whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={() => handleQuickToggle(post, "status")}
-                        className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors ${
-                          post.status === "published"
-                            ? "bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25"
-                            : "bg-amber-500/15 text-amber-700 hover:bg-amber-500/25"
-                        }`}
-                      >
-                        {post.status === "published" ? "منشور" : "مسودة"}
-                      </button>
-                    </td>
-
-                    <td className="py-3.5 px-3 whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleQuickToggle(post, "featured")}
-                          title="تمييز المقال في الأعلى"
-                          className={`p-1.5 rounded-lg border cursor-pointer transition-colors ${
-                            post.featured
-                              ? "bg-amber-400/20 border-amber-400 text-amber-600"
-                              : "border-border text-foreground/35 hover:text-foreground/70"
-                          }`}
-                        >
-                          <Star className="w-4 h-4 fill-current" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleQuickToggle(post, "show_on_homepage")
-                          }
-                          title="إظهار في الصفحة الرئيسية"
-                          className={`p-1.5 rounded-lg border cursor-pointer transition-colors ${
-                            post.show_on_homepage !== false
-                              ? "bg-brand-primary/10 border-brand-primary/30 text-brand-primary"
-                              : "border-border text-foreground/35 hover:text-foreground/70"
-                          }`}
-                        >
-                          <Home className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-
-                    <td className="py-3.5 px-3 whitespace-nowrap font-bold text-foreground/75">
-                      <span className="inline-flex items-center gap-1">
-                        <Eye className="w-3.5 h-3.5 text-brand-action" />
-                        {post.views}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-3 whitespace-nowrap text-xs text-foreground/60">
-                      {new Date(post.published_at).toLocaleDateString("ar-EG", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </td>
-
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <Link
-                          href={`/ar/articles/${post.slug}`}
-                          target="_blank"
-                          className="p-2 rounded-xl bg-background hover:bg-brand-accent/30 text-brand-primary transition-colors"
-                          title="معاينة المقال"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => openEditEditor(post)}
-                          className="p-2 rounded-xl bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary transition-colors cursor-pointer"
-                          title="تعديل المقال"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDuplicate(post)}
-                          className="p-2 rounded-xl bg-background hover:bg-brand-accent/30 text-foreground/70 transition-colors cursor-pointer"
-                          title="تكرار المقال"
-                        >
-                          <Copy className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDeleteTarget(post)}
-                          className="p-2 rounded-xl bg-red-500/10 hover:bg-red-600 hover:text-white text-red-600 transition-colors cursor-pointer"
-                          title="حذف المقال"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+                  <tr className="bg-slate-50/80 border-b border-sky-100 text-[11px] font-extrabold text-slate-500 uppercase">
+                    <th className="py-3.5 px-4">المقال</th>
+                    <th className="py-3.5 px-3">التصنيف</th>
+                    <th className="py-3.5 px-3">الحالة</th>
+                    <th className="py-3.5 px-3">الظهور</th>
+                    <th className="py-3.5 px-3">المشاهدات</th>
+                    <th className="py-3.5 px-3">التاريخ</th>
+                    <th className="py-3.5 px-4 text-left">إجراءات التحكم</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+                </thead>
+                <tbody className="divide-y divide-sky-100 text-xs md:text-sm">
+                  {filteredPosts.map((post) => (
+                    <tr
+                      key={post.id}
+                      className="hover:bg-slate-50/60 transition-colors"
+                    >
+                      <td className="py-3.5 px-4 max-w-md">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                            <Image
+                              src={post.cover_image}
+                              alt={post.title}
+                              fill
+                              className="object-cover"
+                              sizes="64px"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-bold text-[#06446F] line-clamp-1">
+                              {post.title}
+                            </p>
+                            <p
+                              className="text-[11px] text-slate-400 truncate"
+                              dir="ltr"
+                            >
+                              /{post.slug}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <span className="px-2.5 py-1 rounded-xl bg-[#E8F4FB] text-[#06446F] text-xs font-bold">
+                          {post.category}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => handleQuickToggle(post, "status")}
+                          className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors ${
+                            post.status === "published"
+                              ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                              : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                          }`}
+                        >
+                          {post.status === "published" ? "منشور" : "مسودة"}
+                        </button>
+                      </td>
+
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleQuickToggle(post, "featured")}
+                            title="تمييز المقال في الأعلى"
+                            className={`p-1.5 rounded-xl border cursor-pointer transition-colors ${
+                              post.featured
+                                ? "bg-amber-50 border-amber-300 text-amber-600"
+                                : "border-slate-200 text-slate-300 hover:text-slate-500"
+                            }`}
+                          >
+                            <Star className="w-4 h-4 fill-current" />
+                          </button>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#E8F4FB] text-[#06446F] text-xs font-bold">
+                          <Eye className="w-3.5 h-3.5 text-[#1575B5]" />
+                          {post.views || 0}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-3 whitespace-nowrap text-xs text-slate-500">
+                        {new Date(post.published_at).toLocaleDateString("ar-EG")}
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Link
+                            href={`/ar/articles/${post.slug}`}
+                            target="_blank"
+                            className="p-2 rounded-xl bg-[#E8F4FB] hover:bg-[#d6ecf9] text-[#06446F] transition-colors"
+                            title="معاينة المقال"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => openEditEditor(post)}
+                            className="p-2 rounded-xl bg-[#06446F] hover:bg-[#1575B5] text-white transition-colors cursor-pointer"
+                            title="تعديل المقال"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDuplicate(post)}
+                            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+                            title="نسخ المقال"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeleteTarget(post)}
+                            className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
+                            title="حذف المقال"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 
-      {/* ===================================================================== */}
-      {/* Full Rich Article Editor Modal (Mobile-Optimized Full Screen Sheet) */}
-      {/* ===================================================================== */}
+      {/* ------------------------------------------------------------------- */}
+      {/* ARTICLE EDITOR MODAL (Landing Page Style & Mobile Friendly) */}
+      {/* ------------------------------------------------------------------- */}
       {editorOpen && (
-        <div className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-center justify-center p-0 sm:p-4 overflow-y-auto">
-          <div className="bg-white w-full max-w-5xl h-full sm:h-auto sm:max-h-[92vh] rounded-none sm:rounded-3xl border-0 sm:border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-4xl h-full sm:h-auto sm:max-h-[92vh] rounded-none sm:rounded-3xl border-0 sm:border border-sky-100 shadow-2xl overflow-hidden flex flex-col">
             {/* Modal Header */}
-            <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-between shrink-0 shadow-sm">
+            <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-[#06446F] to-[#1575B5] text-white flex items-center justify-between shrink-0 shadow-xs">
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-5 h-5 text-sky-200" />
-                <h2 className="text-base md:text-lg font-black">
+                <Sparkles className="w-5 h-5 text-[#A3DBE4]" />
+                <h2 className="text-base sm:text-lg font-black">
                   {form.id ? "تعديل المقال الطبي" : "إضافة مقال طبي جديد"}
                 </h2>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="px-3 py-1 rounded-full bg-white/15 text-xs font-bold">
-                  تقييم الـ SEO: {seoEvaluation.score}%
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setEditorOpen(false)}
-                  className="p-1.5 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setEditorOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-white/20 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            {/* Editor Sub-Tabs */}
-            <div className="px-6 py-2.5 bg-background border-b border-border flex flex-wrap items-center gap-2">
+            {/* Sub-Tabs */}
+            <div className="px-4 py-2.5 bg-[#E8F4FB] border-b border-sky-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
               {[
-                { id: "content", label: "1. المحتوى والتنسيق", icon: FileText },
-                { id: "media", label: "2. الصورة والتصنيف والنشر", icon: ImageIcon },
+                { id: "content", label: "محتوى المقال والصور", icon: FileText },
                 {
                   id: "takeaways",
-                  label: "3. النقاط الرئيسية والأسئلة الشائعة",
+                  label: "الأسئلة الشائعة والنقاط الهامة",
                   icon: ListChecks,
                 },
-                { id: "seo", label: "4. تحسين محركات البحث (SEO)", icon: Globe },
+                { id: "seo", label: "الظهور في محرك بحث جوجل", icon: Eye },
               ].map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() =>
-                    setEditorTab(
-                      t.id as "content" | "media" | "takeaways" | "seo"
-                    )
+                    setEditorTab(t.id as "content" | "takeaways" | "seo")
                   }
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                     editorTab === t.id
-                      ? "bg-brand-primary text-white shadow-sm"
-                      : "bg-white text-foreground/70 hover:bg-brand-accent/25 border border-border"
+                      ? "bg-[#06446F] text-white shadow-xs"
+                      : "bg-white text-slate-700 hover:bg-sky-50"
                   }`}
                 >
                   <t.icon className="w-3.5 h-3.5" />
@@ -1072,287 +1032,120 @@ export default function ArticlesManagerTab() {
               ))}
             </div>
 
-            {/* Editor Form Body */}
+            {/* Form Content */}
             <form
               onSubmit={handleSaveArticle}
-              className="flex-1 overflow-y-auto p-6 space-y-6"
+              className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5"
             >
+              {/* Tab 1: Content & Images */}
               {editorTab === "content" && (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-brand-primary">
-                        عنوان المقال (بالعربية) *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={form.title}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setForm((prev) => ({
-                            ...prev,
-                            title: val,
-                            slug: prev.slug || generateClientSlug(val),
-                          }));
-                        }}
-                        placeholder="مثال: الدليل الشامل لزراعة الأسنان بدون ألم"
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-foreground/70">
-                        عنوان المقال بالإنجليزية (اختياري)
-                      </label>
-                      <input
-                        type="text"
-                        value={form.title_en}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            title_en: e.target.value,
-                          }))
-                        }
-                        placeholder="Complete Guide to Painless Dental Implants"
-                        dir="ltr"
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Slug */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-brand-primary">
-                        الرابط الدائم للمقال (SEO Slug)
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setForm((prev) => ({
-                            ...prev,
-                            slug: generateClientSlug(
-                              prev.title_en || prev.title
-                            ),
-                          }))
-                        }
-                        className="text-[11px] font-bold text-brand-action hover:underline cursor-pointer"
-                      >
-                        توليد تلقائي من العنوان
-                      </button>
-                    </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      عنوان المقال بالعربية
+                    </label>
                     <input
                       type="text"
-                      value={form.slug}
-                      onChange={(e) =>
-                        setForm((prev) => ({ ...prev, slug: e.target.value }))
-                      }
-                      dir="ltr"
-                      placeholder="painless-dental-implants-guide"
-                      className="w-full rounded-xl border border-border px-3.5 py-2 text-xs font-mono bg-background/50 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                      required
+                      value={form.title}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setForm((prev) => ({
+                          ...prev,
+                          title: val,
+                          slug: prev.slug || generateClientSlug(val),
+                        }));
+                      }}
+                      placeholder="مثال: الدليل الشامل لزراعة الأسنان بدون ألم"
+                      className="w-full rounded-2xl border border-sky-200 px-3.5 py-3 text-sm focus:border-[#1575B5] focus:outline-none"
                     />
                   </div>
 
-                  {/* Excerpt */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-brand-primary">
-                        ملخص المقال (Excerpt - بالعربية)
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                        تصنيف المقال
                       </label>
-                      <textarea
-                        rows={2}
-                        value={form.excerpt}
-                        onChange={(e) =>
+                      <select
+                        value={form.category}
+                        onChange={(e) => {
+                          const cat = DEFAULT_CATEGORIES.find(
+                            (c) => c.ar === e.target.value
+                          );
                           setForm((prev) => ({
                             ...prev,
-                            excerpt: e.target.value,
-                          }))
-                        }
-                        placeholder="ملخص جذاب يظهر في بطاقة المقال وفي محركات البحث..."
-                        className="w-full rounded-xl border border-border p-3 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      />
+                            category: e.target.value,
+                            category_en: cat?.en || e.target.value,
+                          }));
+                        }}
+                        className="w-full rounded-2xl border border-sky-200 px-3.5 py-3 text-sm focus:border-[#1575B5] focus:outline-none bg-white"
+                      >
+                        {DEFAULT_CATEGORIES.map((c) => (
+                          <option key={c.ar} value={c.ar}>
+                            {c.ar}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-foreground/70">
-                        ملخص المقال بالإنجليزية (اختياري)
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                        حالة المقال
                       </label>
-                      <textarea
-                        rows={2}
-                        dir="ltr"
-                        value={form.excerpt_en}
+                      <select
+                        value={form.status}
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            excerpt_en: e.target.value,
+                            status: e.target.value as "published" | "draft",
                           }))
                         }
-                        placeholder="Short English summary..."
-                        className="w-full rounded-xl border border-border p-3 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      />
+                        className="w-full rounded-2xl border border-sky-200 px-3.5 py-3 text-sm focus:border-[#1575B5] focus:outline-none bg-white"
+                      >
+                        <option value="published">منشور ومتاح للزوار</option>
+                        <option value="draft">مسودة معلقة للمراجعة</option>
+                      </select>
                     </div>
                   </div>
 
-                  {/* Rich Formatting Toolbar + Content Editor */}
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <label className="text-xs font-bold text-brand-primary">
-                        محتوى المقال الكامل (يدعم HTML و Markdown) *
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setPreviewMode((p) => !p)}
-                        className="px-3 py-1 rounded-lg bg-brand-accent/25 text-brand-primary text-xs font-bold hover:bg-brand-accent/40 cursor-pointer"
-                      >
-                        {previewMode ? "العودة للتحرير" : "معاينة التنسيق الحي"}
-                      </button>
-                    </div>
-
-                    {/* Formatting Toolbar */}
-                    <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-background border border-border">
-                      <button
-                        type="button"
-                        onClick={() => insertFormattingTag("<h2>", "</h2>")}
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
-                        title="عنوان رئيسي H2"
-                      >
-                        <Heading2 className="w-4 h-4" />
-                        <span>H2</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => insertFormattingTag("<h3>", "</h3>")}
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
-                        title="عنوان فرعي H3"
-                      >
-                        <Heading3 className="w-4 h-4" />
-                        <span>H3</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertFormattingTag("<strong>", "</strong>")
-                        }
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary cursor-pointer"
-                        title="خط عريض"
-                      >
-                        <Bold className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => insertFormattingTag("<em>", "</em>")}
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary cursor-pointer"
-                        title="خط مائل"
-                      >
-                        <Italic className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertFormattingTag(
-                            "<ul>\n  <li>",
-                            "</li>\n  <li>نقطة إضافية</li>\n</ul>"
-                          )
-                        }
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary cursor-pointer"
-                        title="قائمة نقطية"
-                      >
-                        <List className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertFormattingTag("<blockquote>", "</blockquote>")
-                        }
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary cursor-pointer"
-                        title="اقتباس أو نصيحة طبية"
-                      >
-                        <Quote className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          insertFormattingTag(
-                            '<a href="https://wa.me/201112521494">',
-                            "</a>"
-                          )
-                        }
-                        className="p-2 rounded-lg hover:bg-white text-brand-primary cursor-pointer"
-                        title="إدراج رابط"
-                      >
-                        <LinkIcon className="w-4 h-4" />
-                      </button>
-
-                      <input
-                        ref={inlineImageInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleInlineImageUpload}
-                        className="hidden"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => inlineImageInputRef.current?.click()}
-                        disabled={uploadingInline}
-                        className="px-2.5 py-1.5 rounded-lg bg-white border border-border hover:bg-brand-accent/20 text-brand-primary text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>
-                          {uploadingInline
-                            ? "جاري الرفع..."
-                            : "رفع صورة داخل المقال"}
-                        </span>
-                      </button>
-                    </div>
-
-                    {previewMode ? (
-                      <div
-                        className="min-h-[280px] p-6 rounded-2xl border border-border bg-background/30 prose max-w-none space-y-4 [&_h2]:text-xl [&_h2]:font-extrabold [&_h2]:text-brand-primary [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-brand-action [&_blockquote]:border-s-4 [&_blockquote]:border-brand-action [&_blockquote]:bg-brand-accent/15 [&_blockquote]:p-4 [&_blockquote]:rounded-xl"
-                        dangerouslySetInnerHTML={{ __html: form.content }}
-                      />
-                    ) : (
-                      <textarea
-                        ref={contentTextareaRef}
-                        rows={11}
-                        required
-                        value={form.content}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            content: e.target.value,
-                          }))
-                        }
-                        placeholder="اكتب محتوى المقال هنا (يمكنك استخدام أزرار التنسيق أعلاه أو كتابة HTML أو Markdown)..."
-                        className="w-full rounded-2xl border border-border p-4 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      />
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {editorTab === "media" && (
-                <div className="space-y-6">
-                  {/* Cover Image Upload & URL */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                    <div className="md:col-span-7 space-y-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-brand-primary">
-                          صورة الغلاف (رفع مباشر إلى Supabase أو رابط URL)
-                        </label>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={form.cover_image}
-                            onChange={(e) =>
-                              setForm((prev) => ({
-                                ...prev,
-                                cover_image: e.target.value,
-                              }))
-                            }
-                            dir="ltr"
-                            placeholder="https://..."
-                            className="flex-1 rounded-xl border border-border px-3.5 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  {/* Cover Image */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      صورة غلاف المقال
+                    </label>
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      <div className="relative w-full sm:w-36 h-24 rounded-2xl overflow-hidden bg-slate-100 border border-sky-200 shrink-0">
+                        {form.cover_image ? (
+                          <Image
+                            src={form.cover_image}
+                            alt={form.title || "غلاف المقال"}
+                            fill
+                            className="object-cover"
+                            sizes="144px"
                           />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                            بدون صورة
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 w-full space-y-2">
+                        <input
+                          type="text"
+                          value={form.cover_image}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              cover_image: e.target.value,
+                            }))
+                          }
+                          placeholder="رابط الصورة المباشر"
+                          className="w-full rounded-2xl border border-sky-200 px-3 py-2 text-xs focus:border-[#1575B5] focus:outline-none"
+                          dir="ltr"
+                        />
+
+                        <div className="flex items-center gap-2">
                           <input
                             ref={coverImageInputRef}
                             type="file"
@@ -1362,197 +1155,175 @@ export default function ArticlesManagerTab() {
                           />
                           <button
                             type="button"
-                            onClick={() => coverImageInputRef.current?.click()}
                             disabled={uploadingCover}
-                            className="px-4 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-bold hover:bg-brand-action inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
+                            onClick={() => coverImageInputRef.current?.click()}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#E8F4FB] text-[#06446F] hover:bg-[#d6ecf9] text-xs font-bold cursor-pointer transition-colors disabled:opacity-60"
                           >
-                            <Upload className="w-4 h-4" />
+                            <Upload className="w-3.5 h-3.5" />
                             <span>
-                              {uploadingCover ? "جاري الرفع..." : "رفع صورة"}
+                              {uploadingCover
+                                ? "جاري رفع الصورة"
+                                : "رفع صورة من جهازك"}
                             </span>
                           </button>
                         </div>
                       </div>
-
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-brand-primary">
-                          النص البديل للصورة (Image Alt Text - مهم جداً للـ SEO)
-                        </label>
-                        <input
-                          type="text"
-                          value={form.image_alt}
-                          onChange={(e) =>
-                            setForm((prev) => ({
-                              ...prev,
-                              image_alt: e.target.value,
-                            }))
-                          }
-                          placeholder="وصف للصورة يتضمن الكلمة المفتاحية..."
-                          className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-foreground/70">
-                          تعليق أسفل الصورة (Image Caption - اختياري)
-                        </label>
-                        <input
-                          type="text"
-                          value={form.image_caption}
-                          onChange={(e) =>
-                            setForm((prev) => ({
-                              ...prev,
-                              image_caption: e.target.value,
-                            }))
-                          }
-                          placeholder="تعليق توضيحي يظهر أسفل صورة المقال..."
-                          className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-5">
-                      <div className="relative h-52 w-full rounded-2xl overflow-hidden bg-muted border border-border">
-                        {form.cover_image ? (
-                          <Image
-                            src={form.cover_image}
-                            alt={form.image_alt || form.title || "Preview"}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="h-full flex items-center justify-center text-xs text-foreground/45">
-                            لا توجد صورة محددة
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </div>
 
-                  {/* Category & Tags */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-brand-primary">
-                        التصنيف الطبي
+                  {/* Excerpt */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      مقدمة أو نبذة مختصرة عن المقال
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={form.excerpt}
+                      onChange={(e) =>
+                        setForm((prev) => ({ ...prev, excerpt: e.target.value }))
+                      }
+                      placeholder="ملخص قصير يشرح فكرة المقال في سطرين"
+                      className="w-full rounded-2xl border border-sky-200 p-3 text-sm focus:border-[#1575B5] focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Rich Content Editor */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-[#06446F]">
+                        محتوى المقال الكامل
                       </label>
-                      <select
-                        value={form.category}
-                        onChange={(e) => {
-                          const found = DEFAULT_CATEGORIES.find(
-                            (c) => c.ar === e.target.value
-                          );
-                          setForm((prev) => ({
-                            ...prev,
-                            category: e.target.value,
-                            category_en: found ? found.en : prev.category_en,
-                          }));
-                        }}
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm bg-white"
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode(!previewMode)}
+                        className="text-xs font-bold text-[#1575B5] hover:underline cursor-pointer"
                       >
-                        {DEFAULT_CATEGORIES.map((c) => (
-                          <option key={c.ar} value={c.ar}>
-                            {c.ar} ({c.en})
-                          </option>
-                        ))}
-                      </select>
+                        {previewMode ? "العودة للتحرير" : "معاينة الشكل النهائي"}
+                      </button>
                     </div>
 
-                    <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-xs font-bold text-brand-primary">
-                        الكلمات المفتاحية والوسوم (مفصولة بفاصلة ,)
-                      </label>
-                      <input
-                        type="text"
-                        value={form.tags}
-                        onChange={(e) =>
-                          setForm((prev) => ({ ...prev, tags: e.target.value }))
-                        }
-                        placeholder="زراعة الأسنان, تجميل الأسنان, عيادة أسنان المعادي..."
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm"
-                      />
-                    </div>
-                  </div>
+                    {/* Formatting Toolbar */}
+                    {!previewMode && (
+                      <div className="flex flex-wrap items-center gap-1 p-2 bg-[#E8F4FB] rounded-t-2xl border border-b-0 border-sky-200">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            insertFormattingTag("<h2>", "</h2>\n")
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-xs font-bold text-[#06446F] flex items-center gap-1 cursor-pointer shadow-2xs"
+                        >
+                          <Heading2 className="w-3.5 h-3.5" />
+                          <span>عنوان رئيسي</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            insertFormattingTag("<h3>", "</h3>\n")
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-xs font-bold text-[#06446F] flex items-center gap-1 cursor-pointer shadow-2xs"
+                        >
+                          <Heading3 className="w-3.5 h-3.5" />
+                          <span>عنوان فرعي</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            insertFormattingTag("<strong>", "</strong>")
+                          }
+                          className="p-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#06446F] cursor-pointer shadow-2xs"
+                          title="نص عريض"
+                        >
+                          <Bold className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertFormattingTag("<em>", "</em>")}
+                          className="p-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#06446F] cursor-pointer shadow-2xs"
+                          title="نص مائل"
+                        >
+                          <Italic className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            insertFormattingTag("<ul>\n  <li>", "</li>\n</ul>\n")
+                          }
+                          className="p-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#06446F] cursor-pointer shadow-2xs"
+                          title="قائمة نقاط"
+                        >
+                          <List className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            insertFormattingTag("<blockquote>", "</blockquote>\n")
+                          }
+                          className="p-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#06446F] cursor-pointer shadow-2xs"
+                          title="اقتباس طبي"
+                        >
+                          <Quote className="w-3.5 h-3.5" />
+                        </button>
 
-                  {/* Publishing Controls */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <label className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-background/40 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={form.status === "published"}
+                        <input
+                          ref={inlineImageInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleInlineImageUpload}
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          disabled={uploadingInline}
+                          onClick={() => inlineImageInputRef.current?.click()}
+                          className="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-xs font-bold text-[#06446F] flex items-center gap-1 cursor-pointer shadow-2xs"
+                        >
+                          <ImageIcon className="w-3.5 h-3.5 text-[#1575B5]" />
+                          <span>
+                            {uploadingInline ? "جاري الرفع" : "إدراج صورة بالداخل"}
+                          </span>
+                        </button>
+                      </div>
+                    )}
+
+                    {previewMode ? (
+                      <div
+                        className="w-full rounded-2xl border border-sky-200 p-5 min-h-[260px] bg-white prose prose-sky max-w-none text-slate-800"
+                        dangerouslySetInnerHTML={{ __html: form.content }}
+                      />
+                    ) : (
+                      <textarea
+                        ref={contentTextareaRef}
+                        rows={10}
+                        required
+                        value={form.content}
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            status: e.target.checked ? "published" : "draft",
+                            content: e.target.value,
                           }))
                         }
-                        className="w-4 h-4 accent-brand-primary"
+                        placeholder="اكتب محتوى المقال هنا ويمكنك استخدام أزرار التنسيق بالأعلى لإضافة عناوين ونقاط وصور"
+                        className="w-full rounded-b-2xl border border-sky-200 p-4 text-sm focus:border-[#1575B5] focus:outline-none font-sans leading-relaxed"
                       />
-                      <div>
-                        <p className="text-xs font-bold text-brand-primary">
-                          نشر المقال فوراً
-                        </p>
-                        <p className="text-[11px] text-foreground/55">
-                          إلغاء التحديد يحفظه كمسودة
-                        </p>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-background/40 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={form.featured}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            featured: e.target.checked,
-                          }))
-                        }
-                        className="w-4 h-4 accent-brand-primary"
-                      />
-                      <div>
-                        <p className="text-xs font-bold text-brand-primary">
-                          مقال مميز (Featured)
-                        </p>
-                        <p className="text-[11px] text-foreground/55">
-                          يظهر في صدارة صفحة المقالات
-                        </p>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-background/40 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={form.show_on_homepage}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            show_on_homepage: e.target.checked,
-                          }))
-                        }
-                        className="w-4 h-4 accent-brand-primary"
-                      />
-                      <div>
-                        <p className="text-xs font-bold text-brand-primary">
-                          عرض في الصفحة الرئيسية
-                        </p>
-                        <p className="text-[11px] text-foreground/55">
-                          يظهر في قسم المقالات بالرئيسية
-                        </p>
-                      </div>
-                    </label>
+                    )}
                   </div>
                 </div>
               )}
 
+              {/* Tab 2: Key Takeaways & FAQs */}
               {editorTab === "takeaways" && (
                 <div className="space-y-6">
-                  {/* Key Takeaways */}
+                  {/* Takeaways */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs md:text-sm font-extrabold text-brand-primary flex items-center gap-1.5">
-                        <ListChecks className="w-4 h-4 text-brand-action" />
-                        <span>أهم النقاط المستفادة (Key Takeaways)</span>
-                      </label>
+                      <div>
+                        <h4 className="text-sm font-bold text-[#06446F]">
+                          النقاط الرئيسية الهامة في المقال
+                        </h4>
+                        <p className="text-xs text-slate-500">
+                          صندوق خلاصة سريع يظهر في بداية المقال لراحة القارئ
+                        </p>
+                      </div>
                       <button
                         type="button"
                         onClick={() =>
@@ -1561,57 +1332,61 @@ export default function ArticlesManagerTab() {
                             key_takeaways: [...prev.key_takeaways, ""],
                           }))
                         }
-                        className="text-xs font-bold text-brand-action hover:underline cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl bg-[#E8F4FB] text-[#06446F] text-xs font-bold hover:bg-[#d6ecf9] cursor-pointer"
                       >
-                        + إضافة نقطة جديدة
+                        + إضافة نقطة
                       </button>
                     </div>
+
                     <div className="space-y-2">
-                      {form.key_takeaways.map((item, idx) => (
+                      {form.key_takeaways.map((point, idx) => (
                         <div key={idx} className="flex items-center gap-2">
                           <input
                             type="text"
-                            value={item}
+                            value={point}
                             onChange={(e) => {
-                              const next = [...form.key_takeaways];
-                              next[idx] = e.target.value;
+                              const updated = [...form.key_takeaways];
+                              updated[idx] = e.target.value;
                               setForm((prev) => ({
                                 ...prev,
-                                key_takeaways: next,
+                                key_takeaways: updated,
                               }));
                             }}
-                            placeholder={`النقطة المستفادة رقم ${idx + 1}...`}
-                            className="flex-1 rounded-xl border border-border px-3.5 py-2 text-xs md:text-sm"
+                            placeholder={`النقطة الرئيسية ${idx + 1}`}
+                            className="flex-1 rounded-xl border border-sky-200 px-3 py-2.5 text-xs sm:text-sm focus:border-[#1575B5] focus:outline-none"
                           />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setForm((prev) => ({
-                                ...prev,
-                                key_takeaways: prev.key_takeaways.filter(
+                          {form.key_takeaways.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = form.key_takeaways.filter(
                                   (_, i) => i !== idx
-                                ),
-                              }))
-                            }
-                            className="p-2 text-red-500 hover:bg-red-50 rounded-xl cursor-pointer"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                                );
+                                setForm((prev) => ({
+                                  ...prev,
+                                  key_takeaways: updated,
+                                }));
+                              }}
+                              className="p-2 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* FAQs Builder */}
-                  <div className="space-y-3 pt-4 border-t border-border">
+                  {/* FAQs */}
+                  <div className="space-y-3 pt-4 border-t border-sky-100">
                     <div className="flex items-center justify-between">
                       <div>
-                        <label className="text-xs md:text-sm font-extrabold text-brand-primary flex items-center gap-1.5">
-                          <HelpCircle className="w-4 h-4 text-brand-action" />
-                          <span>
-                            الأسئلة الشائعة حول المقال (تولد FAQPage Schema في جوجل)
-                          </span>
-                        </label>
+                        <h4 className="text-sm font-bold text-[#06446F]">
+                          الأسئلة الشائعة وإجاباتها
+                        </h4>
+                        <p className="text-xs text-slate-500">
+                          تظهر في نهاية المقال وتفيد جداً في ثقة المرضى وظهور المقال في جوجل
+                        </p>
                       </div>
                       <button
                         type="button"
@@ -1621,9 +1396,9 @@ export default function ArticlesManagerTab() {
                             faqs: [...prev.faqs, { question: "", answer: "" }],
                           }))
                         }
-                        className="text-xs font-bold text-brand-action hover:underline cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl bg-[#E8F4FB] text-[#06446F] text-xs font-bold hover:bg-[#d6ecf9] cursor-pointer"
                       >
-                        + إضافة سؤال شائع
+                        + إضافة سؤال
                       </button>
                     </div>
 
@@ -1631,52 +1406,57 @@ export default function ArticlesManagerTab() {
                       {form.faqs.map((faq, idx) => (
                         <div
                           key={idx}
-                          className="p-4 rounded-2xl border border-border bg-background/40 space-y-2.5"
+                          className="p-3.5 rounded-2xl bg-[#E8F4FB]/50 border border-sky-100 space-y-2 relative"
                         >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-xs font-bold text-brand-primary">
-                              سؤال #{idx + 1}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-[#06446F]">
+                              سؤال {idx + 1}
                             </span>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setForm((prev) => ({
-                                  ...prev,
-                                  faqs: prev.faqs.filter((_, i) => i !== idx),
-                                }))
-                              }
-                              className="text-xs text-red-500 hover:underline cursor-pointer"
-                            >
-                              حذف السؤال
-                            </button>
+                            {form.faqs.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = form.faqs.filter(
+                                    (_, i) => i !== idx
+                                  );
+                                  setForm((prev) => ({
+                                    ...prev,
+                                    faqs: updated,
+                                  }));
+                                }}
+                                className="text-slate-400 hover:text-red-600 transition-colors p-1"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                           </div>
                           <input
                             type="text"
                             value={faq.question}
                             onChange={(e) => {
-                              const next = [...form.faqs];
-                              next[idx] = {
-                                ...next[idx],
+                              const updated = [...form.faqs];
+                              updated[idx] = {
+                                ...updated[idx],
                                 question: e.target.value,
                               };
-                              setForm((prev) => ({ ...prev, faqs: next }));
+                              setForm((prev) => ({ ...prev, faqs: updated }));
                             }}
-                            placeholder="اكتب السؤال الشائع هنا..."
-                            className="w-full rounded-xl border border-border bg-white px-3.5 py-2 text-xs md:text-sm"
+                            placeholder="اكتب السؤال هنا"
+                            className="w-full rounded-xl border border-sky-200 bg-white px-3 py-2 text-xs sm:text-sm focus:border-[#1575B5] focus:outline-none"
                           />
                           <textarea
                             rows={2}
                             value={faq.answer}
                             onChange={(e) => {
-                              const next = [...form.faqs];
-                              next[idx] = {
-                                ...next[idx],
+                              const updated = [...form.faqs];
+                              updated[idx] = {
+                                ...updated[idx],
                                 answer: e.target.value,
                               };
-                              setForm((prev) => ({ ...prev, faqs: next }));
+                              setForm((prev) => ({ ...prev, faqs: updated }));
                             }}
-                            placeholder="اكتب الإجابة الطبية الواضحة هنا..."
-                            className="w-full rounded-xl border border-border bg-white p-3 text-xs md:text-sm"
+                            placeholder="اكتب الإجابة الطبية الواضحة هنا"
+                            className="w-full rounded-xl border border-sky-200 bg-white p-2.5 text-xs sm:text-sm focus:border-[#1575B5] focus:outline-none"
                           />
                         </div>
                       ))}
@@ -1685,52 +1465,48 @@ export default function ArticlesManagerTab() {
                 </div>
               )}
 
+              {/* Tab 3: Google Search Visibility */}
               {editorTab === "seo" && (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-brand-primary">
-                        الكلمة المفتاحية المستهدفة (Focus Keyword)
-                      </label>
-                      <input
-                        type="text"
-                        value={form.focus_keyword}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            focus_keyword: e.target.value,
-                          }))
-                        }
-                        placeholder="مثال: زراعة الأسنان بدون ألم"
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-brand-primary">
-                        عنوان الميتا للـ SEO (Meta Title)
-                      </label>
-                      <input
-                        type="text"
-                        value={form.seo_title}
-                        onChange={(e) =>
-                          setForm((prev) => ({
-                            ...prev,
-                            seo_title: e.target.value,
-                          }))
-                        }
-                        placeholder={
-                          form.title ||
-                          "عنوان المقال في نتائج بحث جوجل | د. داليا عبد الموجود"
-                        }
-                        className="w-full rounded-xl border border-border px-3.5 py-2.5 text-sm"
-                      />
-                    </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      الكلمة الأساسية التي يبحث عنها المريض
+                    </label>
+                    <input
+                      type="text"
+                      value={form.focus_keyword}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          focus_keyword: e.target.value,
+                        }))
+                      }
+                      placeholder="مثال: زراعة الأسنان بدون ألم"
+                      className="w-full rounded-2xl border border-sky-200 px-3.5 py-2.5 text-sm focus:border-[#1575B5] focus:outline-none"
+                    />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-brand-primary">
-                      وصف الميتا للـ SEO (Meta Description - يفضل 140 إلى 165 حرفاً)
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      عنوان المقال في نتائج بحث جوجل
+                    </label>
+                    <input
+                      type="text"
+                      value={form.seo_title}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          seo_title: e.target.value,
+                        }))
+                      }
+                      placeholder={form.title || "عنوان المقال في جوجل"}
+                      className="w-full rounded-2xl border border-sky-200 px-3.5 py-2.5 text-sm focus:border-[#1575B5] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#06446F] mb-1.5">
+                      وصف المقال في نتائج بحث جوجل
                     </label>
                     <textarea
                       rows={3}
@@ -1741,59 +1517,55 @@ export default function ArticlesManagerTab() {
                           seo_description: e.target.value,
                         }))
                       }
-                      placeholder={
-                        form.excerpt || "وصف المقال كما سيظهر في محرك بحث جوجل..."
-                      }
-                      className="w-full rounded-xl border border-border p-3 text-sm"
+                      placeholder={form.excerpt || "وصف مختصر يظهر في جوجل"}
+                      className="w-full rounded-2xl border border-sky-200 p-3 text-sm focus:border-[#1575B5] focus:outline-none"
                     />
                   </div>
 
-                  {/* Google SERP Live Preview */}
-                  <div className="rounded-2xl border border-border bg-background/50 p-5 space-y-2">
-                    <span className="text-[11px] font-bold text-foreground/50 uppercase">
-                      معاينة حية لظهور المقال في نتائج بحث جوجل (Google SERP Preview)
+                  {/* Google Preview Card */}
+                  <div className="p-4 rounded-2xl bg-[#E8F4FB]/50 border border-sky-100 space-y-1.5">
+                    <span className="text-[11px] font-bold text-[#06446F]">
+                      معاينة شكل المقال في محرك بحث جوجل
                     </span>
-                    <div className="bg-white rounded-xl p-4 border border-border space-y-1">
-                      <p className="text-xs text-emerald-700 truncate" dir="ltr">
-                        https://drdalia-dental.com/ar/articles/
-                        {form.slug || "article-slug"}
-                      </p>
-                      <h4 className="text-base md:text-lg font-bold text-[#1a0dab] line-clamp-1">
-                        {form.seo_title ||
-                          form.title ||
-                          "عنوان المقال الطبي | د. داليا عبد الموجود زارع"}
-                      </h4>
-                      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                    <div className="bg-white rounded-xl p-3 border border-sky-100 space-y-1">
+                      <div className="text-xs text-emerald-700 truncate" dir="ltr">
+                        https://drdalia-dental.com/ar/articles/{form.slug || "article"}
+                      </div>
+                      <div className="text-sm font-bold text-blue-700 hover:underline cursor-pointer truncate">
+                        {form.seo_title || form.title || "عنوان المقال الطبي"}
+                      </div>
+                      <div className="text-xs text-slate-600 line-clamp-2">
                         {form.seo_description ||
                           form.excerpt ||
-                          "وصف المقال الطبي سيظهر هنا في نتائج بحث جوجل لجذب الباحثين عن علاج الأسنان بدون ألم..."}
-                      </p>
+                          "وصف المقال التوضيحي الذي سيقرأه الزائر في نتائج البحث"}
+                      </div>
                     </div>
                   </div>
 
-                  {/* SEO Checklist */}
-                  <div className="rounded-2xl border border-border p-5 space-y-3">
+                  {/* Checklist */}
+                  <div className="p-4 rounded-2xl bg-white border border-sky-100 space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-brand-primary">
-                        قائمة فحص جودة الـ SEO للمقال
+                      <span className="text-xs font-bold text-[#06446F]">
+                        مدى جاهزية المقال لمحركات البحث
                       </span>
-                      <span className="text-sm font-extrabold text-brand-action">
+                      <span className="text-xs font-black text-[#1575B5]">
                         {seoEvaluation.score}%
                       </span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {seoEvaluation.checks.map((chk, idx) => (
                         <div
                           key={idx}
-                          className={`flex items-center gap-2 p-2.5 rounded-xl text-xs font-semibold ${
+                          className={`flex items-center gap-2 p-2 rounded-xl text-xs font-medium ${
                             chk.passed
-                              ? "bg-emerald-500/10 text-emerald-800"
-                              : "bg-amber-500/10 text-amber-800"
+                              ? "bg-emerald-50 text-emerald-800"
+                              : "bg-slate-50 text-slate-600"
                           }`}
                         >
                           <CheckCircle2
-                            className={`w-4 h-4 shrink-0 ${
-                              chk.passed ? "text-emerald-600" : "text-amber-500"
+                            className={`w-3.5 h-3.5 shrink-0 ${
+                              chk.passed ? "text-emerald-600" : "text-slate-300"
                             }`}
                           />
                           <span>{chk.label}</span>
@@ -1804,29 +1576,29 @@ export default function ArticlesManagerTab() {
                 </div>
               )}
 
-              {/* Modal Footer (Sticky at bottom for seamless mobile experience) */}
-              <div className="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3.5 pb-3 px-4 sm:px-6 border-t border-slate-200 flex items-center justify-between gap-3 shadow-lg z-20 shrink-0">
+              {/* Sticky Save Bar on Mobile */}
+              <div className="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3.5 pb-2 border-t border-sky-100 flex items-center justify-between gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setEditorOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="px-4 py-2.5 rounded-2xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 active:scale-95 text-white text-xs sm:text-sm font-bold shadow-md shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60 flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-2xl bg-[#06446F] hover:bg-[#1575B5] active:scale-95 text-white text-xs sm:text-sm font-bold shadow-md shadow-[#06446F]/20 transition-all cursor-pointer disabled:opacity-60 flex items-center gap-2"
                 >
                   {saving ? (
                     <>
                       <div className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                      <span>جاري الحفظ في Supabase...</span>
+                      <span>جاري حفظ المقال</span>
                     </>
                   ) : form.id ? (
-                    <span>حفظ التعديلات في السحابة</span>
+                    <span>حفظ التعديلات</span>
                   ) : (
-                    <span>نشر وحفظ المقال في Supabase</span>
+                    <span>نشر وحفظ المقال الآن</span>
                   )}
                 </button>
               </div>
@@ -1835,204 +1607,115 @@ export default function ArticlesManagerTab() {
         </div>
       )}
 
-      {/* ===================================================================== */}
-      {/* Delete Confirmation Modal */}
-      {/* ===================================================================== */}
+      {/* ------------------------------------------------------------------- */}
+      {/* DELETE CONFIRMATION MODAL */}
+      {/* ------------------------------------------------------------------- */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-[90] bg-black/55 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-md rounded-3xl border border-border p-6 shadow-2xl space-y-5 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-600 flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md rounded-3xl border border-sky-100 p-6 shadow-xl space-y-4 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-lg font-extrabold text-brand-primary">
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-[#06446F]">
                 تأكيد حذف المقال
               </h3>
-              <p className="text-xs md:text-sm text-foreground/70">
+              <p className="text-xs sm:text-sm text-slate-600">
                 هل أنت متأكد من حذف مقال{" "}
-                <strong className="text-brand-primary">
+                <strong className="text-[#06446F]">
                   &ldquo;{deleteTarget.title}&rdquo;
                 </strong>{" "}
-                نهائياً من قاعدة بيانات Supabase؟
+                نهائياً من الموقع
               </p>
             </div>
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setDeleteTarget(null)}
-                className="px-5 py-2.5 rounded-xl border border-border text-xs font-bold cursor-pointer"
+                className="px-5 py-2.5 rounded-2xl border border-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-100"
               >
                 تراجع
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="px-6 py-2.5 rounded-xl bg-red-600 text-white hover:bg-red-700 text-xs font-bold cursor-pointer"
+                className="px-6 py-2.5 rounded-2xl bg-red-600 text-white hover:bg-red-700 text-xs font-bold cursor-pointer transition-colors shadow-xs"
               >
-                نعم، احذف المقال
+                تأكيد الحذف
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ===================================================================== */}
-      {/* MCP AI Agent Integration Modal */}
-      {/* ===================================================================== */}
-      {mcpModalOpen && (
-        <div className="fixed inset-0 z-[85] bg-black/55 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-          <div className="bg-white w-full max-w-3xl rounded-3xl border border-border shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-            <div className="px-6 py-4 bg-brand-primary text-white flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <Bot className="w-5 h-5 text-brand-accent" />
+      {/* ------------------------------------------------------------------- */}
+      {/* AI ASSISTANT MODAL (Simple & Doctor-Friendly) */}
+      {/* ------------------------------------------------------------------- */}
+      {assistantModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-lg rounded-3xl border border-sky-100 shadow-xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-2xl bg-[#E8F4FB] text-[#06446F] flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-[#1575B5]" />
+                </div>
                 <div>
-                  <h2 className="text-base md:text-lg font-extrabold">
-                    ربط وكيل الذكاء الاصطناعي لكتابة المقالات (MCP Server)
-                  </h2>
-                  <p className="text-[11px] text-brand-accent/90">
-                    متصل مباشرة بمشروع Supabase: dr dalia (ksaxugyvzeudupnakrwk)
+                  <h3 className="text-base font-black text-[#06446F]">
+                    المساعد الذكي لكتابة المقالات
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    ربط ذكي لكتابة مقالات طبية جديدة ومراجعتها
                   </p>
                 </div>
               </div>
               <button
                 type="button"
-                onClick={() => setMcpModalOpen(false)}
-                className="p-1.5 rounded-full hover:bg-white/20 cursor-pointer"
+                onClick={() => setAssistantModalOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-6 text-xs md:text-sm">
-              {/* Endpoint Box */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-brand-primary">
-                    1. رابط خادم الـ MCP المباشر (Streamable HTTP Endpoint)
-                  </span>
-                  <button
-                    type="button"
-                    onClick={testMcpConnection}
-                    disabled={mcpStatus.testing}
-                    className="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-700 font-bold text-xs hover:bg-emerald-500/25 cursor-pointer"
-                  >
-                    {mcpStatus.testing
-                      ? "جاري الفحص..."
-                      : "اختبار اتصال الـ MCP الآن"}
-                  </button>
-                </div>
+            <div className="p-4 rounded-2xl bg-[#E8F4FB]/50 border border-sky-100 space-y-3 text-xs text-slate-700 leading-relaxed">
+              <p>
+                يمكنك ربط أي مساعد ذكاء اصطناعي لكتابة مقالات طبية متخصصة وإضافتها كمسودات في لوحة التحكم لمراجعتها والموافقة عليها بضغطة واحدة
+              </p>
 
+              <div>
+                <span className="block text-[11px] font-bold text-[#06446F] mb-1">
+                  رابط المساعد الخاص بموقعك
+                </span>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
                     readOnly
-                    value={mcpEndpointUrl}
+                    value={
+                      typeof window !== "undefined"
+                        ? `${window.location.origin}/api/mcp`
+                        : "/api/mcp"
+                    }
                     dir="ltr"
-                    className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2.5 font-mono text-xs"
+                    className="flex-1 rounded-xl bg-white border border-sky-200 px-3 py-2 text-xs font-mono text-slate-700"
                   />
                   <button
                     type="button"
-                    onClick={() => copyText("url", mcpEndpointUrl)}
-                    className="px-4 py-2.5 rounded-xl bg-brand-primary text-white font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer"
+                    onClick={copyAssistantLink}
+                    className="px-3.5 py-2 rounded-xl bg-[#06446F] hover:bg-[#1575B5] text-white text-xs font-bold transition-all cursor-pointer"
                   >
-                    {mcpCopiedKey === "url" ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        <span>تم النسخ</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        <span>نسخ الرابط</span>
-                      </>
-                    )}
+                    {assistantCopied ? "تم النسخ" : "نسخ الرابط"}
                   </button>
-                </div>
-
-                {mcpStatus.message && (
-                  <div
-                    className={`p-3 rounded-xl font-bold text-xs ${
-                      mcpStatus.online
-                        ? "bg-emerald-500/15 text-emerald-800"
-                        : "bg-red-500/15 text-red-700"
-                    }`}
-                  >
-                    {mcpStatus.message}
-                  </div>
-                )}
-              </div>
-
-              {/* MCP Config JSON */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-brand-primary">
-                    2. إعدادات الربط (Claude / Cursor / Windsurf / Cline / .mcp.json)
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => copyText("json", mcpConfigJson)}
-                    className="text-xs font-bold text-brand-action hover:underline inline-flex items-center gap-1 cursor-pointer"
-                  >
-                    {mcpCopiedKey === "json" ? "تم نسخ الكود!" : "نسخ كود JSON"}
-                  </button>
-                </div>
-                <pre
-                  dir="ltr"
-                  className="p-4 rounded-2xl bg-slate-950 text-slate-100 font-mono text-xs overflow-x-auto"
-                >
-                  {mcpConfigJson}
-                </pre>
-              </div>
-
-              {/* Ready AI Prompt */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-brand-primary">
-                    3. برومبت جاهز لتوجيه الـ Agent لكتابة المقالات وإضافتها في Supabase
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => copyText("prompt", agentPromptText)}
-                    className="text-xs font-bold text-brand-action hover:underline inline-flex items-center gap-1 cursor-pointer"
-                  >
-                    {mcpCopiedKey === "prompt"
-                      ? "تم نسخ البرومبت!"
-                      : "نسخ البرومبت"}
-                  </button>
-                </div>
-                <div className="p-4 rounded-2xl bg-brand-accent/15 border border-brand-accent text-brand-primary text-xs leading-relaxed whitespace-pre-line">
-                  {agentPromptText}
-                </div>
-              </div>
-
-              {/* Available Tools */}
-              <div className="space-y-2.5">
-                <span className="font-extrabold text-brand-primary block">
-                  4. الأدوات المتاحة للـ Agent داخل خادم الـ MCP ({MCP_TOOLS_SUMMARY.length} أدوات):
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {MCP_TOOLS_SUMMARY.map((tool) => (
-                    <div
-                      key={tool.name}
-                      className="p-3 rounded-xl border border-border bg-background/50 space-y-1"
-                    >
-                      <code
-                        dir="ltr"
-                        className="text-xs font-extrabold text-brand-action block"
-                      >
-                        {tool.name}
-                      </code>
-                      <p className="text-[11px] font-bold text-brand-primary">
-                        {tool.title}
-                      </p>
-                      <p className="text-[11px] text-foreground/65">
-                        {tool.description}
-                      </p>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setAssistantModalOpen(false)}
+              className="w-full py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#06446F] text-xs font-bold transition-colors cursor-pointer"
+            >
+              إغلاق
+            </button>
           </div>
         </div>
       )}

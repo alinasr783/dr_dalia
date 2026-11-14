@@ -438,7 +438,7 @@ export default function ArticleDetailClient({
                   </div>
                   <p className="text-xs md:text-sm text-white/85 leading-relaxed">
                     {isAr
-                      ? "خبرة تمتد لأكثر من 20 عاماً في طب وجراحة وتجميل الأسنان بدون ألم في المعادي. نهتم بتقديم تجربة علاجية هادئة ومريحة للكبار والأطفال بأحدث الأجهزة العالمية."
+                      ? "خبرة تمتد لأكثر من 20 عاماً في طب وجراحة وتجميل الأسنان بدون ألم في المعادي حيث نهتم بتقديم تجربة علاجية هادئة ومريحة للكبار والأطفال بأحدث الأجهزة العالمية"
                       : "Over 20 years of clinical excellence in painless restorative, cosmetic, and pediatric dentistry in Maadi, Cairo."}
                   </p>
                   <div className="pt-2">
@@ -501,7 +501,7 @@ export default function ArticleDetailClient({
                   </h3>
                   <p className="text-xs text-foreground/65 leading-relaxed">
                     {isAr
-                      ? "فحص شامل وخطة علاجية دقيقة بدون ألم في قلب المعادي."
+                      ? "فحص شامل وخطة علاجية دقيقة بدون ألم في قلب المعادي"
                       : "Comprehensive dental checkup and personalized painless care in Maadi."}
                   </p>
                 </div>
