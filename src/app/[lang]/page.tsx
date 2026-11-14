@@ -1,508 +1,412 @@
-"use client";
-
-import { use } from "react";
-import Image from "next/image";
-import { motion, Variants } from "framer-motion";
-import { CheckCircle, Clock } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Services from "@/components/Services";
-import ArticlesSection from "@/components/ArticlesSection";
+import type { Metadata } from "next";
+import LandingPageClient from "@/components/home/LandingPageClient";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import { SITE_URL } from "@/lib/supabase/config";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-import {
-  translations,
-  galleryItems,
-  aboutDoctorImage,
-  testimonialsList,
-  heroBackground,
   clinicInfo,
-  beforeAfterCases,
+  testimonialsList,
+  servicesDataJson,
   Language,
 } from "@/lib/supabaseMock";
 
-/* ─────────────────────────── Page ─────────────────────────── */
-
-export default function LandingPage({
-  params,
-}: {
+type PageProps = {
   params: Promise<{ lang: string }>;
-}) {
-  const { lang } = use(params);
-  const currentLang = (lang === "ar" ? "ar" : "en") as Language;
-  const t = translations[currentLang];
-  const isAr = currentLang === "ar";
+};
 
-  const whatsappMessage = isAr
-    ? "مرحباً دكتورة داليا عبد الموجود زارع، أود حجز موعد استشارة بدون ألم."
-    : "Hello Dr. Dalia AbdElMougood Zariaa, I would like to book a Painless consultation appointment.";
-  const whatsappUrl = clinicInfo.whatsappLink || `https://wa.me/${clinicInfo.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { lang } = await params;
+  const isAr = lang === "ar";
 
-  const sectionVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+  const title = isAr
+    ? "عيادة د. داليا عبد الموجود زارع | استشاري طب وتجميل وزراعة الأسنان بالمعادي"
+    : "Dr. Dalia AbdElMougood Zariaa Dental Clinic | Painless Cosmetic & Implant Dentistry in Maadi, Cairo";
+
+  const description = isAr
+    ? "عيادة د. داليا عبد الموجود زارع (استشاري طب وجراحة الفم والأسنان بالقصر العيني) في المعادي، القاهرة. خبرة أكثر من 20 عاماً في زراعة الأسنان بدون ألم، ابتسامة هوليود والفينيرز، تبييض الأسنان بالليزر، علاج العصب بدون ألم، وطب أسنان الأطفال."
+    : "Dr. Dalia AbdElMougood Zariaa Dental Clinic in Maadi, Cairo. 20+ years of clinical excellence in painless dental implants, Hollywood Smile porcelain veneers, laser teeth whitening, painless rotary root canals, and gentle pediatric dentistry.";
+
+  const canonicalUrl = `${SITE_URL}/${isAr ? "ar" : "en"}`;
+
+  const keywords = isAr
+    ? [
+        "دكتورة داليا عبد الموجود زارع",
+        "دكتورة داليا زريع",
+        "عيادة أسنان المعادي",
+        "افضل دكتور اسنان في المعادي",
+        "دكتور اسنان القصر العيني",
+        "زراعة الاسنان بدون الم المعادي",
+        "ابتسامة هوليود في مصر",
+        "فينيرز الاسنان ايماكس",
+        "تبييض الاسنان بالليزر في القاهرة",
+        "حشو وعلاج عصب بدون الم",
+        "طب اسنان الاطفال المعادي",
+        "توريد وتحديد اللثة بالليزر",
+        "علاج الضحكة اللثوية",
+        "تركيبات الزيركون والايماكس",
+        "اسعار زراعة الاسنان في مصر",
+        "عيادة اسنان شارع النصر المعادي",
+      ]
+    : [
+        "Dr. Dalia AbdElMougood Zariaa",
+        "Dr Dalia Dental Clinic Maadi",
+        "Best Dentist in Maadi Cairo",
+        "Painless Dental Implants Egypt",
+        "Hollywood Smile Cairo",
+        "Porcelain Veneers Maadi",
+        "Laser Teeth Whitening Cairo",
+        "Painless Root Canal Treatment",
+        "Pediatric Dentist Maadi",
+        "Cosmetic Dentistry Egypt",
+        "Laser Gum Contouring",
+        "Zirconia Dental Crowns",
+      ];
+
+  return {
+    title,
+    description,
+    keywords,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        "ar-EG": `${SITE_URL}/ar`,
+        ar: `${SITE_URL}/ar`,
+        "en-US": `${SITE_URL}/en`,
+        en: `${SITE_URL}/en`,
+        "x-default": `${SITE_URL}/ar`,
+      },
     },
+    openGraph: {
+      type: "website",
+      locale: isAr ? "ar_EG" : "en_US",
+      alternateLocale: isAr ? ["en_US"] : ["ar_EG"],
+      url: canonicalUrl,
+      siteName: isAr
+        ? "عيادة د. داليا عبد الموجود زارع لطب الأسنان بلا ألم"
+        : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+      title,
+      description,
+      images: [
+        {
+          url: `${SITE_URL}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE_URL}/opengraph-image`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  };
+}
+
+export default async function LandingPage({ params }: PageProps) {
+  const { lang } = await params;
+  const currentLang = (lang === "ar" ? "ar" : "en") as Language;
+  const isAr = currentLang === "ar";
+  const pageUrl = `${SITE_URL}/${currentLang}`;
+
+  const topReviews = testimonialsList.slice(0, 10).map((review) => ({
+    "@type": "Review",
+    author: {
+      "@type": "Person",
+      name: isAr ? review.nameAr : review.nameEn,
+    },
+    datePublished: "2026-01-15",
+    reviewBody: isAr ? review.reviewAr : review.reviewEn,
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: String(review.rating),
+      bestRating: "5",
+      worstRating: "1",
+    },
+  }));
+
+  const medicalProcedures = servicesDataJson.services.map((service) => ({
+    "@type": "MedicalProcedure",
+    name: isAr ? service.titleAr : service.titleEn,
+    description: isAr ? service.descAr : service.descEn,
+    image: service.image,
+    procedureType: "NoninvasiveProcedure",
+  }));
+
+  const faqItems = isAr
+    ? [
+        {
+          question: "هل إجراءات زراعة وعلاج الأسنان في عيادة د. داليا بدون ألم حقاً؟",
+          answer:
+            "نعم تماماً؛ تعتمد د. داليا عبد الموجود زارع على بروتوكولات التخدير الموضعي الرقمي اللطيف وأحدث التقنيات الطبية لضمان جلسة مريحة وخالية بنسبة 100% من أي ألم أو انزعاج، سواء في زراعة الأسنان، علاج العصب، أو الحشوات التجميلية.",
+        },
+        {
+          question: "ما هي مميزات فينيرز الأسنان وابتسامة هوليود في العيادة؟",
+          answer:
+            "نستخدم أجود خامات الإيماكس والزركونيا العالمية المصممة رقمياً لتناسب تقاسيم وجهك بدقة فائقة، مع الحفاظ الأقصى على بنية الأسنان الطبيعية ومظهر ناصع يدوم لسنوات طويلة.",
+        },
+        {
+          question: "كيف تتعامل العيادة مع خوف الأطفال من طبيب الأسنان؟",
+          answer:
+            "تتمتع دكتورة داليا بخبرة استثنائية وأسلوب هادئ ومحبب للأطفال يحوّل زيارة الأسنان إلى تجربة ممتعة بدون خوف أو دموع، مع استخدام تقنيات متطورة للعلاج السريع وغير المؤلم.",
+        },
+        {
+          question: "ما هي خطوات زراعة الأسنان والمدة اللازمة للتعافي؟",
+          answer:
+            "تتم الزراعة بعد فحص ثلاثي الأبعاد دقيق (CBCT) وتستغرق جلسة وضع الغرسة نحو 20 إلى 30 دقيقة فقط تحت تخدير موضعي بسيط، ويمكن للمريض استئناف نشاطه الطبيعي في اليوم التالي مباشرة.",
+        },
+        {
+          question: "أين تقع عيادة دكتورة داليا وكيف يمكنني حجز موعد استشارة؟",
+          answer:
+            "تقع العيادة في 45 شارع النصر، المعادي، القاهرة. يمكنك حجز موعدك بسهولة عبر تطبيق واتساب على الرقم 01112521494 أو من خلال زر الحجز المباشر بالموقع.",
+        },
+        {
+          question: "ما هي مواعيد العمل المتاحة في العيادة؟",
+          answer:
+            "نستقبلكم أيام الأحد والثلاثاء والخميس من الساعة 3:00 عصراً وحتى 9:30 مساءً بمواعيد مسبقة لضمان أقصى درجات الخصوصية والرعاية الطبية الفائقة.",
+        },
+      ]
+    : [
+        {
+          question: "Are dental procedures at Dr. Dalia's clinic truly painless?",
+          answer:
+            "Yes, absolutely. Dr. Dalia AbdElMougood Zariaa applies gentle digital local anesthesia protocols and modern micro-invasive techniques to ensure 100% stress-free, painless treatments for implants, root canals, and restorative care.",
+        },
+        {
+          question: "What makes Hollywood Smile and Veneers special at our clinic?",
+          answer:
+            "We use premium custom-crafted Emax and Zirconia ceramics digitally planned to harmonize with your facial aesthetics, offering exceptional longevity and a natural-looking radiant smile.",
+        },
+        {
+          question: "How do you help children overcome dental fear?",
+          answer:
+            "With over two decades of gentle patient handling, Dr. Dalia creates a warm, welcoming environment that transforms pediatric visits into fun, positive experiences without tears or anxiety.",
+        },
+        {
+          question: "How long does a dental implant procedure take?",
+          answer:
+            "Implant fixture placement typically takes only 20 to 30 minutes under gentle anesthesia. Most patients return to their routine activities comfortably the very next day.",
+        },
+        {
+          question: "Where is the clinic located and how can I book an appointment?",
+          answer:
+            "The clinic is located at 45 Al Nasr Street, Maadi, Cairo Governorate, Egypt. You can instantly book via WhatsApp (+201112521494) or through the online booking buttons.",
+        },
+        {
+          question: "What are the clinic's operating hours?",
+          answer:
+            "We welcome patients on Sundays, Tuesdays, and Thursdays from 3:00 PM to 9:30 PM by prior appointment to guarantee personalized, unhurried clinical care.",
+        },
+      ];
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["Dentist", "MedicalClinic", "LocalBusiness"],
+        "@id": `${SITE_URL}/#clinic`,
+        name: isAr
+          ? "عيادة د. داليا عبد الموجود زارع لطب وتجميل وزراعة الأسنان"
+          : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+        alternateName: [
+          "د. داليا عبد الموجود زارع",
+          "د. داليا عبد الموجود زريع",
+          "دكتورة داليا زارع",
+          "دكتورة داليا زريع",
+          "عيادة دكتورة داليا للأسنان بالمعادي",
+          "Dr. Dalia Dental Clinic Maadi",
+          "Dr. Dalia AbdElMougood Zariaa",
+        ],
+        description: isAr
+          ? "عيادة استشارية متخصصة في طب وجراحة وتجميل وزراعة الأسنان بلا ألم بالمعادي، القاهرة تحت إشراف الدكتورة داليا عبد الموجود زارع استشاري طب الأسنان بالقصر العيني."
+          : "Premier dental clinic in Maadi, Cairo specializing in painless dental implants, Hollywood Smile veneers, laser whitening, orthodontics, and gentle pediatric dentistry under consultant Dr. Dalia AbdElMougood Zariaa.",
+        url: pageUrl,
+        logo: `${SITE_URL}/logo.svg`,
+        image: [
+          `${SITE_URL}/logo.svg`,
+          "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
+        ],
+        telephone: "+201112521494",
+        email: "drdalia89is@gmail.com",
+        priceRange: "$$",
+        currenciesAccepted: "EGP, USD, SAR, AED, KWD, EUR",
+        paymentAccepted: "Cash, Credit Card, Visa, Mastercard, InstaPay, Vodafone Cash",
+        medicalSpecialty: [
+          "Dentistry",
+          "CosmeticDentistry",
+          "DentalImplantology",
+          "PediatricDentistry",
+          "Endodontics",
+          "Orthodontics",
+          "Periodontics",
+          "Prosthodontics",
+        ],
+        availableService: medicalProcedures,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "45 شارع النصر، البساتين الغربية، المعادي",
+          addressLocality: "المعادي، القاهرة",
+          addressRegion: "Cairo Governorate",
+          postalCode: "11728",
+          addressCountry: "EG",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 29.9742821,
+          longitude: 31.2753871,
+        },
+        hasMap: "https://maps.google.com/?q=29.9742821,31.2753871",
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Sunday"],
+            opens: "15:00",
+            closes: "21:30",
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Tuesday"],
+            opens: "16:00",
+            closes: "21:30",
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Thursday"],
+            opens: "16:00",
+            closes: "21:30",
+          },
+        ],
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: "4.9",
+          bestRating: "5",
+          worstRating: "1",
+          ratingCount: "38",
+          reviewCount: "38",
+        },
+        review: topReviews,
+        founder: {
+          "@type": "Physician",
+          "@id": `${SITE_URL}/#doctor`,
+          name: isAr
+            ? "د. داليا عبد الموجود زارع"
+            : "Dr. Dalia AbdElMougood Zariaa",
+          alternateName: [
+            "د. داليا عبد الموجود زريع",
+            "دكتورة داليا زارع",
+          ],
+          jobTitle: isAr
+            ? "استشاري طب وجراحة وتجميل الفم والأسنان - القصر العيني"
+            : "Consultant in Oral & Dental Medicine and Surgery - Qasr El Ainy, Cairo University",
+          alumniOf: {
+            "@type": "EducationalOrganization",
+            name: "كلية طب الفم والأسنان - جامعة القاهرة (القصر العيني)",
+          },
+          medicalSpecialty: "Dentistry",
+          worksFor: {
+            "@id": `${SITE_URL}/#clinic`,
+          },
+          image: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
+          url: pageUrl,
+        },
+        sameAs: [
+          "https://www.facebook.com/share/1CocjuuFjk/",
+          "https://www.instagram.com/dr_dalia_abdelmowgoud?igsh=MWY2Y2szbzlnZG95NA==",
+          "https://snapchat.com/t/BsKEHjCC",
+          clinicInfo.whatsappLink ||
+            `https://wa.me/${clinicInfo.whatsappNumber}`,
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: isAr
+          ? "عيادة د. داليا عبد الموجود زارع لطب الأسنان"
+          : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+        inLanguage: ["ar-EG", "en-US"],
+        publisher: {
+          "@id": `${SITE_URL}/#clinic`,
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${SITE_URL}/${currentLang}/articles?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: isAr ? "الرئيسية" : "Home",
+            item: pageUrl,
+          },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: isAr
+          ? "عيادة د. داليا عبد الموجود زارع لطب وتجميل وزراعة الأسنان"
+          : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+        description: isAr
+          ? "رعاية متكاملة لطب وجراحة وتجميل الأسنان بدون ألم بالمعادي"
+          : "Painless comprehensive dental care in Maadi, Cairo",
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+        about: {
+          "@id": `${SITE_URL}/#clinic`,
+        },
+        inLanguage: isAr ? "ar-EG" : "en-US",
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: ["h1", "h2", "#home p"],
+        },
+      },
+    ],
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* ──────── 1. Header / Navbar ──────── */}
-      <Navbar lang={currentLang} />
-
-      <main>
-        {/* ──────── 2. Hero Section ──────── */}
-        <section
-          id="home"
-          className="relative min-h-[700px] flex items-center justify-center overflow-hidden bg-background pt-24 pb-12 px-4 md:px-12"
-        >
-          <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-8 z-10 relative">
-            <div className="space-y-4 text-start">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-[28px] leading-[36px] md:text-[32px] md:leading-[40px] font-semibold text-brand-primary"
-              >
-                {isAr ? (
-                  t.hero.headline
-                ) : (
-                  <>
-                    A <span className="healthy-word">healthy
-                      <svg className="healthy-hand-drawn-svg" viewBox="0 0 130 50">
-                        {/* Outer hand-drawn circle - red, slightly wobbly */}
-                        <path className="hand-circle circle-1" d="M65,4 C90,2 118,8 124,18 C128,28 122,42 100,46 C78,50 42,48 22,44 C6,40 2,28 6,18 C10,6 38,2 65,4" />
-                        {/* Inner hand-drawn circle - blue, different irregularity */}
-                        <path className="hand-circle circle-2" d="M62,8 C82,5 112,12 118,22 C122,32 116,40 96,44 C72,48 44,46 26,42 C10,38 8,26 12,18 C16,8 40,6 62,8" />
-                      </svg>
-                    </span> Painless smile, by design
-                  </>
-                )}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-base leading-6 text-foreground/70"
-              >
-                {t.hero.subheadline}
-              </motion.p>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative h-[400px] w-full rounded overflow-hidden shadow-lg border border-border bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 flex items-center justify-center"
-            >
-              <Image
-                src={aboutDoctorImage}
-                alt="Dr. Dalia AbdElMougood Zariaa - Painless Dentistry"
-                fill
-                className="object-cover"
-                priority
-              />
-            </motion.div>
-
-            <motion.a
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whatsapp-btn"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="whatsapp-icon w-5 h-5"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.117 1.519 5.852L.06 23.498a.5.5 0 00.612.612l5.65-1.46A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.38-1.57.5.5 0 00-.38-.063l-3.654.945.945-3.654a.5.5 0 00-.063-.38A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-              </svg>
-              <span>{t.hero.cta}</span>
-            </motion.a>
-          </div>
-
-          {/* Subtle background decoration */}
-          <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20">
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[-10%] right-[-5%] w-[60%] h-[60%] bg-brand-accent rounded-full blur-[100px]"
-            />
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-[-10%] left-[-5%] w-[50%] h-[50%] bg-brand-accent/50 rounded-full blur-[120px]"
-            />
-          </div>
-        </section>
-
-        {/* ──────── 3. Our Services ──────── */}
-        <Services lang={currentLang} />
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 5. Before & After ──────── */}
-        <section id="before-after" className="py-12 px-4 md:px-12 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={sectionVariants}
-              className="text-center mb-10"
-            >
-              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
-                {t.beforeAfter.title}
-              </h2>
-              <p className="text-sm leading-5 text-foreground/60">
-                {t.beforeAfter.subtitle}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {beforeAfterCases.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="rounded-xl overflow-hidden shadow-sm border border-border bg-white"
-                >
-                  <div className="relative h-64 bg-muted">
-                    <Image
-                      src={item.beforeImage}
-                      alt={isAr ? item.titleAr : item.titleEn}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 6. About Section ──────── */}
-        <section id="about" className="py-12 px-4 md:px-12 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="flex flex-col gap-8">
-              <div className="space-y-4">
-                <span className="inline-block px-3 py-1 rounded-full bg-brand-accent/20 text-brand-primary text-xs font-bold tracking-wider uppercase">
-                  {t.about.badge}
-                </span>
-                <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary">
-                  {t.about.title}
-                </h2>
-                <p className="text-base leading-6 text-foreground/70">
-                  {t.about.bio}
-                </p>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="relative h-80 w-full rounded-2xl overflow-hidden shadow-md border border-border bg-muted flex items-center justify-center"
-              >
-                <Image
-                  src={aboutDoctorImage}
-                  alt="Dr. Dalia AbdElMougood Zariaa - Painless Clinical Portrait"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-
-              <ul className="space-y-3">
-                {t.about.degrees.map((degree, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 mt-0.5 text-brand-primary shrink-0" />
-                    <span className="text-sm leading-5 text-foreground/60">
-                      {degree}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── Kids' Smiles Gallery ──────── */}
-        <section id="gallery" className="py-12 px-4 md:px-12 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={sectionVariants}
-              className="text-center mb-10"
-            >
-              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
-                {t.gallery.title}
-              </h2>
-              <p className="text-sm leading-5 text-foreground/60">
-                {t.gallery.subtitle}
-              </p>
-            </motion.div>
-
-            <div className="flex flex-col gap-6">
-              {galleryItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group relative rounded-xl overflow-hidden shadow-sm bg-white border border-border h-64"
-                >
-                  <Image
-                    src={item.image}
-                    alt={isAr ? item.altAr : item.altEn}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white">
-                    <p className="text-sm leading-5">
-                      {t.gallery.items[index]?.title}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 7. Patient Stories ──────── */}
-        <section id="testimonials" className="py-12 px-4 md:px-12 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={sectionVariants}
-              className="text-center mb-10"
-            >
-              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
-                {t.testimonials.title}
-              </h2>
-              <p className="text-sm leading-5 text-foreground/60">
-                {t.testimonials.subtitle}
-              </p>
-            </motion.div>
-
-            <Carousel
-              opts={{
-                loop: true,
-                align: "start",
-                direction: isAr ? "rtl" : "ltr",
-              }}
-              className="w-full max-w-[720px] mx-auto px-2 sm:px-0"
-            >
-              <CarouselContent className="items-start">
-                {testimonialsList.map((testimonial) => (
-                  <CarouselItem
-                    key={testimonial.id}
-                    className="md:basis-1/2"
-                  >
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-border flex flex-col">
-                      <div className="flex gap-1 mb-3 text-amber-400">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <svg
-                            key={i}
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <p className="italic text-foreground/70 mb-6 leading-relaxed text-base">
-                        &ldquo;
-                        {isAr ? testimonial.reviewAr : testimonial.reviewEn}
-                        &rdquo;
-                      </p>
-                      <div className="flex items-center gap-3 pt-4 border-t border-border">
-                        <div className="w-10 h-10 rounded-full bg-brand-accent/30 flex items-center justify-center text-brand-primary font-semibold text-sm shrink-0">
-                          {(isAr ? testimonial.nameAr : testimonial.nameEn).charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-brand-primary">
-                            {isAr ? testimonial.nameAr : testimonial.nameEn}
-                          </p>
-                          <p className="text-xs text-foreground/50">
-                            {isAr ? "مريض موثق - بدون ألم" : "Verified Painless Patient"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-
-              <div className="flex items-center justify-center gap-4 mt-8">
-                <CarouselPrevious className="static translate-x-0 translate-y-0 inset-auto h-10 w-10 bg-white text-brand-primary border-brand-accent hover:bg-brand-primary hover:text-white" />
-                <CarouselNext className="static translate-x-0 translate-y-0 inset-auto h-10 w-10 bg-white text-brand-primary border-brand-accent hover:bg-brand-primary hover:text-white" />
-              </div>
-            </Carousel>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 7.5 Medical Articles Section ──────── */}
-        <ArticlesSection lang={currentLang} />
-
-        {/* Divider */}
-        <div className="flex justify-center py-2">
-          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
-        </div>
-
-        {/* ──────── 8. Our Clinic ──────── */}
-        <AnalyticsTracker />
-        <section id="clinic" className="py-12 px-4 md:px-12 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={sectionVariants}
-              className="text-center mb-10"
-            >
-              <h2 className="text-[24px] leading-[32px] font-semibold text-brand-primary mb-4">
-                {t.clinic.title}
-              </h2>
-              <p className="text-sm leading-5 text-foreground/60">
-                {t.clinic.subtitle}
-              </p>
-            </motion.div>
-
-            <div className="flex flex-col gap-6">
-              {/* Map Embed */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="w-full h-[300px] rounded-2xl overflow-hidden shadow-md border border-border bg-muted relative flex items-center justify-center"
-              >
-                <iframe
-                  src={clinicInfo.googleMapsEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, position: "absolute", inset: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title={t.clinic.mapTitle}
-                />
-              </motion.div>
-
-              {/* Working Hours */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="w-full bg-brand-primary text-white rounded-2xl p-6 shadow-md flex flex-col justify-center"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <Clock className="w-7 h-7 text-brand-accent" />
-                  <h3 className="text-[20px] leading-[28px] font-semibold text-brand-accent">
-                    {t.clinic.hours}
-                  </h3>
-                </div>
-                <ul className="space-y-4 text-sm leading-5">
-                  {t.clinic.hoursSchedule.map((schedule, idx) => (
-                    <li
-                      key={idx}
-                      className="flex justify-between border-b border-white/20 pb-2"
-                    >
-                      <span>{schedule.day}</span>
-                      <span className="font-semibold">{schedule.time}</span>
-                    </li>
-                  ))}
-                  <li className="flex flex-col pt-2">
-                    <span className="mb-1 text-white/80">
-                      {t.clinic.fridayNote}
-                    </span>
-                    <span className="text-xs italic text-brand-accent/70">
-                      {t.clinic.fridaySubNote}
-                    </span>
-                  </li>
-                </ul>
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-8 flex items-center justify-center gap-2 bg-white text-brand-primary px-6 py-3 rounded-lg hover:bg-muted transition-colors text-sm font-semibold"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.117 1.519 5.852L.06 23.498a.5.5 0 00.612.612l5.65-1.46A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.38-1.57.5.5 0 00-.38-.063l-3.654.945.945-3.654a.5.5 0 00-.063-.38A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-                  </svg>
-                  {t.hero.cta}
-                </a>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* ──────── 9. Footer ──────── */}
-      <Footer lang={currentLang} />
-
-      {/* ──────── Floating WhatsApp Button ──────── */}
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t.hero.cta}
-        className="fixed bottom-4 left-3 md:bottom-6 md:left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#1ebe5d] transition-all duration-300"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.117 1.519 5.852L.06 23.498a.5.5 0 00.612.612l5.65-1.46A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.38-1.57.5.5 0 00-.38-.063l-3.654.945.945-3.654a.5.5 0 00-.063-.38A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-        </svg>
-      </a>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <AnalyticsTracker />
+      <LandingPageClient lang={currentLang} />
+    </>
   );
 }

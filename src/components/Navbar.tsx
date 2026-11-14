@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, Globe, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,9 +85,9 @@ export default function Navbar({ lang }: { lang: Language }) {
   };
 
   const logoSection = (
-    <button
-      type="button"
-      onClick={() => router.push(`/${lang}`)}
+    <Link
+      href={`/${lang}`}
+      aria-label={isAr ? clinicInfo.nameAr : clinicInfo.nameEn}
       className="flex items-center gap-2.5 cursor-pointer text-start"
     >
       <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center text-white shadow-sm">
@@ -98,7 +99,7 @@ export default function Navbar({ lang }: { lang: Language }) {
       <span className="hidden md:inline text-[10px] font-bold text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
         {isAr ? "بدون ألم" : "Painless"}
       </span>
-    </button>
+    </Link>
   );
 
   return (
@@ -116,13 +117,17 @@ export default function Navbar({ lang }: { lang: Language }) {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
-              <button
+              <a
                 key={link.href}
-                onClick={() => handleLinkClick(link.href)}
+                href={link.href.startsWith("/") ? link.href : `/${lang}${link.href}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLinkClick(link.href);
+                }}
                 className="text-sm font-semibold text-foreground/70 hover:text-brand-primary transition-colors cursor-pointer"
               >
                 {link.label}
-              </button>
+              </a>
             ))}
           </nav>
 
@@ -197,16 +202,20 @@ export default function Navbar({ lang }: { lang: Language }) {
               {/* Navigation Links */}
               <nav className="flex flex-col items-center gap-6">
                 {navLinks.map((link, i) => (
-                  <motion.button
+                  <motion.a
                     key={link.href}
-                    onClick={() => handleLinkClick(link.href)}
+                    href={link.href.startsWith("/") ? link.href : `/${lang}${link.href}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLinkClick(link.href);
+                    }}
                     className="text-2xl font-bold text-foreground/80 hover:text-brand-primary transition-colors cursor-pointer"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
                   >
                     {link.label}
-                  </motion.button>
+                  </motion.a>
                 ))}
               </nav>
 

@@ -21,7 +21,9 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: isAr ? "المقال غير موجود | د. داليا عبد الموجود" : "Article Not Found | Dr. Dalia",
+      title: isAr
+        ? "المقال غير موجود | د. داليا عبد الموجود زارع"
+        : "Article Not Found | Dr. Dalia AbdElMougood Zariaa",
       robots: { index: false, follow: true },
     };
   }
@@ -38,29 +40,41 @@ export async function generateMetadata({
 
   const canonicalUrl = `${SITE_URL}/${isAr ? "ar" : "en"}/articles/${post.slug}`;
 
+  const keywords = [
+    ...(post.tags || []),
+    post.focus_keyword || "",
+    post.category,
+    isAr ? "دكتورة داليا عبد الموجود زارع" : "Dr. Dalia AbdElMougood Zariaa",
+    isAr ? "استشاري اسنان القصر العيني" : "Qasr El Ainy Dental Consultant",
+    isAr ? "عيادة أسنان المعادي" : "Dentist in Maadi Cairo",
+    isAr ? "طب أسنان بدون ألم" : "Painless Dentistry",
+  ].filter(Boolean);
+
   return {
     title,
     description,
-    keywords: [
-      ...(post.tags || []),
-      post.focus_keyword || "",
-      post.category,
-      "دكتورة داليا عبد الموجود زارع",
-      "عيادة أسنان المعادي",
-      "طب أسنان بلا ألم",
-    ].filter(Boolean),
+    keywords,
     authors: [
       {
-        name: isAr ? post.author_name : post.author_name_en || post.author_name,
+        name: isAr
+          ? post.author_name
+          : post.author_name_en || post.author_name,
         url: `${SITE_URL}/${isAr ? "ar" : "en"}`,
       },
     ],
+    creator: isAr ? post.author_name : post.author_name_en || post.author_name,
+    publisher: "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
     alternates: {
       canonical: canonicalUrl,
       languages: {
         "ar-EG": `${SITE_URL}/ar/articles/${post.slug}`,
+        ar: `${SITE_URL}/ar/articles/${post.slug}`,
         "en-US": `${SITE_URL}/en/articles/${post.slug}`,
+        en: `${SITE_URL}/en/articles/${post.slug}`,
         "x-default": `${SITE_URL}/ar/articles/${post.slug}`,
+      },
+      types: {
+        "application/rss+xml": `${SITE_URL}/feed.xml`,
       },
     },
     openGraph: {
@@ -71,10 +85,13 @@ export async function generateMetadata({
         ? "عيادة د. داليا عبد الموجود زارع لطب الأسنان"
         : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
       locale: isAr ? "ar_EG" : "en_US",
+      alternateLocale: isAr ? ["en_US"] : ["ar_EG"],
       type: "article",
       publishedTime: post.published_at,
-      modifiedTime: post.updated_at,
-      authors: [isAr ? post.author_name : post.author_name_en || post.author_name],
+      modifiedTime: post.updated_at || post.published_at,
+      authors: [
+        isAr ? post.author_name : post.author_name_en || post.author_name,
+      ],
       section: isAr ? post.category : post.category_en || post.category,
       tags: post.tags,
       images: [
@@ -91,6 +108,17 @@ export async function generateMetadata({
       title,
       description,
       images: [post.cover_image],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -121,11 +149,17 @@ export default async function ArticleDetailPage({ params }: PageProps) {
 
   const articleTitle = isAr ? post.title : post.title_en || post.title;
   const articleDesc = isAr ? post.excerpt : post.excerpt_en || post.excerpt;
+  const articleContent = isAr ? post.content : post.content_en || post.content;
   const articleUrl = `${SITE_URL}/${currentLang}/articles/${post.slug}`;
+
+  const plainText = articleContent
+    ? articleContent.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()
+    : "";
+  const wordCount = plainText ? plainText.split(" ").length : 0;
 
   const graph: Record<string, unknown>[] = [
     {
-      "@type": ["Article", "MedicalWebPage", "BlogPosting"],
+      "@type": ["MedicalWebPage", "Article", "BlogPosting"],
       "@id": `${articleUrl}#article`,
       mainEntityOfPage: {
         "@type": "WebPage",
@@ -135,30 +169,64 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       description: articleDesc,
       image: [post.cover_image],
       datePublished: post.published_at,
-      dateModified: post.updated_at,
+      dateModified: post.updated_at || post.published_at,
       inLanguage: isAr ? "ar-EG" : "en-US",
       articleSection: isAr ? post.category : post.category_en || post.category,
       keywords: (post.tags || []).join(", "),
-      author: {
-        "@type": "Physician",
-        name: isAr ? post.author_name : post.author_name_en || post.author_name,
-        jobTitle: isAr ? post.author_role : post.author_role_en || post.author_role,
-        image: post.author_avatar,
-        url: `${SITE_URL}/${currentLang}`,
-      },
-      publisher: {
+      wordCount,
+      copyrightYear: new Date(post.published_at).getFullYear(),
+      copyrightHolder: {
         "@type": "Dentist",
         name: isAr
           ? "عيادة د. داليا عبد الموجود زارع لطب الأسنان"
           : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+      },
+      author: {
+        "@type": "Physician",
+        "@id": `${SITE_URL}/#doctor`,
+        name: isAr
+          ? post.author_name
+          : post.author_name_en || post.author_name,
+        jobTitle: isAr
+          ? post.author_role
+          : post.author_role_en || post.author_role,
+        alumniOf: {
+          "@type": "EducationalOrganization",
+          name: "كلية طب الفم والأسنان - جامعة القاهرة (القصر العيني)",
+        },
+        image: post.author_avatar,
+        url: `${SITE_URL}/${currentLang}`,
+      },
+      reviewedBy: {
+        "@type": "Physician",
+        name: isAr
+          ? "د. داليا عبد الموجود زارع"
+          : "Dr. Dalia AbdElMougood Zariaa",
+        jobTitle: isAr
+          ? "استشاري طب وجراحة الفم والأسنان - القصر العيني"
+          : "Consultant of Oral & Dental Medicine - Qasr El Ainy, Cairo University",
+        url: `${SITE_URL}/${currentLang}`,
+      },
+      publisher: {
+        "@type": "Dentist",
+        "@id": `${SITE_URL}/#clinic`,
+        name: isAr
+          ? "عيادة د. داليا عبد الموجود زارع لطب وتجميل وزراعة الأسنان"
+          : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
+        url: `${SITE_URL}/${currentLang}`,
         logo: {
           "@type": "ImageObject",
           url: `${SITE_URL}/logo.svg`,
         },
       },
+      speakable: {
+        "@type": "SpeakableSpecification",
+        cssSelector: ["h1", "article > p:first-of-type", ".key-takeaways"],
+      },
     },
     {
       "@type": "BreadcrumbList",
+      "@id": `${articleUrl}#breadcrumb`,
       itemListElement: [
         {
           "@type": "ListItem",
@@ -175,6 +243,14 @@ export default async function ArticleDetailPage({ params }: PageProps) {
         {
           "@type": "ListItem",
           position: 3,
+          name: isAr ? post.category : post.category_en || post.category,
+          item: `${SITE_URL}/${currentLang}/articles?category=${encodeURIComponent(
+            isAr ? post.category : post.category_en || post.category
+          )}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
           name: articleTitle,
           item: articleUrl,
         },
@@ -185,6 +261,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
   if (post.faqs && post.faqs.length > 0) {
     graph.push({
       "@type": "FAQPage",
+      "@id": `${articleUrl}#faq`,
       mainEntity: post.faqs.map((faq) => ({
         "@type": "Question",
         name: isAr ? faq.question : faq.question_en || faq.question,

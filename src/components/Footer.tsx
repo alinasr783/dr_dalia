@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import { clinicInfo, socialLinks, Language, translations } from "@/lib/supabaseMock";
 
@@ -185,12 +186,12 @@ export default function Footer({ lang }: FooterProps) {
                 </a>
               </li>
               <li>
-                <a
+                <Link
                   href={`/${lang}/articles`}
                   className="flex items-center gap-2 text-white/70 hover:text-brand-accent transition-colors text-xs font-semibold"
                 >
                   <span>{isAr ? "المقالات الطبية والمدونة" : "Medical Articles & Blog"}</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

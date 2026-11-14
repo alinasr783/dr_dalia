@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "عيادة د. داليا عبد الموجود زريع لطب وتجميل وزراعة الأسنان | Dr. Dalia Dental Clinic";
+  "عيادة د. داليا عبد الموجود زارع لطب وتجميل وزراعة الأسنان | Dr. Dalia Dental Clinic";
 export const size = {
   width: 1200,
   height: 630,
@@ -27,7 +27,7 @@ export default async function Image({
           justifyContent: "space-between",
           padding: "64px",
           background:
-            "linear-gradient(135deg, #0F172A 0%, #0C4A6E 55%, #0284C7 100%)",
+            "linear-gradient(135deg, #06446F 0%, #0F172A 60%, #1575B5 100%)",
           color: "#FFFFFF",
           fontFamily: "sans-serif",
         }}
@@ -52,11 +52,11 @@ export default async function Image({
                 width: "84px",
                 height: "84px",
                 borderRadius: "24px",
-                background: "linear-gradient(135deg, #38BDF8 0%, #0284C7 100%)",
+                background: "linear-gradient(135deg, #A3DBE4 0%, #1575B5 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 16px 36px rgba(14, 165, 233, 0.45)",
+                boxShadow: "0 16px 36px rgba(21, 117, 181, 0.45)",
               }}
             >
               <svg
@@ -77,7 +77,7 @@ export default async function Image({
                 style={{
                   fontSize: "24px",
                   fontWeight: 700,
-                  color: "#38BDF8",
+                  color: "#A3DBE4",
                   letterSpacing: "1px",
                 }}
               >
@@ -90,8 +90,8 @@ export default async function Image({
                 }}
               >
                 {isAr
-                  ? "طب وجراحة وتجميل وزراعة الأسنان — الهرم، الجيزة"
-                  : "Cosmetic Dentistry, Dental Implants & Orthodontics — Giza, Egypt"}
+                  ? "استشاري طب وجراحة الفم والأسنان — القصر العيني"
+                  : "Consultant of Oral & Dental Medicine — Qasr El Ainy"}
               </span>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default async function Image({
               color: "#F8FAFC",
             }}
           >
-            ★ 4.9 / 5.0
+            ★ 4.9 / 5.0 (38+ Verified Reviews)
           </div>
         </div>
 
@@ -121,26 +121,26 @@ export default async function Image({
         >
           <div
             style={{
-              fontSize: "54px",
+              fontSize: "52px",
               fontWeight: 800,
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               color: "#FFFFFF",
             }}
           >
             {isAr
-              ? "عيادة د. داليا عبد الموجود زريع لطب وتجميل الأسنان"
-              : "Dr. Dalia AbdElMougood Zariaa Dental Clinic"}
+              ? "عيادة د. داليا عبد الموجود زارع لطب وتجميل وزراعة الأسنان"
+              : "Dr. Dalia AbdElMougood Zariaa Painless Dental Clinic"}
           </div>
           <div
             style={{
-              fontSize: "26px",
+              fontSize: "24px",
               lineHeight: 1.5,
               color: "#CBD5E1",
             }}
           >
             {isAr
-              ? "زراعة الأسنان الفورية • ابتسامة هوليود والفينير • تبييض الليزر • علاج الجذور بدون ألم"
-              : "Dental Implants • Hollywood Smile & Veneers • Laser Whitening • Painless Root Canal"}
+              ? "زراعة الأسنان بدون ألم • ابتسامة هوليود وفينيرز • تبييض الليزر • طب أسنان الأطفال"
+              : "Painless Dental Implants • Hollywood Smile Veneers • Laser Whitening • Pediatric Dentistry"}
           </div>
         </div>
 
@@ -155,9 +155,9 @@ export default async function Image({
             color: "#E2E8F0",
           }}
         >
-          <span>📞 +20 101 857 1561</span>
-          <span>📍 155 شارع الهرم — المطبعة، الجيزة</span>
-          <span>🌐 drdaliadental.com</span>
+          <span>📞 +20 111 252 1494</span>
+          <span>📍 45 شارع النصر — المعادي، القاهرة</span>
+          <span>🌐 drdalia-dental.com</span>
         </div>
       </div>
     ),

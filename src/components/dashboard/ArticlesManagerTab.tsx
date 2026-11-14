@@ -321,7 +321,7 @@ export default function ArticlesManagerTab({
     field: "status" | "featured" | "show_on_homepage"
   ) => {
     try {
-      let update: Partial<Post> = {};
+      const update: Partial<Post> = {};
       if (field === "status") {
         update.status = post.status === "published" ? "draft" : "published";
       } else if (field === "featured") {

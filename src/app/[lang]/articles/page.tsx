@@ -19,11 +19,11 @@ export async function generateMetadata({
 
   const title = isAr
     ? "المقالات الطبية وموسوعة طب الأسنان بلا ألم | د. داليا عبد الموجود زارع"
-    : "Medical Articles & Painless Dentistry Blog | Dr. Dalia AbdElMougood Zariaa";
+    : "Medical Articles & Painless Dentistry Guide | Dr. Dalia AbdElMougood Zariaa";
 
   const description = isAr
-    ? "اقرأ أحدث المقالات والنصائح الطبية الموثوقة من د. داليا عبد الموجود زارع استشاري طب وجراحة الأسنان بالقصر العيني حول زراعة الأسنان، ابتسامة هوليود، أسنان الأطفال، وعلاج العصب بدون ألم"
-    : "Read expert dental articles and painless oral care guides by Dr. Dalia AbdElMougood Zariaa (Qasr El Ainy Dental Consultant) on dental implants, Hollywood Smile veneers, pediatric dentistry, and root canals.";
+    ? "اقرأ أحدث المقالات والنصائح الطبية الموثوقة من د. داليا عبد الموجود زارع استشاري طب وجراحة الأسنان بالقصر العيني بالمعادي: زراعة الأسنان، ابتسامة هوليود، أسنان الأطفال، وعلاج العصب بدون ألم."
+    : "Read expert clinical dental guides and painless oral care articles by Dr. Dalia AbdElMougood Zariaa (Qasr El Ainy Dental Consultant in Maadi, Cairo) on dental implants, veneers, pediatric care, and root canals.";
 
   return {
     title,
@@ -31,20 +31,27 @@ export async function generateMetadata({
     keywords: [
       "مقالات طب الأسنان",
       "دكتورة داليا عبد الموجود زارع",
-      "زراعة الأسنان بدون ألم",
+      "زراعة الأسنان بدون ألم المعادي",
       "علاج أسنان الأطفال بدون خوف",
-      "ابتسامة هوليود المعادي",
+      "ابتسامة هوليود وفينيرز",
       "حشو العصب بدون ألم",
       "توريد اللثة بالليزر",
+      "نصائح صحة الفم والأسنان",
       "Dr. Dalia Dental Articles",
       "Painless Dentistry Blog Maadi Cairo",
+      "Dental Care Guides Egypt",
     ],
     alternates: {
       canonical: `${SITE_URL}/${isAr ? "ar" : "en"}/articles`,
       languages: {
         "ar-EG": `${SITE_URL}/ar/articles`,
+        ar: `${SITE_URL}/ar/articles`,
         "en-US": `${SITE_URL}/en/articles`,
+        en: `${SITE_URL}/en/articles`,
         "x-default": `${SITE_URL}/ar/articles`,
+      },
+      types: {
+        "application/rss+xml": `${SITE_URL}/feed.xml`,
       },
     },
     openGraph: {
@@ -55,10 +62,11 @@ export async function generateMetadata({
         ? "عيادة د. داليا عبد الموجود زارع لطب الأسنان"
         : "Dr. Dalia AbdElMougood Zariaa Dental Clinic",
       locale: isAr ? "ar_EG" : "en_US",
+      alternateLocale: isAr ? ["en_US"] : ["ar_EG"],
       type: "website",
       images: [
         {
-          url: "https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg",
+          url: `${SITE_URL}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: title,
@@ -69,7 +77,18 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: ["https://i.ibb.co/h14mtXMx/IMG-20260728-WA0001.jpg"],
+      images: [`${SITE_URL}/opengraph-image`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -78,6 +97,7 @@ export default async function ArticlesPage({ params }: PageProps) {
   const { lang } = await params;
   const currentLang: Language = lang === "ar" ? "ar" : "en";
   const isAr = currentLang === "ar";
+  const pageUrl = `${SITE_URL}/${currentLang}/articles`;
 
   const { posts } = await listPosts({ status: "published", limit: 100 });
 
@@ -85,15 +105,15 @@ export default async function ArticlesPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Blog",
-        "@id": `${SITE_URL}/${currentLang}/articles#blog`,
+        "@type": ["Blog", "CollectionPage"],
+        "@id": `${pageUrl}#blog`,
         name: isAr
-          ? "مدونة وموسوعة عيادة د. داليا عبد الموجود زارع لطب الأسنان بلا ألم"
-          : "Dr. Dalia AbdElMougood Zariaa Painless Dentistry Blog",
+          ? "موسوعة ومدونة د. داليا عبد الموجود زارع لطب الأسنان بدون ألم"
+          : "Dr. Dalia AbdElMougood Zariaa Painless Dentistry Blog & Encyclopedia",
         description: isAr
-          ? "مقالات طبية متخصصة في طب وجراحة وتجميل الأسنان بدون ألم"
-          : "Expert clinical articles on painless dentistry and smile aesthetics",
-        url: `${SITE_URL}/${currentLang}/articles`,
+          ? "دليل طبي متكامل ومقالات موثوقة في زراعة وتجميل وعلاج الأسنان بدون ألم"
+          : "Comprehensive medical guides and expert clinical articles on painless dental care",
+        url: pageUrl,
         inLanguage: isAr ? "ar-EG" : "en-US",
         publisher: {
           "@type": "Dentist",
@@ -102,22 +122,37 @@ export default async function ArticlesPage({ params }: PageProps) {
             : "Dr. Dalia AbdElMougood Zariaa",
           url: `${SITE_URL}/${currentLang}`,
         },
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: posts.map((p, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: `${pageUrl}/${p.slug}`,
+            name: isAr ? p.title : p.title_en || p.title,
+          })),
+        },
         blogPost: posts.map((p) => ({
           "@type": "BlogPosting",
           headline: isAr ? p.title : p.title_en || p.title,
           description: isAr ? p.excerpt : p.excerpt_en || p.excerpt,
-          url: `${SITE_URL}/${currentLang}/articles/${p.slug}`,
+          url: `${pageUrl}/${p.slug}`,
           image: p.cover_image,
           datePublished: p.published_at,
-          dateModified: p.updated_at,
+          dateModified: p.updated_at || p.published_at,
           author: {
-            "@type": "Person",
-            name: isAr ? p.author_name : p.author_name_en || p.author_name,
+            "@type": "Physician",
+            name: isAr
+              ? p.author_name
+              : p.author_name_en || p.author_name,
+            jobTitle: isAr
+              ? p.author_role
+              : p.author_role_en || p.author_role,
           },
         })),
       },
       {
         "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
         itemListElement: [
           {
             "@type": "ListItem",
@@ -129,7 +164,7 @@ export default async function ArticlesPage({ params }: PageProps) {
             "@type": "ListItem",
             position: 2,
             name: isAr ? "المقالات الطبية" : "Medical Articles",
-            item: `${SITE_URL}/${currentLang}/articles`,
+            item: pageUrl,
           },
         ],
       },
