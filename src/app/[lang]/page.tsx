@@ -7,6 +7,8 @@ import { CheckCircle, Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Services from "@/components/Services";
+import ArticlesSection from "@/components/ArticlesSection";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import {
   Carousel,
   CarouselContent,
@@ -382,7 +384,16 @@ export default function LandingPage({
           <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
         </div>
 
+        {/* ──────── 7.5 Medical Articles Section ──────── */}
+        <ArticlesSection lang={currentLang} />
+
+        {/* Divider */}
+        <div className="flex justify-center py-2">
+          <div className="w-full max-w-[800px] h-[2px] rounded-full bg-gradient-to-r from-transparent via-brand-accent/60 to-transparent" />
+        </div>
+
         {/* ──────── 8. Our Clinic ──────── */}
+        <AnalyticsTracker />
         <section id="clinic" className="py-12 px-4 md:px-12 bg-background">
           <div className="max-w-[1200px] mx-auto">
             <motion.div

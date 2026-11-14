@@ -184,6 +184,14 @@ export default function Footer({ lang }: FooterProps) {
                   <span>{clinicInfo.phone}</span>
                 </a>
               </li>
+              <li>
+                <a
+                  href={`/${lang}/articles`}
+                  className="flex items-center gap-2 text-white/70 hover:text-brand-accent transition-colors text-xs font-semibold"
+                >
+                  <span>{isAr ? "المقالات الطبية والمدونة" : "Medical Articles & Blog"}</span>
+                </a>
+              </li>
             </ul>
           </div>
 

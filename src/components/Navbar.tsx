@@ -60,6 +60,7 @@ export default function Navbar({ lang }: { lang: Language }) {
     { href: "#services", label: t.services },
     { href: "#before-after", label: t.beforeAfter },
     { href: "#about", label: t.about },
+    { href: `/${lang}/articles`, label: t.articles },
     { href: "#gallery", label: t.gallery },
     { href: "#testimonials", label: t.testimonials },
     { href: "#clinic", label: t.clinic },
@@ -67,14 +68,27 @@ export default function Navbar({ lang }: { lang: Language }) {
 
   const handleLinkClick = (href: string) => {
     setMobileMenuOpen(false);
+    if (href.startsWith("/")) {
+      router.push(href);
+      return;
+    }
+    const isLanding = pathname === `/${lang}` || pathname === `/${lang}/`;
+    if (!isLanding) {
+      router.push(`/${lang}${href}`);
+      return;
+    }
     setTimeout(() => {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    }, 200);
   };
 
   const logoSection = (
-    <div className="flex items-center gap-2.5">
+    <button
+      type="button"
+      onClick={() => router.push(`/${lang}`)}
+      className="flex items-center gap-2.5 cursor-pointer text-start"
+    >
       <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center text-white shadow-sm">
         <ToothIcon className="w-5 h-5" />
       </div>
@@ -84,7 +98,7 @@ export default function Navbar({ lang }: { lang: Language }) {
       <span className="hidden md:inline text-[10px] font-bold text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
         {isAr ? "بدون ألم" : "Painless"}
       </span>
-    </div>
+    </button>
   );
 
   return (
