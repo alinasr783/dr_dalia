@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listPosts, createPost, getCategories } from "@/lib/supabase/db";
+import { listPosts, getCategories } from "@/lib/supabase/db";
 
 export const dynamic = "force-dynamic";
 
@@ -53,19 +53,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    if (!body?.title || !String(body.title).trim()) {
-      return NextResponse.json(
-        { success: false, error: "عنوان المقال مطلوب | Article title is required" },
-        { status: 400 }
-      );
-    }
-    const post = await createPost(body);
-    return NextResponse.json({ success: true, post }, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create post";
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
-  }
+// Creating articles through the API is disabled (no manual or external/AI-agent creation).
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: "إنشاء المقالات غير متاح | Article creation is disabled" },
+    { status: 403 }
+  );
 }

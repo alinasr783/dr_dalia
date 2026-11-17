@@ -11,7 +11,6 @@ import {
   User,
   Eye,
   EyeOff,
-  CheckCircle2,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -21,7 +20,6 @@ import {
   DASHBOARD_USERNAME,
   DASHBOARD_PASSWORD,
 } from "@/lib/supabase/config";
-import type { Post } from "@/lib/supabase/types";
 
 const AUTH_STORAGE_KEY = "dr_dalia_dashboard_auth_v1";
 
@@ -39,7 +37,6 @@ export default function DashboardClient() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
-  const [editingPostFromOverview, setEditingPostFromOverview] = useState<Post | null>(null);
 
   // Login form state
   const [username, setUsername] = useState<string>("");
@@ -140,11 +137,6 @@ export default function DashboardClient() {
     setIsAuthenticated(false);
     setUsername("");
     setPassword("");
-  };
-
-  const handleEditPostRequest = (post: Post) => {
-    setEditingPostFromOverview(post);
-    setActiveTab("articles");
   };
 
   if (checkingAuth) {
@@ -394,7 +386,7 @@ export default function DashboardClient() {
                     activeTab === "overview" ? "text-sky-100" : "text-slate-400"
                   }`}
                 >
-                  تقرير الزوار والمقالات المعلقة
+                  الزيارات والمسودات
                 </div>
               </div>
             </button>
@@ -410,13 +402,13 @@ export default function DashboardClient() {
             >
               <FileText className="w-5 h-5 shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="leading-tight">إدارة المقالات</div>
+                <div className="leading-tight">المقالات</div>
                 <div
                   className={`text-[11px] font-normal mt-0.5 truncate ${
                     activeTab === "articles" ? "text-sky-100" : "text-slate-400"
                   }`}
                 >
-                  كتابة وتعديل ونشر المقالات
+                  النشر والكتابة بالذكاء الاصطناعي
                 </div>
               </div>
             </button>
@@ -449,49 +441,23 @@ export default function DashboardClient() {
       {/* MAIN CONTENT AREA (Clean Landing Page Style) */}
       {/* ------------------------------------------------------------------- */}
       <main className="flex-1 min-w-0 p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full pb-28 lg:pb-8">
-        {/* Top Header Card */}
-        <div className="mb-5 sm:mb-6 flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-sky-100 shadow-xs">
-          <div className="min-w-0">
-            <h2 className="text-base sm:text-xl font-black text-[#06446F] truncate">
-              {activeTab === "overview"
-                ? "نظرة عامة على أداء الموقع والزيارات"
-                : "إدارة المقالات الطبية ونشر المحتوى"}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5 truncate">
-              {activeTab === "overview"
-                ? "متابعة أرقام الزيارات الفعلية والمقالات التي تحتاج موافقتك للنشر"
-                : "إضافة وتعديل وحذف مقالات العيادة ومشاركتها مع المرضى"}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {activeTab === "overview" ? (
-              <button
-                type="button"
-                onClick={() => setActiveTab("articles")}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#06446F] hover:bg-[#1575B5] text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer active:scale-95"
-              >
-                <FileText className="w-4 h-4" />
-                <span>إدارة المقالات</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setActiveTab("overview")}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#E8F4FB] hover:bg-[#d6ecf9] text-[#06446F] text-xs sm:text-sm font-bold transition-all cursor-pointer active:scale-95"
-              >
-                <BarChart3 className="w-4 h-4" />
-                <span>نظرة عامة</span>
-              </button>
-            )}
-          </div>
+        {/* Page Title */}
+        <div className="mb-4 sm:mb-5 px-1">
+          <h2 className="text-lg sm:text-2xl font-black text-[#06446F]">
+            {activeTab === "overview" ? "نظرة عامة" : "المقالات"}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            {activeTab === "overview"
+              ? "الزيارات والمقالات التي تنتظر موافقتك"
+              : "نشر وإخفاء وحذف المقالات، وكتابة مقالات جديدة بالذكاء الاصطناعي"}
+          </p>
         </div>
 
         {/* Render Tab */}
         {activeTab === "overview" ? (
-          <OverviewTab onEditPostRequest={handleEditPostRequest} />
+          <OverviewTab />
         ) : (
-          <ArticlesManagerTab initialEditingPost={editingPostFromOverview} />
+          <ArticlesManagerTab />
         )}
       </main>
 
@@ -523,7 +489,7 @@ export default function DashboardClient() {
             }`}
           >
             <FileText className="w-4 h-4" />
-            <span>إدارة المقالات</span>
+            <span>المقالات</span>
           </button>
         </div>
       </nav>

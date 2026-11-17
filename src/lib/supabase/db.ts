@@ -45,7 +45,7 @@ export function normalizeContentToHtml(raw: string): string {
     return trimmed;
   }
 
-  // Convert Markdown to clean semantic HTML for AI Agent MCP submissions
+  // Convert Markdown to clean semantic HTML 
   const lines = trimmed.split(/\r?\n/);
   const htmlParts: string[] = [];
   let inList = false;

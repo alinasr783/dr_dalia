@@ -18,18 +18,13 @@ import {
   Clock,
   BarChart3,
   CheckCircle2,
-  Edit3,
   Sparkles,
   Check,
   AlertCircle,
 } from "lucide-react";
 import type { AnalyticsReport, Post } from "@/lib/supabase/types";
 
-type OverviewTabProps = {
-  onEditPostRequest?: (post: Post) => void;
-};
-
-export default function OverviewTab({ onEditPostRequest }: OverviewTabProps) {
+export default function OverviewTab() {
   const [days, setDays] = useState<number>(14);
   const [report, setReport] = useState<AnalyticsReport | null>(null);
   const [draftPosts, setDraftPosts] = useState<Post[]>([]);
@@ -258,7 +253,7 @@ export default function OverviewTab({ onEditPostRequest }: OverviewTabProps) {
               )}
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              يمكنك مراجعة المسودات وتعديلها أو الموافقة عليها مباشرة لتنشر في الموقع فوراً
+              راجع المسودات ووافق عليها لتظهر في الموقع فوراً
             </p>
           </div>
         </div>
@@ -299,14 +294,14 @@ export default function OverviewTab({ onEditPostRequest }: OverviewTabProps) {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-                  <button
-                    type="button"
-                    onClick={() => onEditPostRequest?.(post)}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#06446F] text-xs font-bold transition-all cursor-pointer active:scale-95"
+                  <Link
+                    href={`/ar/articles/${post.slug}`}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#06446F] text-xs font-bold transition-all active:scale-95"
                   >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    <span>تعديل المقال</span>
-                  </button>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>معاينة</span>
+                  </Link>
 
                   <button
                     type="button"
@@ -332,7 +327,7 @@ export default function OverviewTab({ onEditPostRequest }: OverviewTabProps) {
               جميع المقالات منشورة وجاهزة ولا توجد مسودات معلقة حالياً
             </p>
             <p className="text-xs text-slate-500 mt-0.5">
-              عند إضافة مقال جديد كمسودة أو كتابته بواسطة المساعد الذكي سيظهر هنا لمراجعتك
+              أي مقال جديد يُحفظ كمسودة سيظهر هنا لمراجعتك
             </p>
           </div>
         )}
