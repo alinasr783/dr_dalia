@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { listPosts } from "@/lib/supabase/db";
+import type { Post } from "@/lib/supabase/types";
 import { SITE_URL } from "@/lib/supabase/config";
-import { SEED_POSTS } from "@/lib/supabase/seedPosts";
 
 function escapeXml(unsafe: string): string {
   if (!unsafe) return "";
@@ -14,14 +14,14 @@ function escapeXml(unsafe: string): string {
 }
 
 export async function GET() {
-  let posts = SEED_POSTS;
+  let posts: Post[] = [];
   try {
     const res = await listPosts({ status: "published", limit: 50 });
     if (res && Array.isArray(res.posts) && res.posts.length > 0) {
       posts = res.posts;
     }
   } catch {
-    posts = SEED_POSTS;
+    posts = [];
   }
 
   const published = posts.filter((p) => p.status === "published");

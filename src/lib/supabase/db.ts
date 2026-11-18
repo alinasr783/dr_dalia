@@ -1,6 +1,5 @@
 import { randomUUID } from "crypto";
 import { getAdminSupabase, SUPABASE_URL } from "./config";
-import { SEED_POSTS, generateSeedAnalytics } from "./seedPosts";
 import type {
   Post,
   CreatePostInput,
@@ -136,27 +135,23 @@ async function readPostsFromStorage(): Promise<Post[]> {
 
     if (error || !data) {
       await ensureBuckets();
-      await writePostsToStorage(SEED_POSTS);
-      memoryPostsCache = SEED_POSTS;
+      memoryPostsCache = [];
       memoryPostsCacheTime = Date.now();
-      return SEED_POSTS;
+      return [];
     }
 
     const text = await data.text();
     const parsed = JSON.parse(text) as Post[];
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      await writePostsToStorage(SEED_POSTS);
-      memoryPostsCache = SEED_POSTS;
+    if (!Array.isArray(parsed)) {
+      memoryPostsCache = [];
       memoryPostsCacheTime = Date.now();
-      return SEED_POSTS;
+      return [];
     }
     memoryPostsCache = parsed;
     memoryPostsCacheTime = Date.now();
     return parsed;
   } catch {
-    memoryPostsCache = SEED_POSTS;
-    memoryPostsCacheTime = Date.now();
-    return SEED_POSTS;
+    return memoryPostsCache || [];
   }
 }
 
@@ -184,12 +179,6 @@ async function loadAllPosts(): Promise<Post[]> {
       .order("published_at", { ascending: false });
 
     if (!error && Array.isArray(data)) {
-      if (data.length === 0) {
-        // Seed the SQL table with initial posts
-        const storagePosts = await readPostsFromStorage();
-        await supabase.from("posts").upsert(storagePosts, { onConflict: "slug" });
-        return storagePosts;
-      }
       return data.map(normalizePostRecord);
     }
   } catch {

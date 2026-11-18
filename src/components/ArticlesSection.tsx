@@ -14,18 +14,12 @@ import {
   Eye,
 } from "lucide-react";
 import { translations, Language } from "@/lib/supabaseMock";
-import { SEED_POSTS } from "@/lib/supabase/seedPosts";
 import type { Post } from "@/lib/supabase/types";
 
 export default function ArticlesSection({ lang }: { lang: Language }) {
   const isAr = lang === "ar";
   const t = translations[lang].articles;
-  const [posts, setPosts] = useState<Post[]>(() =>
-    SEED_POSTS.filter((p) => p.status === "published" && p.show_on_homepage).slice(
-      0,
-      4
-    )
-  );
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     let active = true;

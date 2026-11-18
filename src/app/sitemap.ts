@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { listPosts } from "@/lib/supabase/db";
+import type { Post } from "@/lib/supabase/types";
 import { SITE_URL } from "@/lib/supabase/config";
-import { SEED_POSTS } from "@/lib/supabase/seedPosts";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -80,14 +80,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    let postsList = SEED_POSTS;
+    let postsList: Post[] = [];
     try {
       const res = await listPosts({ status: "published", limit: 500 });
       if (res && Array.isArray(res.posts) && res.posts.length > 0) {
         postsList = res.posts;
       }
     } catch {
-      postsList = SEED_POSTS;
+      postsList = [];
     }
 
     const articleRoutes: MetadataRoute.Sitemap = [];
