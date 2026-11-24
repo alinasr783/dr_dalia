@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## MCP server (Manus / AI agents)
+
+Endpoint: `https://drdalia-dental.com/api/mcp` (Streamable HTTP).
+
+Set the environment variable `MCP_API_KEY` (at least 16 characters) on the hosting provider and redeploy.
+Clients must send it as `Authorization: Bearer <MCP_API_KEY>` (or `X-API-Key`, or `?key=` as a last resort).
+Without `MCP_API_KEY` the endpoint stays closed.
+
+Tools: `list_articles`, `get_article`, `create_article`, `update_article`, `delete_article`,
+`upload_article_image`, `list_categories`, `get_clinic_seo_context`.
